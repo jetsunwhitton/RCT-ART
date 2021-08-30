@@ -1,0 +1,86 @@
+title: "???"
+description: "????"
+
+# Variables can be referenced across the project.yml using ${vars.var_name}
+vars:
+  # model trained on glaucoma data alone
+  glaucoma_annotations: "datasets/for_annotation/trenta_glaucoma/ner_rel_annotated_results.jsonl"
+  glaucoma_train_file: "datasets/preprocessed/glaucoma/train.spacy"
+  glaucoma_dev_file: "datasets/preprocessed/glaucoma/dev.spacy"
+  glaucoma_test_file: "datasets/preprocessed/glaucoma/test.spacy"
+  glaucoma_ner_trained_model: "trained_model/ner/glaucoma/model-best"
+  glaucoma_rel_pipeline_trained_model: "trained_model/rel_pipeline/glaucoma/model-best"
+
+  ner_config: "ner_config.cfg" # training config including architectures and hyperparameters
+  rel_pipeline_config: "rel_pipeline_config.cfg" # training config including architectures and hyperparameters
+
+
+# Directories. The project CLI will make sure that they always exist.
+directories: ["datasets","scripts", "trained_model"]
+
+# Annotated dataset which must be available for training models
+datasets:
+    - dest: ${vars.glaucoma_annotations}
+      description: "Glaucoma Gold-standard REL and NER annotations created with Prodigy"
+
+workflows:
+  all:
+    - parse_glaucoma_annotations
+    - train_ner_glaucoma
+    - train_rel_pipeline_glaucoma
+
+
+# Project commands, specified in a style similar to CI config files (e.g. Azure
+# pipelines). The name is the command name that lets you trigger the command
+# via "spacy project run [command] [path]". The help message is optional and
+# shown when executing "spacy project run [optional command] [path] --help".
+commands:
+  - name: "parse_glaucoma_annotations"
+    help: "Parse the gold-standard annotations from the Prodigy annotations."
+    script:
+      - "python ./scripts/parse_data.py ${vars.glaucoma_annotations} ${vars.glaucoma_train_file} ${vars.glaucoma_dev_file} ${vars.glaucoma_test_file}"
+    deps:
+      - ${vars.glaucoma_annotations}
+    outputs:
+      - ${vars.glaucoma_train_file}
+      - ${vars.glaucoma_dev_file}
+      - ${vars.glaucoma_test_file}
+
+  - name: "train_ner_glaucoma"
+    help: "Train the ner model with a Transformer on a GPU and evaluate on the dev corpus."
+    script:
+      - "python -m spacy train ${vars.ner_config} --output trained_model/ner/glaucoma --paths.train ${vars.glaucoma_train_file} --paths.dev ${vars.glaucoma_dev_file} -c ./scripts/custom_functions.py --gpu-id 0"
+    deps:
+      - ${vars.glaucoma_train_file}
+      - ${vars.glaucoma_dev_file}
+    outputs:
+      - ${vars.glaucoma_ner_trained_model}
+
+  - name: "train_rel_pipeline_glaucoma"
+    help: "Train the full project pipeline on GPU with the Transformer-based relation detector component, requires ner model to be trained first"
+    script:
+      - "python -m spacy train ${vars.rel_pipeline_config} --output trained_model/rel_pipeline/glaucoma --paths.train ${vars.glaucoma_train_file} --paths.dev ${vars.glaucoma_dev_file} -c ./scripts/custom_functions.py --gpu-id 0"
+    deps:
+      - ${vars.glaucoma_train_file}
+      - ${vars.glaucoma_dev_file}
+    outputs:
+      - ${vars.glaucoma_rel_pipeline_trained_model}
+
+  - name: "evaluate_glaucoma_ner"
+    help: "Apply the best model to new, unseen text, and measure accuracy at different thresholds."
+    script:
+      - "python scripts/evaluate.py ${vars.glaucoma_ner_trained_model} ${vars.glaucoma_test_file} False"
+    deps:
+      - ${vars.glaucoma_ner_trained_model}
+      - ${vars.glaucoma_test_file}
+
+  - name: "clean_ner"
+    help: "Remove the ner model to start training from a clean slate"
+    script:
+      - "rm -rf ner_component/training/*"
+
+  - name: "clean_rel"
+    help: "Remove the clean rel model to start training from a clean slate."
+    script:
+      - "rm -rf rel_component/training/*"
+
