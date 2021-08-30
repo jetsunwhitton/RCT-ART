@@ -44,8 +44,9 @@ class PreprocessEbmNlp:
         self.queries = {}
         self.ebm_nlp = '../datasets/for_preprocessing/ebm_nlp'
         if os.path.isdir(f"{self.ebm_nlp}/ebm_nlp_2_00") == False:
-            tar = tarfile.open(f"{self.ebm_nlp}/ebm_nlp_2_00.tar.gz")
-            tar.extractall()
+            print("extracting ebm-nlp corpus -- this may take some time")
+            tar = tarfile.open(f"{self.ebm_nlp}/ebm_nlp _2_00.tar.gz")
+            tar.extractall(path=self.ebm_nlp)
         self.token_fnames = glob(f'{self.ebm_nlp}/ebm_nlp_2_00/documents/*.tokens')
 
     def add_queries(self, query, domain):
