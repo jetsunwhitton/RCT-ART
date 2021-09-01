@@ -3,17 +3,12 @@ blis==0.7.4
 cachetools==4.2.2
 catalogue==2.0.4
 certifi==2021.5.30
-charset-normalizer==2.0.3
 click==7.1.2
 colorama==0.4.4
-cupy-cuda111==9.0.0
 cymem==2.0.5
-en-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.1.0/en_core_web_trf-3.1.0-py3-none-any.whl
 fastapi==0.68.0
-fastrlock==0.6
 filelock==3.0.12
 h11==0.12.0
-huggingface-hub==0.0.8
 idna==3.2
 Jinja2==3.0.1
 joblib==1.0.1
@@ -25,7 +20,6 @@ pathy==0.6.0
 peewee==3.14.4
 plac==1.1.3
 preshed==3.0.5
-prodigy @ file:///C:/Users/jetsu/1.%20Degree%20stuff/COMP0073%20Summer%20project/prodigy_labelling/prodigy-1.11.0-cp39-cp39-win_amd64.whl
 pydantic==1.8.2
 PyJWT==2.1.0
 pyparsing==2.4.7
@@ -33,11 +27,7 @@ regex==2021.7.6
 requests==2.26.0
 sacremoses==0.0.45
 six==1.16.0
-smart-open==5.1.0
 spacy==3.1.1
-spacy-alignments==0.8.3
-spacy-legacy==3.0.8
-spacy-transformers==1.0.3
 srsly==2.4.1
 starlette==0.14.2
 thinc==8.0.8
@@ -47,7 +37,15 @@ torch==1.9.0
 tqdm==4.61.2
 transformers==4.6.1
 typer==0.3.2
-typing-extensions==3.10.0.0
 urllib3==1.26.6
 uvicorn==0.13.4
 wasabi==0.8.2
+
+Pillow~=8.3.1
+pip~=21.2.4
+nltk~=3.6.2
+PyYAML~=5.4.1
+setuptools~=57.4.0
+torchvision~=0.10.0+cu111
+torchaudio~=0.9.0
+prodigy~=1.11.0

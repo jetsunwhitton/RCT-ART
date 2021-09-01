@@ -1,5 +1,11 @@
+# project file
+project.lock
+
 # model files
 trained_model
+
+# raw data files
+datasets/for_preprocessing/ebm_nlp/ebm_nlp_2_00
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -12,6 +12,7 @@ from rel_pipe import make_relation_extractor, score_relations
 from rel_model import create_relation_model, create_classification_layer, create_instances, create_tensors
 
 
+
 def main(trained_pipeline: Path, test_data: Path, print_details: bool):
     nlp = spacy.load(trained_pipeline)
 

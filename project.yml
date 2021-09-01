@@ -38,7 +38,7 @@ commands:
   - name: "parse_glaucoma_annotations"
     help: "Parse the gold-standard annotations from the Prodigy annotations."
     script:
-      - "python ./scripts/parse_data.py ${vars.glaucoma_annotations} ${vars.glaucoma_train_file} ${vars.glaucoma_dev_file} ${vars.glaucoma_test_file}"
+      - "python ./scripts/postannotation_preprocessing.py ${vars.glaucoma_annotations} ${vars.glaucoma_train_file} ${vars.glaucoma_dev_file} ${vars.glaucoma_test_file}"
     deps:
       - ${vars.glaucoma_annotations}
     outputs:
@@ -66,12 +66,12 @@ commands:
     outputs:
       - ${vars.glaucoma_rel_pipeline_trained_model}
 
-  - name: "evaluate_glaucoma_ner"
+  - name: "evaluate_rel_pipeline_glaucoma"
     help: "Apply the best model to new, unseen text, and measure accuracy at different thresholds."
     script:
-      - "python scripts/evaluate.py ${vars.glaucoma_ner_trained_model} ${vars.glaucoma_test_file} False"
+      - "python scripts/evaluate.py ${vars.glaucoma_rel_pipeline_trained_model} ${vars.glaucoma_test_file} False"
     deps:
-      - ${vars.glaucoma_ner_trained_model}
+      - ${vars.glaucoma_rel_pipeline_trained_model}
       - ${vars.glaucoma_test_file}
 
   - name: "clean_ner"
