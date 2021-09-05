@@ -11,7 +11,7 @@ import pickle
 import operator
 
 
-class PreprocessEbmNlp:
+class ProcessEbmNlp:
     ###!!!!!! consider adding annotation adjustment functionality
     def __init__(self):
         self.queries = {}
@@ -274,28 +274,36 @@ def filter_sentences(annotation_data, sent_filter, domain_name):
     :return:
     """
     from prodigy.components.preprocess import split_sentences
+    import scripts.custom_functions
     nlp = spacy.load("en_core_web_sm")
+    nlp.add_pipe("custom_sentencizer", before="parser")
     stream = split_sentences(nlp, annotation_data, min_length=30)
     folder = f"../datasets/for_annotation/ebm_nlp/{domain_name}"
-    with open(f"{folder}/{sent_filter['start_parse']}.jsonl", 'w') as filter_output:
-        count = 0
-        section_parse = False
-        for item in stream:
-            if section_parse:
-                if re.match(f"{sent_filter['stop_parse']}", item["text"]):
-                    section_parse = False
+    if sent_filter != {}:
+        with open(f"{folder}/{sent_filter['start_parse']}.jsonl", 'w') as filter_output:
+            count = 0
+            section_parse = False
+            for item in stream:
+                if section_parse:
+                    if re.match(f"{sent_filter['stop_parse']}", item["text"]):
+                        section_parse = False
+                    else:
+                        filter_output.write(json.dumps(item) + "\n")
+                        count += 1
                 else:
-                    filter_output.write(json.dumps(item) + "\n")
-                    count += 1
-            else:
-                if re.match(f"{sent_filter['start_parse']}", item["text"]):
-                    filter_output.write(json.dumps(item) + "\n")
-                    count += 1
-                    section_parse = True
+                    if re.match(f"{sent_filter['start_parse']}", item["text"]):
+                        filter_output.write(json.dumps(item) + "\n")
+                        count += 1
+                        section_parse = True
 
 
-        print(f"{sent_filter} on {domain_name} returns {count} example sentences in {domain_name}.jsonl")
-        filter_output.close()
+            print(f"{sent_filter} on {domain_name} returns {count} example sentences in {domain_name}.jsonl")
+            filter_output.close()
+    else:
+        with open(f"{folder}/all_abstract_sentences.jsonl", 'w') as filter_output:
+            for item in stream:
+                filter_output.write(json.dumps(item) + "\n")
+            filter_output.close()
 
 
 def model_pre_annotate(data,ner_model=None,rel_model=None,filter=None):
@@ -341,13 +349,9 @@ def model_pre_annotate(data,ner_model=None,rel_model=None,filter=None):
             print("An ner model must be provided to pre-annotate")
         return updated_data
 
-def parse_out_rejected(examples):
-
-
-
 
 if __name__ == "__main__":
-    ## default query terms used by the PICO_ner_rel system
+        ## default query terms used by the PICO_ner_rel system
     query_terms = {"diabetes":"diabetes",
                    "solid_tumour_cancer":"(breast cancer OR ovarian cancer OR prostate cancer OR lung cancer)",
                    "blood_cancer": "(lymphoma OR leukemia OR myeloma)",
@@ -360,6 +364,7 @@ if __name__ == "__main__":
     #pp_ebm_nlp.output_iob()
     #pp_ebm_nlp.convert_iob_to_spacy()
     prepro_ebm_dir = "../datasets/for_preprocessing/ebm_nlp"
+    anno_ebm_dir = "../datasets/for_annotation/ebm_nlp"
     spacy_dir = f"{prepro_ebm_dir}/ebm_nlp_spacy"
     pmid_dir = f"{prepro_ebm_dir}/domain_pmids"
     fanno_dir = "../datasets/for_annotation/ebm_nlp"
@@ -367,7 +372,8 @@ if __name__ == "__main__":
     rel_model = "../trained_model/rel_pipeline/glaucoma/model-best"
     filter = ["POPU","INTV","OC"]
 
-    #for sfn, pfn in zip(os.listdir(spacy_dir), os.listdir(pmid_dir)):
+    for sfn, pfn in zip(os.listdir(spacy_dir), os.listdir(pmid_dir)):
+
      #   fn_split = re.search("(?<=(nlp_))[_a-z]*(?=\.)", sfn)
       #  name = fn_split.group(0)
 
@@ -378,18 +384,19 @@ if __name__ == "__main__":
          #   print("Converting spacy files to jsonl for prodigy annotation")
           #  spacy_to_jsonl(spacy_files, name, add_ids=pmids, doc_filter="missing_entities")
 
-       # annotation_data = json.load(open(f"../datasets/for_annotation/ebm_nlp/{name}/unfiltered.jsonl","r"))
-        #sent_filter = {"start_parse":"RESULT","stop_parse": "CONCLUSION"}
-        #filter_sentences(annotation_data, sent_filter, name)
+     for domain in os.listdir(anno_ebm_dir):
+         annotation_data = json.load(open(f"../datasets/for_annotation/ebm_nlp/{domain}/unfiltered.jsonl", "r"))
+         result_sent_filter = {"start_parse": "RESULT", "stop_parse": "CONCLUSION"}
+         no_filter = {}
+         filter_sentences(annotation_data, no_filter, domain)
 
-
-   # for domain in os.listdir(fanno_dir):
-    data = open(f"{fanno_dir}/{domain}/RESULT.jsonl","r")
-    preannotated = model_pre_annotate(data, ner_model=ner_model, rel_model=rel_model, filter=filter)
-    with open(f"{fanno_dir}/{domain}/RESULT_preannotated.jsonl", 'w') as preannotated_output:
-            for line in preannotated:
-                    preannotated_output.write(json.dumps(line) + "\n")
-            preannotated_output.close()
+        #for domain in os.listdir(fanno_dir):
+     #   data = open(f"{fanno_dir}/{domain}/RESULT.jsonl","r")
+      #  preannotated = model_pre_annotate(data, ner_model=ner_model, rel_model=rel_model, filter=filter)
+       # with open(f"{fanno_dir}/{domain}/RESULT_preannotated.jsonl", 'w') as preannotated_output:
+        #        for line in preannotated:
+         #               preannotated_output.write(json.dumps(line) + "\n")
+          #      preannotated_output.close()
 
 
 

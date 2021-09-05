@@ -19,7 +19,7 @@ class custom_entity_ruler:
         ####  set pattern variables to add to entity_ruler  ####
 
         # procedure patterns
-        with open("../datasets/procedure_suffix_regex.txt") as regex_input:
+        with open("./datasets/procedure_suffix_regex.txt") as regex_input:
             PROC_SFX = [{"LOWER": {"REGEX": regex_input.read()}}, {"TEXT": "-", "OP": "?"}]
         G_DENOM = [{"LOWER": "group"},
                    {"TEXT": {"REGEX": "(([Aa]|[Bb]|([Oo]ne)|1|([Tt]wo)|2)(?!.))"}}]  # group with denomination

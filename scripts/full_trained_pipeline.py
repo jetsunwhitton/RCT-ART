@@ -2,10 +2,12 @@ import spacy
 
 from spacy.tokens import DocBin, Doc
 from spacy.training.example import Example
+import operator
+from collections import defaultdict
 
-from rel_component.scripts.evaluate import main as evaluate
+from scripts.evaluate import main as evaluate
 
-from rel_component.scripts.rel_model import create_relation_model, create_classification_layer, create_instances
+from scripts.rel_model import create_relation_model, create_classification_layer, create_instances
 
 from pandas import DataFrame
 
@@ -27,8 +29,6 @@ from pandas import DataFrame
 #nlp0.add_pipe("senten")
 #doc = nlp0(text)
 
-nlp = spacy.load("C:\\Users\\jetsu\\1. Degree stuff\\COMP0073 Summer project\\spacy_re\\training\\model-best")
-test_data = "data/test.spacy"
 
 def print_doc(nlp, data):
     doc_bin = DocBin(store_user_data=True).from_disk(data)
@@ -37,7 +37,6 @@ def print_doc(nlp, data):
         print(doc)
         print(doc._.rel)
 
-print_doc(nlp, test_data)
 
 def ner_processing(nlp, data):
     doc_bin = DocBin(store_user_data=True).from_disk(data)
@@ -67,8 +66,9 @@ def ner_processing(nlp, data):
 Path = "data/test_ner_processed.spacy"
 
 
-def rel_processing(nlp, test_data: Path):
-    doc_bin = DocBin(store_user_data=True).from_disk(test_data)
+
+def relation_exraction1(nlp, input_docs):
+    doc_bin = DocBin(store_user_data=True).from_disk(input_docs)
     docs = doc_bin.get_docs(nlp.vocab)
     for doc in docs:
         pred = Doc(
@@ -77,31 +77,53 @@ def rel_processing(nlp, test_data: Path):
             spaces=[t.whitespace_ for t in doc],
         )
         pred.ents = doc.ents
+        rel_tab_dict = defaultdict(dict)
         for name, proc in nlp.pipeline:
-            pred = proc(pred)
-        rel_predictions = ([(value, rel_dict) for value, rel_dict in pred._.rel.items()
-                            if rel_dict["A1_RES"] > 0.1 or rel_dict["A2_RES"] > 0.1 or rel_dict["OC_RES"] > 0.1])
-        rel_tab_dict = {"Outcome":{},"Arm 1": {},"Arm 2": {}}
-        for entry in rel_predictions:
-            if entry[1]['A1_RES'] > entry[1]['A2_RES']:
-                intervention = list(filter(lambda x: x.start == entry[0][0], pred.ents))[0]
-                result = list(filter(lambda x: x.start == entry[0][1], pred.ents))[0]
-                rel_tab_dict["Arm 1"]["Intervention"] = intervention
-                if "Results" in rel_tab_dict["Arm 1"]:
-                    rel_tab_dict["Arm 1"]["Results"].append(result)
-                else:
-                    rel_tab_dict["Arm 1"]["Results"] = [result]
-            elif entry[1]['A2_MEASURE'] > entry[1]['A1_MEASURE']:
-                intervention = list(filter(lambda x: x.start == entry[0][0], pred.ents))[0]
-                result = list(filter(lambda x: x.start == entry[0][1], pred.ents))[0]
-                rel_tab_dict["Arm 2"] = {"Intervention": intervention}
-                if "Results" in rel_tab_dict["Arm 2"]:
-                    rel_tab_dict["Arm 2"]["Results"].append(result)
-                else:
-                    rel_tab_dict["Arm 2"]["Results"] = [result]
+            rel_preds = proc(pred)
+            print(rel_preds)
+            for key in rel_preds._.rel:
+                pred_rel = max(rel_preds._.rel[key].items(),
+                               key=operator.itemgetter(1))  # selects rel with highest probability
+                if pred_rel[1] > 0.5:  # probability threshold for inclusion
+                    result = list(filter(lambda x: x.start == key[1], pred.ents))[0]  # gets result entity
+                    if pred_rel[0] == "A1_RES":
+                        intervention = list(filter(lambda x: x.start == key[0], pred.ents))[0]  # gets arm 1 entity
+                        rel_tab_dict[result]["Arm 1"] = intervention
+                    elif pred_rel[0] == "A2_RES":
+                        intervention = list(filter(lambda x: x.start == key[0], pred.ents))[0]  # gets arm 2 entity
+                        rel_tab_dict[result]["Arm 2"] = intervention
+                    elif pred_rel[0] == "OC_RES":
+                        outcome = list(filter(lambda x: x.start == key[0], pred.ents))[0]  # gets arm 2 entity
+                        rel_tab_dict[result]["Outcome"] = outcome
+        print(rel_tab_dict)
         print("\n\n", doc.text)
-        #print(rel_tab_dict)
+        # print(rel_tab_dict)
         print(DataFrame.from_dict(rel_tab_dict, orient='columns', dtype=None, columns=None))
+
+def relation_exraction(nlp, input_docs):
+    doc_bin = DocBin(store_user_data=True).from_disk(input_docs)
+    docs = doc_bin.get_docs(nlp.vocab)
+    for doc in docs:
+        rel_tab_dict = defaultdict(dict)
+        for key in doc._.rel:
+            pred_rel = max(doc._.rel[key].items(),key=operator.itemgetter(1))  # selects rel with highest probability
+            if pred_rel[1] > 0.5:  # probability threshold for inclusion
+                result = list(filter(lambda x: x.start == key[1], doc.ents))[0]  # gets result entity
+                if pred_rel[0] == "A1_RES":
+                    intervention = list(filter(lambda x: x.start == key[0], doc.ents))[0]  # gets arm 1 entity
+                    rel_tab_dict[result]["Arm 1"] = intervention
+                elif pred_rel[0] == "A2_RES":
+                    intervention = list(filter(lambda x: x.start == key[0], doc.ents))[0]  # gets arm 2 entity
+                    rel_tab_dict[result]["Arm 2"] = intervention
+                elif pred_rel[0] == "OC_RES":
+                    outcome = list(filter(lambda x: x.start == key[0], doc.ents))[0]  # gets arm 2 entity
+                    rel_tab_dict[result]["Outcome"] = outcome
+        print("\n\n", doc.text)
+        print(rel_tab_dict)
+        print(DataFrame.from_dict(rel_tab_dict, orient='columns', dtype=None, columns=None))
+
+nlp = spacy.blank("en")
+relation_exraction(nlp, "../datasets/preprocessed/all_domains/results_only/test.spacy")
 
 #rel_processing(nlp2, Path)
 
