@@ -87,6 +87,7 @@ def annotations_to_spacy(json_loc):
                         if label not in rels[(start, end)]:
                             rels[(start, end)][label] = 1.0
 
+
                     # The annotation is complete, so fill in zero's where the data is missing
                     for x1 in span_starts:
                         for x2 in span_starts:
@@ -95,9 +96,10 @@ def annotations_to_spacy(json_loc):
                                     rels[(x1, x2)][label] = 0.0
                     doc._.rel = rels
                     try:
-                        doc.user_data = ast.literal_eval(example["user_data"])
+                        pmid = ast.literal_eval(example["user_data"])
+                        doc.user_data["pmid"] = pmid["pmid"]
                     except KeyError:
-                        print("glaucoma dataset") # pmids have not been added to glaucoma dataset
+                        pass # print("Skipping glaucoma dataset as no pmid") # pmids have not been added to glaucoma dataset
                     docs.append(doc)
 
                 except KeyError as e:
@@ -140,8 +142,8 @@ def train_dev_test_split(docs,output_dir):
     random.shuffle(without_pmid)  # randomise sentences without pubmed ids for dividing across sets
     l = len(without_pmid)
     wo_train = without_pmid[0:int(l * 0.7)]
-    wo_dev = without_pmid[int(l * 0.7):int(l * 0.85)]
-    wo_test = without_pmid[int(l * 0.85):]
+    wo_dev = without_pmid[int(l * 0.7):int(l * 0.8)]
+    wo_test = without_pmid[int(l * 0.8):]
 
     joined_train = w_train + wo_train
     joined_dev = w_dev + wo_dev
@@ -210,7 +212,7 @@ def restore_ebm_nlp_annos(results, full_abstracts, output):
     doc_bin.to_disk(output)
 
 
-def stratify_train_examples(examples, output):
+#def stratify_train_examples(examples, output):
 
 
 def parse_accepted(examples_path):
@@ -237,11 +239,11 @@ if __name__ == "__main__":
     #parse_accepted(annos)
     #merge_examples(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
     for domain in os.listdir("../datasets/gold_result_annotations"):
-     #   docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
-      #  train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
+         docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
+         train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
          for tdt in os.listdir(f"../datasets/preprocessed/{domain}/results_only"):
              try:
                 restore_ebm_nlp_annos(f"../datasets/preprocessed/{domain}/results_only/{tdt}",f"../datasets/for_annotation/ebm_nlp/{domain}/all_abstract_sentences.jsonl",f"../datasets/preprocessed/{domain}/full_abstracts/{tdt}")
              except:
-                 pass
+                pass
 
