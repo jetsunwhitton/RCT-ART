@@ -122,4 +122,4 @@ if __name__ == "__main__":
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
     ner_model_path = "../trained_model/ner/all_domains/model-best"
     rel_model_path = "../trained_model/rel_pipeline/all_domains/model-best"
-    ner_rel_evaluate(ner_model_path,rel_model_path,doc_path,False)
+    ner_rel_evaluate(ner_model_path,rel_model_path,doc_path,True)

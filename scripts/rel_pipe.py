@@ -233,32 +233,32 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
                         if k in gold_labels:
                             micro_prf.fn += 1
 
-            # keys match the entity indexes of the gold annos, if an entity pair not in the gold list
-            # this second part of the code evaluates correct entities with no relations mapped
+            # keys match the entity indexes of the gold annos, if an entity pair is not in the gold list
+            # this second part of the code evaluates if there are correct entities with no relations mapped
             else:
                 pred_rel = max(pred_dict.items(), key=operator.itemgetter(1))
                 if pred_rel[1] > 0.5:
-                    micro_prf.fp += 1
+                    micro_prf.fp += 1 # relation mapped for incorrect entity pair
                 else:
                     parent_ent = list(filter(lambda x: x.start == key[0], example.predicted.ents))[0].text
                     child_ent = list(filter(lambda x: x.start == key[1], example.predicted.ents))[0].text
                     if parent_ent not in assessed_ents:
                         if parent_ent in gold_ents:
-                            micro_prf.tp += 1
+                            micro_prf.tp += 1 # correctly labelled entity and didn't choose relation
                         else:
-                            micro_prf.fp += 1
+                            micro_prf.fp += 1  # incorrectly labelled entity
                         assessed_ents.append(parent_ent)
                     if child_ent not in assessed_ents:
                         if child_ent in gold_ents:
-                            micro_prf.tp += 1
+                            micro_prf.tp += 1  # correctly labelled entity and didn't choose relation
                         else:
-                            micro_prf.fp += 1
+                            micro_prf.fp += 1 # incorrectly labelled entity
                         assessed_ents.append(child_ent)
 
         # counts entity false negatives by checking gold ents not appearing in pred ents
         leftover_ents = [ents_left for ents_left in gold_ents if ents_left not in pred_ents]
         for missed_ent in leftover_ents:
-                micro_prf.fn += 1
+                micro_prf.fn += 1 # incorrectly labelled entity
 
     return {
         "rel_micro_p": micro_prf.precision,

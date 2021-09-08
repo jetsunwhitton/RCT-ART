@@ -38,7 +38,7 @@ def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]
 
     return get_instances
 
-
+# amend to model exploring more specific entity instances -- resulted in worse results
 #@spacy.registry.misc("rel_instance_generator.v1")
 #def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]]:
  #   def get_instances(doc: Doc) -> List[Tuple[Span, Span]]:
