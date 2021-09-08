@@ -27,13 +27,7 @@ def ner_rel_evaluate(mode_path, test_data, print_details: bool):
     docs = doc_bin.get_docs(model.vocab)
     examples = []
     for gold in docs:
-        pred = Doc(
-            model.vocab,
-            words=[t.text for t in gold],
-            spaces=[t.whitespace_ for t in gold],
-        )
-
-        pred = model(pred)
+        pred = model(gold.text)
         examples.append(Example(pred, gold))
         # Print the gold and prediction, if gold label is not 0
         if print_details:
