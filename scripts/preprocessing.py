@@ -170,7 +170,10 @@ def stratify_train_examples(doc_path, strats):
     docs = list(doc_bin.get_docs(vocab))
     l = len(docs)
     for strat in strats:
-        name = str(strat)[-1] + "0%"
+        if str(strat)[-2] != "0":
+            name = str(strat)[-1] + "0%"
+        else:
+            name = str(strat)[-1] + "%"
         doc_strat = docs[:int(l*strat)]
         docbin = DocBin(docs=doc_strat, store_user_data=True)
         docbin.to_disk(f"../datasets/preprocessed/all_domains/training_stratifications/train_strat_{name}.spacy")
@@ -249,8 +252,7 @@ if __name__ == "__main__":
     merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
                       for domain in os.listdir("../datasets/gold_result_annotations") if domain != "all_domains"]
 
-    stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",
-                            [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9])
+    stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
     #parse_accepted(annos)
     #merge_examples(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
     #for domain in os.listdir("../datasets/gold_result_annotations"):
