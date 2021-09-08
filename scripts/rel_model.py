@@ -25,33 +25,33 @@ def create_classification_layer(
         return Linear(nO=nO, nI=nI) >> Logistic()
 
 
-#@spacy.registry.misc("rel_instance_generator.v1")
-#def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]]:
- #   def get_instances(doc: Doc) -> List[Tuple[Span, Span]]:
-  #      instances = []
-   #     for ent1 in doc.ents:
-    #        for ent2 in doc.ents:
-     #           if ent1 != ent2:
-      #              if max_length and abs(ent2.start - ent1.start) <= max_length:
-       #                 instances.append((ent1, ent2))
-        #return instances
-
-    #return get_instances
-
-
 @spacy.registry.misc("rel_instance_generator.v1")
 def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]]:
     def get_instances(doc: Doc) -> List[Tuple[Span, Span]]:
         instances = []
-        for meas in doc.ents:
-            if meas.label_ == "MEAS":
-                for res_rel in doc.ents:
-                    if res_rel.label_ == "OC" or res_rel.label_ == "INTV":
-                        if max_length and abs(meas.start - res_rel.start) <= max_length:
-                            instances.append((res_rel, meas))
+        for ent1 in doc.ents:
+            for ent2 in doc.ents:
+                if ent1 != ent2:
+                    if max_length and abs(ent2.start - ent1.start) <= max_length:
+                        instances.append((ent1, ent2))
         return instances
 
     return get_instances
+
+
+#@spacy.registry.misc("rel_instance_generator.v1")
+#def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]]:
+ #   def get_instances(doc: Doc) -> List[Tuple[Span, Span]]:
+  #      instances = []
+   #     for meas in doc.ents:
+    #        if meas.label_ == "MEAS":
+     #           for res_rel in doc.ents:
+      #              if res_rel.label_ == "OC" or res_rel.label_ == "INTV":
+       #                 if max_length and abs(meas.start - res_rel.start) <= max_length:
+        #                    instances.append((res_rel, meas))
+        #return instances
+
+    #return get_instances
 
 
 @spacy.registry.architectures("rel_instance_tensor.v1")
