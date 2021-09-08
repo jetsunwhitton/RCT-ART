@@ -17,31 +17,24 @@ from rel_model import create_relation_model, create_classification_layer, create
 # This function was adapted from the spaCy relation component
 # template: https://github.com/explosion/projects/tree/v3/tutorials
 # it can now be used to evaluate joint entity--relation extraction performance
-def ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_details: bool):
+def ner_rel_evaluate(mode_path, test_data, print_details: bool):
     """Evaluates joint performance of ner and rel extraction model, as well as the rel model alone
     if gold entities were provided"""
     print("|| Loading models")
-    if ner_model_path != None:
-        ner = spacy.load(ner_model_path)
-    rel = spacy.load(rel_model_path)
+    model = spacy.load(mode_path)
 
     doc_bin = DocBin(store_user_data=True).from_disk(test_data)
-    docs = doc_bin.get_docs(rel.vocab)
+    docs = doc_bin.get_docs(model.vocab)
     examples = []
     for gold in docs:
         pred = Doc(
-            rel.vocab,
+            model.vocab,
             words=[t.text for t in gold],
             spaces=[t.whitespace_ for t in gold],
         )
-        if ner_model_path != None:
-            pred.ents = ner(gold.text).ents
-        else:
-            pred.ents = gold.ents
-        for name, proc in rel.pipeline:
-            pred = proc(pred)
-        examples.append(Example(pred, gold))
 
+        pred = model(pred)
+        examples.append(Example(pred, gold))
         # Print the gold and prediction, if gold label is not 0
         if print_details:
             print()
@@ -79,18 +72,15 @@ def ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_details: b
             print()
     print("|| Getting model scores")
     random_examples = []
-    docs = doc_bin.get_docs(rel.vocab)
+    docs = doc_bin.get_docs(model.vocab)
     for gold in docs:
         pred = Doc(
-            rel.vocab,
+            model.vocab,
             words=[t.text for t in gold],
             spaces=[t.whitespace_ for t in gold],
         )
-        if ner_model_path != None:
-            pred.ents = ner(gold.text).ents
-        else:
-            pred.ents = gold.ents
-        relation_extractor = rel.get_pipe("relation_extractor")
+        pred.ents = gold.ents
+        relation_extractor = model.get_pipe("relation_extractor")
         get_instances = relation_extractor.model.attrs["get_instances"]
         for (e1, e2) in get_instances(pred):
             offset = (e1.start, e2.start)
@@ -120,6 +110,5 @@ def _score_and_format(examples, thresholds):
 if __name__ == "__main__":
     #typer.run(ner_rel_evaluate)
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    ner_model_path = "../trained_model/ner/all_domains/model-best"
-    rel_model_path = "../trained_model/rel_pipeline/all_domains/model-best"
-    ner_rel_evaluate(ner_model_path,rel_model_path,doc_path,False)
+    model_path = "../trained_model/joint/model-best"
+    ner_rel_evaluate(model_path,doc_path,False)
