@@ -1,3 +1,3 @@
-python -m spacy train ner_config.cfg --output trained_model/ner/all_domains --paths.train datasets/preprocessed/all_domains/full_abstracts/train.spacy --paths.dev datasets/preprocessed/all_domains/full_abstracts/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
+python -m spacy train ner_config.cfg --output trained_model/ner/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
 
 python -m spacy train rel_trf.cfg --output trained_model/rel_pipeline/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0

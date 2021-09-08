@@ -1,0 +1,874 @@
+,Outcomes,Arm 1,Arm 2
+0,intervention,olanzapine,haloperidol
+1,Five of six,CGI Improvement item,CGI Improvement item
+2,three of six,CGI Improvement item,CGI Improvement item
+3,haloperidol,Five of six,
+4,responders,CGI Improvement item,CGI Improvement item
+5,CGI Improvement item,responders,responders
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,secretin,placebo
+1,change of ADOS social-communication total score,secretin,secretin
+2,no,0.346,0.346
+3,-0.8 +/- 2.9,0.346,0.346
+4,-0.6 +/- 1.4,0.346,0.346
+5,0.346,-0.6 +/- 1.4,-0.6 +/- 1.4
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,49 children,placebo
+1,101,randomly assigned,randomly assigned
+2,82,randomly assigned,randomly assigned
+3,19,randomly assigned,randomly assigned
+4,8.8+/-2.7,randomly assigned,randomly assigned
+5,randomly assigned,placebo,placebo
+6,49 children,randomly assigned,52
+7,52,8.8+/-2.7,8.8+/-2.7
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,0.5 to 3.5 mg,placebo
+1,0.5 to 3.5 mg,14.1 percent,
+2,56.9 percent,14.1 percent,Irritability score
+3,reduction in the,placebo,placebo
+4,Irritability score,placebo,placebo
+5,14.1 percent,Irritability score,Irritability score
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,risperidone,placebo
+1,rate of a positive response,52,52
+2,at least a 25 percent decrease in the Irritability score,52,52
+3,rating of much improved or very much improved on the CGI-I,52,52
+4,69 percent,52,52
+5,34 of 49,52,52
+6,positive response,52,52
+7,12 percent,52,52
+8,placebo,69 percent,
+9,6 of,52,52
+10,52,6 of,6 of
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Risperidone,placebo
+1,weight gain,placebo,placebo
+2,2.7+/-2.9 kg,weight gain,0.8+/-2.2 kg
+3,0.8+/-2.2 kg,weight gain,weight gain
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,risperidone,placebo
+1,64 %,31 %,placebo
+2,improvement over baseline in the irritability score,placebo,placebo
+3,31 %,improvement over baseline in the irritability score,improvement over baseline in the irritability score
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,risperidone,placebo
+1,87 %,global improvement in their condition,40 %
+2,global improvement in their condition,placebo,placebo
+3,40 %,global improvement in their condition,global improvement in their condition
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,risperidone,7.7 %
+1,Somnolence,manageable,manageable
+2,72.5 %,manageable,manageable
+3,7.7 %,manageable,manageable
+4,manageable,placebo,placebo
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,-treated group,placebo
+1,Eight ( 53 % ) of 15 patients,none of 15,responders
+2,responders,placebo,placebo
+3,none of 15,responders,responders
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,FM,early CR
+1,Median FFS,53 months,53 months
+2,36 months,53 months,53 months
+3,19 months,53 months,53 months
+4,53 months,19 months,19 months
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,IT methotrexate,triple IT therapy
+1,19.5 %,Processing Speed Index score,6.9 %
+2,Processing Speed Index score,triple IT therapy,triple IT therapy
+3,6.9 %,Processing Speed Index score,Processing Speed Index score
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,AMB,41
+1,58 %,0.05,0.05
+2,36,41,80 %
+3,completed prophylaxis,0.05,0.05
+4,80 %,0.05,0.05
+5,41,completed prophylaxis,completed prophylaxis
+6,FLU,58 %,
+7,0.05,41,80 %
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,tamoxifen,placebo
+1,6074,severe angina,severe angina
+2,tamoxifen,severe angina,severe angina
+3,6072,severe angina,severe angina
+4,placebo,1.75 ( 0.44 to 8.13 ),
+5,95 %,severe angina,severe angina
+6,1.75 ( 0.44 to 8.13 ),severe angina,severe angina
+7,fatal myocardial infarction,severe angina,severe angina
+8,1.11 ( 0.55 to 2.28 ),severe angina,severe angina
+9,nonfatal myocardial infarction,severe angina,severe angina
+10,0.69 ( 0.29 to 1.57 ),severe angina,severe angina
+11,unstable angina,severe angina,severe angina
+12,0.83 ( 0.32 to 2.10 ),severe angina,severe angina
+13,severe angina,0.83 ( 0.32 to 2.10 ),0.83 ( 0.32 to 2.10 )
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,tamoxifen,placebo
+1,CHD,severe angina,severe angina
+2,516,severe angina,severe angina
+3,532,severe angina,severe angina
+4,placebo,1.25 ( 0.32 to 5.18 ),
+5,risk ratios,severe angina,severe angina
+6,95 %,severe angina,severe angina
+7,0.00 ( 0 to 1.58 ),severe angina,severe angina
+8,fatal myocardial infarction,severe angina,severe angina
+9,1.25 ( 0.32 to 5.18 ),severe angina,severe angina
+10,nonfatal myocardial infarction,severe angina,severe angina
+11,2.26 ( 0.87 to 6.55 ),severe angina,severe angina
+12,unstable angina,severe angina,severe angina
+13,1.39 ( 0.23 to 9.47 ),severe angina,severe angina
+14,severe angina,1.39 ( 0.23 to 9.47 ),1.39 ( 0.23 to 9.47 )
+
+,Outcomes,Arm 1
+0,intervention,psychosocial therapy
+1,Risk of cardiovascular death,psychosocial therapy
+2,86 %,Risk of cardiovascular death
+
+,Outcomes,Arm 2,Arm 1
+0,intervention,control,ventricular arrhythmias
+1,Six,ventricular arrhythmias,cardiovascular deaths
+2,seven,ventricular arrhythmias,cardiovascular deaths
+3,cardiovascular deaths,ventricular arrhythmias,control
+
+,Outcomes,Arm 1
+0,intervention,therapy group
+1,risk of all-cause mortality,therapy group
+2,62 %,risk of all-cause mortality
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,therapy group,eight
+1,three,deaths,deaths
+2,deaths,control group,control group
+3,eight,deaths,deaths
+
+,Outcomes,Arm 2,Arm 1
+0,intervention,losartan,50 mg
+1,50 mg,50 mg,
+2,captopril,,50 mg
+3,tolerated,50 mg,50 mg
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,all-cause mortality,447 ( 16 % )
+1,primary end point,captopril,captopril
+2,all-cause mortality,deaths,deaths
+3,499 ( 18 % ),deaths,deaths
+4,447 ( 16 % ),deaths,deaths
+5,deaths,captopril,captopril
+6,captopril,499 ( 18 % ),
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,losartan,captopril
+1,cardiovascular deaths,captopril,captopril
+2,"420 , 15 %",cardiovascular deaths,"363 , 13 %"
+3,"363 , 13 %",cardiovascular deaths,cardiovascular deaths
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Losartan,captopril
+1,Losartan,captopril,captopril
+2,tolerated,captopril,captopril
+3,captopril,17,fewer patients discontinuing
+4,fewer patients discontinuing,captopril,captopril
+5,17,23 %,23 %
+6,23 %,losartan,losartan
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,35 mg,125 mg
+1,incidence of ICD therapies per patient-year,0.31,0.31
+2,36,0.31,0.31
+3,10,0.31,0.31
+4,12,0.31,0.31
+5,9,0.31,0.31
+6,35 mg,,125 mg
+7,75 mg,0.31,0.31
+8,125 mg,0.31,0.31
+9,0.31,12,9
+
+,Outcomes,Arm 1
+0,intervention,metoprolol CR/XL
+1,left ventricular ejection fraction,122 to 145 ms
+2,0.26 to 0.31,duration of the late mitral filling wave ( A )
+3,deceleration time of the early mitral filling wave ( E ),122 to 145 ms
+4,189 to 246 ms,122 to 145 ms
+5,time velocity integral of E-wave,122 to 145 ms
+6,8.7 to 11.2 cm,122 to 145 ms
+7,duration of the late mitral filling wave ( A ),122 to 145 ms
+8,122 to 145 ms,duration of the late mitral filling wave ( A )
+
+,Outcomes,Arm 2
+0,intervention,placebo
+1,No,changes
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Bronchodilators,0.21
+1,reduced peripheral airways resistance,increased measures of compliance,increased measures of compliance
+2,0.53,increased measures of compliance,increased measures of compliance
+3,0.38,increased measures of compliance,increased measures of compliance
+4,controls,0.38,
+5,0.21,0.38,reduced peripheral airways resistance
+6,0.19,0.38,reduced peripheral airways resistance
+7,increased measures of compliance,controls,0.19
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Magnesium,Magnesium
+1,reduced the,shivering threshold,
+2,shivering threshold,reduced the,
+3,36.3 [ SD 0.4 ] degrees C,shivering threshold,36.6 [ 0.3 ] degrees C
+4,36.6 [ 0.3 ] degrees C,shivering threshold,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,HBI,usual care
+1,reducing unplanned hospitalization,usual care,usual care
+2,677,readmissions,824
+3,readmissions,usual care,usual care
+4,824,readmissions,readmissions
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,CCM,180 +/- 34
+1,increased LV ejection fraction,180 +/- 34,180 +/- 34
+2,26 +/- 1,increasing MVO ( 2 ),
+3,31 +/- 2,increasing MVO ( 2 ),
+4,increasing MVO ( 2 ),180 +/- 34,180 +/- 34
+5,257 +/- 41,increasing MVO ( 2 ),31 +/- 2
+6,180 +/- 34,increasing MVO ( 2 ),
+
+,Outcomes,Arm 1
+0,intervention,CCM
+1,increased LV peak +dP/dt,CCM
+2,10.1 +/- 1.5 %,increased LV peak +dP/dt
+
+,Outcomes,Arm 1
+0,intervention,6.2 %
+1,died,15.7 %
+2,12.1 %,15.7 %
+3,MI,15.7 %
+4,15.7 %,died
+5,death or MI,15.7 %
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,SES,PES
+1,rates of MACEs,two,two
+2,5.9 % ( n = 5 ),PES,PES
+3,SES,3.6 % ( n = 3 ),3.6 % ( n = 3 )
+4,9.5 % ( n = 8 ),two,two
+5,PES,3.6 % ( n = 3 ),3.6 % ( n = 3 )
+6,definite stent thrombosis,two,two
+7,1.2 % ( n = 1 ),PES,PES
+8,3.6 % ( n = 3 ),two,two
+9,two,PES,PES
+
+,Outcomes,Arm 1
+0,intervention,prophylaxis study
+1,asymptomatic,normal
+2,109,normal
+3,duplex scans,normal
+4,normal,duplex scans
+
+,Outcomes,Arm 1
+0,intervention,5.7 %
+1,Two,excessive blood loss
+2,5.7 %,excessive blood loss
+3,excessive blood loss,coumadin
+
+,Outcomes,Arm 1
+0,intervention,219
+1,One,clinically detectable proximal deep vein thrombosis
+2,219,clinically detectable proximal deep vein thrombosis
+3,clinically detectable proximal deep vein thrombosis,nonrandomized group
+
+,Outcomes
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,transfusions,standard care
+1,130,randomly assigned,randomly assigned
+2,8.3+/-3.3,randomly assigned,randomly assigned
+3,63,67,67
+4,randomly assigned,standard care,standard care
+5,67,8.3+/-3.3,8.3+/-3.3
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,transfusion group,standard-care
+1,Ten,crossed over,crossed over
+2,dropped out,transfusion,transfusion
+3,two,crossed over,crossed over
+4,crossed over,transfusion,transfusion
+
+,Outcomes,Arm 2
+0,intervention,standard-care
+1,10,92 percent
+2,cerebral infarctions,92 percent
+3,1,92 percent
+4,intracerebral hematoma,92 percent
+5,infarction,92 percent
+6,transfusion,92 percent
+7,92 percent,transfusion
+
+,Outcomes,Arm 1
+0,intervention,wall motion and MCE assessment
+1,sensitivity,82 % to 83 %
+2,specificity,82 % to 83 %
+3,82 % to 83 %,46 % to 55 %
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,acarbose-treated,placebo
+1,responders,placebo,placebo
+2,20/24 patients,responders,10/19 patients
+3,10/19 patients,responders,responders
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,acarbose,placebo
+1,mean daily insulin dose,placebo,placebo
+2,16.4 +/- 10.1 IU,mean daily insulin dose,22.4 +/- 12.2 IU
+3,22.4 +/- 12.2 IU,mean daily insulin dose,mean daily insulin dose
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,120,137 +/- 44
+1,higher metabolic effect,enalapril,enalapril
+2,glibenclamide,enalapril,enalapril
+3,AUC GIR,enalapril,enalapril
+4,0-120,enalapril,enalapril
+5,229 +/- 173,240,240
+6,137 +/- 44,240,240
+7,-1,enalapril,enalapril
+8,120,240,240
+9,240,enalapril,enalapril
+
+,Outcomes,Arm 1
+0,intervention,5.2 +/- 1.9
+1,maximal metabolic effect,GIR ( max )
+2,glibenclamide,-1
+3,GIR ( max ),-1
+4,5.2 +/- 1.9,4.1 +/- 1.3
+5,4.1 +/- 1.3,-1
+6,-1,-1
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,1286 +/- 249,enalapril
+1,total metabolic effect,0-600,0-600
+2,glibenclamide,-1,-1
+3,placebo,1267 +/- 334,
+4,AUC GIR,-1,-1
+5,0-600,-1,-1
+6,1267 +/- 334,0-600,1286 +/- 249
+7,1286 +/- 249,0-600,0-600
+8,-1,1267 +/- 334,1286 +/- 249
+
+,Outcomes,Arm 1
+0,intervention,7.7 %
+1,adverse events,2.9 %
+2,dizziness,2.9 %
+3,tinnitus,2.9 %
+4,2.9 %,treatment-related events
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,intervention and,intervention and
+1,no,BP,control ;
+2,change,BP,control ;
+3,BP,BP,control ;
+4,control ;,BP,no
+5,-4.2 mmHg ( 95 % CI -12.4 to 3.9 ) /-2.6 mmHg ( 95 % CI -8.4 to 3.3 ),BP,control ;
+
+,Outcomes,Arm 1
+0,intervention,14
+1,14,in-hospital deaths without relationship
+2,in-hospital deaths without relationship,GLN
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,3 of 8 patients,GLY placebo
+1,Acute graft us host disease,.05,.05
+2,1 of 10 hematologic patients,.05,.05
+3,3 of 8 patients,.05,.05
+4,.05,GLN,GLN
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,40.5 %,50-mg
+1,Response rates,27.3 %,27.3 %
+2,50-mg,42.9 %,
+3,40.5 %,panel,panel
+4,36.4 %,42.9 %,panel
+5,panel,27.3 %,27.3 %
+6,42.9 %,27.3 %,27.3 %
+7,27.3 %,42.9 %,panel
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,20 mg,47.7 %
+1,CBR,47.7 %,47.7 %
+2,64.3 %,panel,61.4 %
+3,61.4 %,panel,
+4,panel,47.7 %,47.7 %
+5,59.5 %,panel,61.4 %
+6,47.7 %,panel,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,arzoxifene,50 mg
+1,Mean observed steady-state plasma concentrations,50 mg,50 mg
+2,3.62,7.48,7.48
+3,7.48,3.62,3.62
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,tourniquet,control
+1,blood lost,0.0003,0.0003
+2,1870 mL,0.0003,0.0003
+3,95 %,0.0003,0.0003
+4,1159-2580 mL,0.0003,0.0003
+5,transfusion rates,0.0003,0.0003
+6,7 %,0.0003,0.0003
+7,79 %,0.0003,0.0003
+8,0.0003,transfusion rates,transfusion rates
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,fulvestrant,322 ( 76.1 % )
+1,319 ( 74.5 % ),died,died
+2,322 ( 76.1 % ),died,died
+3,died,anastrozole,anastrozole
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,fulvestrant,anastrozole
+1,median overall survival,0.98 ; 95 %,0.98 ; 95 %
+2,27.4 months,0.84-1.15,0.84-1.15
+3,27.7 months,0.84-1.15,0.84-1.15
+4,0.98 ; 95 %,0.84-1.15,0.84-1.15
+5,0.84-1.15,0.98 ; 95 %,0.98 ; 95 %
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,q.d .,b.i.d .
+1,15-year actuarial locoregional recurrence rate,b.i.d .,b.i.d .
+2,7 %,12 %,15-year actuarial locoregional recurrence rate
+3,12 %,15-year actuarial locoregional recurrence rate,15-year actuarial locoregional recurrence rate
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,q.d .,b.i.d .
+1,rates of severe acute toxicity,b.i.d .,b.i.d .
+2,4 %,42 %,42 %
+3,q.d .,,5 %
+4,5 %,42 %,42 %
+5,b.i.d .,4 %,
+6,moist desquamation,b.i.d .,b.i.d .
+7,42 %,b.i.d .,b.i.d .
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,q.d .,b.i.d.
+1,15-year actuarial rate of severe late RT complications,b.i.d.,b.i.d.
+2,two,q.d .,q.d .
+3,6 %,15-year actuarial rate of severe late RT complications,15-year actuarial rate of severe late RT complications
+4,11 %,two,two
+
+,Outcomes,Arm 2,Arm 1
+0,intervention,130,864
+1,864,deaths,
+2,breast cancers,control,133
+3,133,breast cancers,
+4,breast cancer deaths,control,133
+5,896,breast cancers,133
+6,130,breast cancers,133
+7,deaths,control,133
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,tamoxifen,7 %
+1,higher mean hot flash score,exemestane,exemestane
+2,daily hot flashes,exemestane,exemestane
+3,33 %,increase from,increase from
+4,7 %,increase from,increase from
+5,increase from,exemestane,exemestane
+
+,Outcomes,Arm 1
+0,intervention,group A
+1,objective response rate,group A
+2,18 %,objective response rate
+3,27.5 %,objective response rate
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,3 %,group B
+1,rate and grade 3 and 4 neutropenia,group B,
+2,23,,3 %
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,3840 +/- 298,13.6 +/- 2.49
+1,reduction of mean duration of air leak,3840 +/- 298,5160 +/- 3890
+2,4.9 +/- 1.79,hospital stay cost per patient,hospital stay cost per patient
+3,8.2 +/- 4.2,leva,
+4,number of days of a chest tube duration,3840 +/- 298,5160 +/- 3890
+5,7.3 +/- 1.14,hospital stay cost per patient,5160 +/- 3890
+6,12.46 +/- 3.6,leva,
+7,length of postoperative in-hospital stay in days,3840 +/- 298,5160 +/- 3890
+8,9.4 +/- 1.86,hospital stay cost per patient,hospital stay cost per patient
+9,13.6 +/- 2.49,leva,
+10,hospital stay cost per patient,3840 +/- 298,5160 +/- 3890
+11,leva,hospital stay cost per patient,5160 +/- 3890
+12,3840 +/- 298,hospital stay cost per patient,hospital stay cost per patient
+13,5160 +/- 3890,leva,hospital stay cost per patient
+
+,Outcomes,Arm 1
+0,intervention,17.9 % ( 41/229 )
+1,HER2 overexpression/amplification,37.3 % ( 91/244 )
+
+,Outcomes
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,PSA-D,PSA-T
+1,higher area under the ROC curve,PSA-T,PSA-T
+2,0.77,0.79,higher area under the ROC curve
+3,0.79,higher area under the ROC curve,0.77
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,arm A,arm B
+1,response rates,arm B,arm B
+2,22.0,28.9,response rates
+3,28.9,response rates,response rates
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,arm A,arm B
+1,Median time to treatment failure,arm B,arm B
+2,3.6 months,Median time to treatment failure,Median time to treatment failure
+3,4.8 months,Median time to treatment failure,Median time to treatment failure
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,arm A,arm B
+1,Median time to progression,arm B,arm B
+2,4.1 months,Median time to progression,Median time to progression
+3,5.5 months,Median time to progression,Median time to progression
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,arm A,arm B
+1,Median survival time,arm B,arm B
+2,15.5 months,Median survival time,18.8 months
+3,18.8 months,Median survival time,Median survival time
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,bimatoprost,latanoprost
+1,Ocular irritation,latanoprost,latanoprost
+2,22 subjects (37.9%),13 subjects (22.4%),ocular hyperaemia
+3,ocular hyperaemia,latanoprost,latanoprost
+4,13 subjects (22.4%),ocular hyperaemia,ocular hyperaemia
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,TRA/TIM BAK-free group,TRA/TIM group
+1,hyperemia of the eye,TRA/TIM group,TRA/TIM group
+2,ocular hyperemia and conjunctival hyperemia,TRA/TIM group,TRA/TIM group
+3,11.8%,13.0%,ocular hyperemia and conjunctival hyperemia
+4,13.0%,ocular hyperemia and conjunctival hyperemia,ocular hyperemia and conjunctival hyperemia
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,350- and,500-mm2
+1,postoperative visual acuities remained within one line of the preoperative visual acuities,350- and,500-mm2
+2,62%,postoperative visual acuities remained within one line of the preoperative visual acuities,66%
+3,66%,62%,postoperative visual acuities remained within one line of the preoperative visual acuities
+4,500-mm2,62%,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,0.15,BPL
+1,global subjective ocular symptom score,BPL,BPL
+2,BPL,0.15,
+3,0.15,0.46,0.46
+4,0.41,0.18,0.18
+5,0.18,0.46,0.46
+6,0.46,0.18,0.18
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Brimonidine,timolol
+1,overall mean peak reduction in intraocular pressure (IOP),mean peak reduction in IOP,mean peak reduction in IOP
+2,6.5 mm Hg,6.1 mm Hg,mean peak reduction in IOP
+3,mean peak reduction in IOP,6.1 mm Hg,timolol
+4,6.1 mm Hg,mean peak reduction in IOP,mean peak reduction in IOP
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,alginate carteolol,standard
+1,mean reductions from baseline in intraocular pressure,standard,standard
+2,6.32+/-2.87,mean reductions from baseline in intraocular pressure,5.67+/-3.30
+3,5.67+/-3.30,mean reductions from baseline in intraocular pressure,mean reductions from baseline in intraocular pressure
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,11.17,TTFC
+1,Mean IOP reductions,TTFC,TTFC
+2,11.34,7.89,7.89
+3,6.42,11.17,11.17
+4,11.17,Mean IOP reductions,Mean IOP reductions
+5,7.89,11.17,11.17
+6,TTFC,11.34,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,6.2 mmHg (27.0%),brimonidine-timolol
+1,mean additional reduction from latanoprost-treated baseline IOP,10,10
+2,8.3 mmHg (35.5%),mean additional reduction from latanoprost-treated baseline IOP,6.2 mmHg (27.0%)
+3,6.2 mmHg (27.0%),mean additional reduction from latanoprost-treated baseline IOP,mean additional reduction from latanoprost-treated baseline IOP
+4,10,brimonidine-timolol,6.2 mmHg (27.0%)
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,group BSS,Ringer
+1,no,Ringer,Ringer
+2,CV increase,Ringer,Ringer
+3,23.0 ± 3.0%,CV increase,CV increase
+4,Ringer,23.0 ± 3.0%,
+5,20.2 ± 4.0%,23.0 ± 3.0%,CV increase
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,2.54,bimatoprost
+1,mean IOP levels,latanoprost/timolol,bimatoprost
+2,latanoprost/timolol,,3.28
+3,13.83,latanoprost/timolol,3.28
+4,2.54,,3.28
+5,16.16,latanoprost/timolol,3.28
+6,3.28,latanoprost/timolol,16.16
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,brimonidine,latanoprost
+1,127,61,55
+2,55,latanoprost,latanoprost
+3,66,61,55
+4,61,55,55
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,tafluprost,timolol
+1,conjunctival hyperemia,timolol,timolol
+2,4.4%,conjunctival hyperemia,1.2%
+3,1.2%,conjunctival hyperemia,conjunctival hyperemia
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,latanoprost plus timolol group,dorzolamide plus timolol group
+1,least square estimate of the mean diurnal intraocular pressure reduction,dorzolamide plus timolol group,dorzolamide plus timolol group
+2,-7.06 mm Hg,least square estimate of the mean diurnal intraocular pressure reduction,-4.44 mm Hg
+3,-4.44 mm Hg,-7.06 mm Hg,least square estimate of the mean diurnal intraocular pressure reduction
+4,dorzolamide plus timolol group,-7.06 mm Hg,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,study group,control group
+1,mean baseline intraocular pressure,control group,control group
+2,23.8 +/- 12.6 mmHg,mean baseline intraocular pressure,mean baseline intraocular pressure
+3,25.9 +/- 10.6 mmHg,mean baseline intraocular pressure,mean baseline intraocular pressure
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Ahmed,Baerveldt
+1,Mean durations of follow-up,Baerveldt,Baerveldt
+2,20.0 months,Mean durations of follow-up,22.9 months
+3,22.9 months,Mean durations of follow-up,Mean durations of follow-up
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,Ahmed,Baerveldt
+1,Cumulative successes,Baerveldt,Baerveldt
+2,0.73,0.85,0.85
+3,0.62,0.92,0.92
+4,cumulative successes,0.85,0.85
+5,Baerveldt,0.73,
+6,0.92,cumulative successes,cumulative successes
+7,0.85,0.92,0.92
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,laser group,control group
+1,proportion of eyes started on medical treatment,control group,control group
+2,2,9 eyes (17%),proportion of eyes started on medical treatment
+3,8 eyes (15%,control group,control group
+4,9 eyes (17%),2,2
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,study group,control group
+1,Forty-three,12,12
+2,25,12,12
+3,completed the study,12,12
+4,12,completed the study,completed the study
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,dorzolamide/timolol,dorzolamide/timolol
+1,mean (standard error of mean [SE]) IOP reductions at months one,dorzolamide/timolol,dorzolamide/timolol
+2,7.2 (0.4),7.4 (0.3) mm Hg,7.4 (0.3) mm Hg
+3,7.3 (0.4),7.4 (0.3) mm Hg,7.4 (0.3) mm Hg
+4,7.1 (0.3) mm Hg,7.4 (0.3) mm Hg,7.4 (0.3) mm Hg
+5,7.5 (0.3),7.4 (0.3) mm Hg,7.4 (0.3) mm Hg
+6,7.8 (0.3),7.4 (0.3) mm Hg,7.4 (0.3) mm Hg
+7,7.4 (0.3) mm Hg,7.5 (0.3),7.8 (0.3)
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,fixed-combination,latanoprost
+1,at least 1 treatment-emergent AE,latanoprost,latanoprost
+2,10.9%,12.1%,at least 1 treatment-emergent AE
+3,12.1%,at least 1 treatment-emergent AE,at least 1 treatment-emergent AE
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,brimonidine,timolol
+1,Clinical success,timolol,timolol
+2,71% (75/106),Clinical success,Clinical success
+3,70% (73/105),Clinical success,Clinical success
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,lidocaine,BSS
+1,125 of 277 patients (45.1%),123 of 229 patients (53.7%),123 of 229 patients (53.7%)
+2,pain,BSS,BSS
+3,123 of 229 patients (53.7%),pain,pain
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,dorzolamide,dorzolamide
+1,corresponding figures,dorzolamide,dorzolamide
+2,27.2 (3.4),,corresponding figures
+3,5.6 (2.6),27.2 (3.4),corresponding figures
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,SLT,ALT
+1,No,two,two
+2,mean decrease in IOP,two,two
+3,5.86 mm Hg,mean decrease in IOP,mean decrease in IOP
+4,6.04 mm Hg,mean decrease in IOP,mean decrease in IOP
+5,two,mean decrease in IOP,mean decrease in IOP
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,350-mm2,500-mm2
+1,Visual acuities,500-mm2,500-mm2
+2,50%,Visual acuities,Visual acuities
+3,46%,Visual acuities,Visual acuities
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,viscocanalostomy,trabeculectomy
+1,Mean baseline IOP,trabeculectomy,trabeculectomy
+2,24.0+/-2.0 mmHg,Mean baseline IOP,23.7+/-2.6 mmHg
+3,viscocanalostomy,,23.7+/-2.6 mmHg
+4,23.7+/-2.6 mmHg,viscocanalostomy,viscocanalostomy
+5,trabeculectomy,24.0+/-2.0 mmHg,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,microtrabeculectomy,microtrabeculectomy
+1,mean intraocular pressure,0.89,0.89
+2,cumulative probability of failure,0.89,0.89
+3,12.4 ± 4.6 mmHg,cumulative probability of failure,0.27
+4,0.28,0.89,0.89
+5,11.5 ± 3.6 mmHg,cumulative probability of failure,0.27
+6,0.27,0.89,0.89
+7,0.89,11.5 ± 3.6 mmHg,0.27
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,brimonidine,latanoprost
+1,clinical success at month 3,latanoprost,latanoprost
+2,91%,clinical success at month 3,74%
+3,74%,clinical success at month 3,clinical success at month 3
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,trabeculectomy,Ex-PRESS implantation
+1,mean pre-operative IOP,Ex-PRESS implantation,Ex-PRESS implantation
+2,31.1 (± 14.2) to 16.2 (± 1.5) mm Hg,mean pre-operative IOP,mean pre-operative IOP
+3,28.1 (± 9.0) to 15.7 (± 1.8) mm Hg,31.1 (± 14.2) to 16.2 (± 1.5) mm Hg,mean pre-operative IOP
+4,Ex-PRESS implantation,31.1 (± 14.2) to 16.2 (± 1.5) mm Hg,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,0.005%,0.0015%
+1,reduced IOP (+/- SEM),0.0015%,0.0015%
+2,latanoprost,,9.8 +/- 0.9 mm Hg
+3,9.8 +/- 0.9 mm Hg,6.7 +/- 0.9 mm Hg,reduced IOP (+/- SEM)
+4,6.7 +/- 0.9 mm Hg,reduced IOP (+/- SEM),9.8 +/- 0.9 mm Hg
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,MMC,ologen
+1,absolute success rate,ologen,ologen
+2,100%,absolute success rate,50%
+3,MMC,,50%
+4,50%,absolute success rate,absolute success rate
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,25.2,bimatoprost
+1,reduced IOP (mean (SD)),bimatoprost,bimatoprost
+2,8.4 (3.8) mm Hg,3.6,3.6
+3,bimatoprost,25.2,
+4,8.9 (3.9) mm Hg,3.6,3.6
+5,25.2,3.6,3.6
+6,3.6,3.6,3.6
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,intracameral lidocaine,BSS
+1,median pain score (range),BSS,BSS
+2,0.0,median pain score (range),median pain score (range)
+3,1.0,median pain score (range),median pain score (range)
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,MMC,control
+1,30%,control,control
+2,probability of success,control,control
+3,62%,probability of success,67%
+4,67%,probability of success,probability of success
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,brimonidine,81.8%
+1,clinical success rate,no,no
+2,86.2%,no,no
+3,81.8%,no,no
+4,no,timolol,timolol
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,350- and,11%
+1,serous choroidal effusion,11%,11%
+2,16%,corneal or corneal graft edema,corneal or corneal graft edema
+3,32%,11%,11%
+4,strabismus,11%,11%
+5,19%,11%,11%
+6,anterior uveitis,11%,11%
+7,14%,corneal or corneal graft edema,corneal or corneal graft edema
+8,11%,corneal or corneal graft edema,corneal or corneal graft edema
+9,corneal or corneal graft edema,11%,11%
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,dorzolamide/timolol,2
+1,mean daytime diurnal IOP,2,2
+2,18.9 mmHg,2,2
+3,18.4 mmHg,dorzolamide/timolol,17.5
+4,latanoprost,17.4 mmHg,1
+5,17.4 mmHg,2,2
+6,dorzolamide/timolol,mean daytime diurnal IOP,17.5
+7,17.5,2,2
+8,2,17.4 mmHg,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,MMC,5-FU
+1,intraocular pressures,5-FU,5-FU
+2,10.9 +/- 5.3 mmHg,60.0%,21.1%
+3,MMC,,21.1%
+4,14.2 +/- 5.5 mmHg,MMC,MMC
+5,5-FU,60.0%,21.1%
+6,less than or equal to 12 mmHg,5-FU,5-FU
+7,60.0%,less than or equal to 12 mmHg,21.1%
+8,21.1%,MMC,MMC
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,laser group,6%
+1,Eight,converted to glaucoma,converted to glaucoma
+2,15%,converted to glaucoma,converted to glaucoma
+3,3,converted to glaucoma,converted to glaucoma
+4,6%,converted to glaucoma,converted to glaucoma
+5,control group,15%,
+6,converted to glaucoma,control group,control group
+
+,Outcomes,Arm 1
+0,intervention,alginate
+1,blurred vision sensation,alginate
+2,2 out of 74 patients,blurred vision sensation
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,14 eyes,7 eyes
+1,14 eyes,first,first
+2,shallower anterior,first,first
+3,7 eyes,first,first
+4,first,group B,group B
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,PCG,non-PCG
+1,Responder rates,non-PCG,non-PCG
+2,latanoprost,46%,57%
+3,timolol,72%,
+4,50%,46%,57%
+5,46%,72%,Responder rates
+6,72%,non-PCG,non-PCG
+7,57%,72%,Responder rates
+8,non-PCG,72%,
+
+,Outcomes,Arm 1,Arm 2
+0,intervention,MMC,OLO
+1,mean preoperative IOP,OLO,OLO
+2,26.5 (±5.2),mean preoperative IOP,mean preoperative IOP
+3,27.3 (±6.0),mean preoperative IOP,mean preoperative IOP
+

@@ -12,12 +12,14 @@ from spacy.vocab import Vocab
 from spacy import Language
 from thinc.model import set_dropout_rate
 from wasabi import Printer
+import operator
 
 
 Doc.set_extension("rel", default={}, force=True)
 msg = Printer()
 
-
+# This object was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 @Language.factory(
     "relation_extractor",
     requires=["doc.ents", "token.ent_iob", "token.ent_type"],
@@ -28,13 +30,17 @@ msg = Printer()
         "rel_micro_f": None,
     },
 )
+
+# This object was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 def make_relation_extractor(
     nlp: Language, name: str, model: Model, *, threshold: float
 ):
     """Construct a RelationExtractor component."""
     return RelationExtractor(nlp.vocab, model, name, threshold=threshold)
 
-
+# This class was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 class RelationExtractor(TrainablePipe):
     def __init__(
         self,
@@ -200,24 +206,60 @@ class RelationExtractor(TrainablePipe):
         """Score a batch of examples."""
         return score_relations(examples, self.threshold)
 
-
+# This function was adapted from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
+# it now provide scores for joint ner and relation extraction
+# as well as for relation classes
 def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, Any]:
-    """Score a batch of examples."""
+    """Score ner and rel in a batch of examples."""
     micro_prf = PRFScore()
     for example in examples:
-        gold = example.reference._.rel
-        pred = example.predicted._.rel
-        for key, pred_dict in pred.items():
-            gold_labels = [k for (k, v) in gold[key].items() if v == 1.0]
-            for k, v in pred_dict.items():
-                if v >= threshold:
-                    if k in gold_labels:
-                        micro_prf.tp += 1
+        gold_rels = example.reference._.rel
+        pred_rels = example.predicted._.rel
+        gold_ents = [e.text for e in example.reference.ents]
+        pred_ents = [e.text for e in example.predicted.ents]
+        assessed_ents = []
+        for key, pred_dict in pred_rels.items():
+            # checks if entity pair in gold list for scoring relations
+            if key in gold_rels.keys():
+                gold_labels = [k for (k, v) in gold_rels[key].items() if v == 1.0]
+                for k, v in pred_dict.items():
+                    if v >= threshold:
+                        if k in gold_labels:
+                            micro_prf.tp += 1
+                        else:
+                            micro_prf.fp += 1
                     else:
-                        micro_prf.fp += 1
+                        if k in gold_labels:
+                            micro_prf.fn += 1
+
+            # keys match the entity indexes of the gold annos, if an entity pair not in the gold list
+            # this second part of the code evaluates correct entities with no relations mapped
+            else:
+                pred_rel = max(pred_dict.items(), key=operator.itemgetter(1))
+                if pred_rel[1] > 0.5:
+                    micro_prf.fp += 1
                 else:
-                    if k in gold_labels:
-                        micro_prf.fn += 1
+                    parent_ent = list(filter(lambda x: x.start == key[0], example.predicted.ents))[0].text
+                    child_ent = list(filter(lambda x: x.start == key[1], example.predicted.ents))[0].text
+                    if parent_ent not in assessed_ents:
+                        if parent_ent in gold_ents:
+                            micro_prf.tp += 1
+                        else:
+                            micro_prf.fp += 1
+                        assessed_ents.append(parent_ent)
+                    if child_ent not in assessed_ents:
+                        if child_ent in gold_ents:
+                            micro_prf.tp += 1
+                        else:
+                            micro_prf.fp += 1
+                        assessed_ents.append(child_ent)
+
+        # counts entity false negatives by checking gold ents not appearing in pred ents
+        leftover_ents = [ents_left for ents_left in gold_ents if ents_left not in pred_ents]
+        for missed_ent in leftover_ents:
+                micro_prf.fn += 1
+
     return {
         "rel_micro_p": micro_prf.precision,
         "rel_micro_r": micro_prf.recall,

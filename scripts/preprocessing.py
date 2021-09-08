@@ -1,6 +1,5 @@
 """
 This preprocesing script parses annotated relations and entities from the prodigy jsonl output files.
-Some of the code was adapted from https://github.com/explosion/projects.
 """
 import json
 import typer
@@ -33,6 +32,8 @@ def merge_examples(examples_path_list, output_path):
         output.close()
 
 
+# This function was adapted from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 def annotations_to_spacy(json_loc):
     """Converts Prodigy annotations into doc object with custom rel attribute."""
     msg = Printer()
@@ -162,8 +163,22 @@ def train_dev_test_split(docs,output_dir):
     print(f"{len(joined_test)} test sentences")
 
 
+def stratify_train_examples(doc_path, strats):
+    """Stratifies input docs and binaries them into new spacy files"""
+    vocab = Vocab()
+    doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+    docs = list(doc_bin.get_docs(vocab))
+    l = len(docs)
+    for strat in strats:
+        name = str(strat)[-1] + "0%"
+        doc_strat = docs[:int(l*strat)]
+        docbin = DocBin(docs=doc_strat, store_user_data=True)
+        docbin.to_disk(f"../datasets/preprocessed/all_domains/training_stratifications/train_strat_{name}.spacy")
+
+
+#  this function was developed but not used in the primary study
 def restore_ebm_nlp_annos(results, full_abstracts, output):
-    """Adds back rest of the entity annotated sentences from the ebm_nlp dataset"""
+    """Adds back rest of the entity annotated sentences from the ebm_nlp dataset to the processed result sentences"""
     pmid_set = set()
     text_set = set()
     vocab = Vocab()
@@ -212,9 +227,7 @@ def restore_ebm_nlp_annos(results, full_abstracts, output):
     doc_bin.to_disk(output)
 
 
-#def stratify_train_examples(examples, output):
-
-
+#  this function was developed but not used in the primary study
 def parse_accepted(examples_path):
     """redundant helper function for annotation processing"""
     loaded = open(examples_path,"r").read()
@@ -236,14 +249,16 @@ if __name__ == "__main__":
     merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
                       for domain in os.listdir("../datasets/gold_result_annotations") if domain != "all_domains"]
 
+    stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",
+                            [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9])
     #parse_accepted(annos)
     #merge_examples(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
-    for domain in os.listdir("../datasets/gold_result_annotations"):
-         docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
-         train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
-         for tdt in os.listdir(f"../datasets/preprocessed/{domain}/results_only"):
-             try:
-                restore_ebm_nlp_annos(f"../datasets/preprocessed/{domain}/results_only/{tdt}",f"../datasets/for_annotation/ebm_nlp/{domain}/all_abstract_sentences.jsonl",f"../datasets/preprocessed/{domain}/full_abstracts/{tdt}")
-             except:
-                pass
+    #for domain in os.listdir("../datasets/gold_result_annotations"):
+     #    docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
+      #   train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
+       #  for tdt in os.listdir(f"../datasets/preprocessed/{domain}/results_only"):
+        #     try:
+         #       restore_ebm_nlp_annos(f"../datasets/preprocessed/{domain}/results_only/{tdt}",f"../datasets/for_annotation/ebm_nlp/{domain}/all_abstract_sentences.jsonl",f"../datasets/preprocessed/{domain}/full_abstracts/{tdt}")
+          #   except:
+           #     pass
 
