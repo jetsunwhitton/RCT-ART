@@ -121,5 +121,5 @@ if __name__ == "__main__":
     #typer.run(ner_rel_evaluate)
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
     ner_model_path = "../trained_model/ner/all_domains/model-best"
-    rel_model_path = "../trained_model/rel_pipeline/all_domains/model-best"
-    ner_rel_evaluate(ner_model_path,rel_model_path,doc_path,True)
+    rel_model_path = "../trained_model/rel/all_domains/model-best"
+    ner_rel_evaluate(ner_model_path,rel_model_path,doc_path,False)

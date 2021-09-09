@@ -13,10 +13,10 @@ import os
 import ast
 
 
-def merge_examples(examples_path_list, output_path):
+def merge_jsonl(jsonl_dirs, output_path):
     """Merges gold standard JSONL files from different disease area domains"""
     merge_list = []
-    for path in examples_path_list:
+    for path in jsonl_dirs:
         loaded = open(path,"r").read()
         merge_list += loaded.split("\n")
     with open(output_path, "w") as output:
@@ -31,7 +31,26 @@ def merge_examples(examples_path_list, output_path):
                     print(dict)
         output.close()
 
-def merge_docs
+def merge_domain_train(doc_dirs, output_path):
+    merged_docs = []
+    vocab = Vocab()
+    for dir in doc_dirs:
+        for files in os.listdir(dir):
+            doc_bin = DocBin(store_user_data=True).from_disk(f"{dir}/{files}")
+            merged_docs += list(doc_bin.get_docs(vocab))
+    train_dev_test_split(merged_docs, output_path)
+    l = len(train_dev_test_split)
+    train = train_dev_test_split[0:int(l * 0.9)]
+    dev = train_dev_test_split[int(l * 0.9):]
+
+    docbin = DocBin(docs=train, store_user_data=True)
+    docbin.to_disk(f"{output_path}/train.spacy")
+    print(f"{len(train)} training sentences")
+
+    docbin = DocBin(docs=dev, store_user_data=True)
+    docbin.to_disk(f"{output_path}/dev.spacy")
+    print(f"{len(dev)} dev sentences")
+
 # This function was adapted from the spaCy relation component
 # template: https://github.com/explosion/projects/tree/v3/tutorials
 def annotations_to_spacy(json_loc):
@@ -245,6 +264,7 @@ def parse_accepted(examples_path):
                     output.write(json.dumps(example) + "\n")
         output.close()
 
+
 if __name__ == "__main__":
     #cardiovascular = f"{gold_dir}/cardiovascular_disease/cardiovascular_disease_gold.jsonl"
     #glaucoma = f"{gold_dir}/glaucoma/glaucoma_gold.jsonl"
@@ -252,7 +272,7 @@ if __name__ == "__main__":
     merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
                       for domain in os.listdir("../datasets/gold_result_annotations") if domain != "all_domains"]
 
-    stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
+    #stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
     #parse_accepted(annos)
     #merge_examples(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
     #for domain in os.listdir("../datasets/gold_result_annotations"):
@@ -263,4 +283,7 @@ if __name__ == "__main__":
          #       restore_ebm_nlp_annos(f"../datasets/preprocessed/{domain}/results_only/{tdt}",f"../datasets/for_annotation/ebm_nlp/{domain}/all_abstract_sentences.jsonl",f"../datasets/preprocessed/{domain}/full_abstracts/{tdt}")
           #   except:
            #     pass
+
+
+
 

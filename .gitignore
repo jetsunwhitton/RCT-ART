@@ -2,7 +2,7 @@
 project.lock
 
 # model files
-trained_model
+trained_models
 
 # raw data files
 datasets/for_preprocessing/ebm_nlp/ebm_nlp_2_00
