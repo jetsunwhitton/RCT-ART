@@ -1,5 +1,5 @@
 python -m spacy train ner_config.cfg --output trained_model/ner/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
 
-python -m spacy train configs/ner_scibert.cfg --output trained_model/sci_bert/ner/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
+python -m spacy train configs/ner_scibert.cfg --output trained_models/sci_bert/ner/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
 
-python -m spacy train configs/rel_scibert.cfg --output trained_models/sci_bert/rel/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
+python -m spacy train configs/rel_biobert.cfg --output trained_models/bio_bert/rel/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
