@@ -31,7 +31,7 @@ def merge_examples(examples_path_list, output_path):
                     print(dict)
         output.close()
 
-
+def merge_docs
 # This function was adapted from the spaCy relation component
 # template: https://github.com/explosion/projects/tree/v3/tutorials
 def annotations_to_spacy(json_loc):
