@@ -35,7 +35,13 @@ def train_across_strats(file_dir, config, model_type):
 if __name__ == "__main__":
     #train_across_domains("../datasets/preprocessed", "configs/ner_biobert.cfg", "ner")
 
-    train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/ner_biobert.cfg", "ner")
+    # ner
+    #train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/ner_biobert.cfg", "ner")
+
+    # rel
+    train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/rel_biobert.cfg", "rel")
+
+
 #def train_across_strats():
 
 #def train_different_models
