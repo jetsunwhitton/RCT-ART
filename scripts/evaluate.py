@@ -208,8 +208,8 @@ if __name__ == "__main__":
     outfile = open(f"../evaluation_results/{file_name}.txt", "w")
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
     rel_model_path = "../trained_models/rel/all_domains/model-best"
-    gold_table_path = "../datasets/preprocessed/all_domains/gold_table/all_domains"
-    pred_table_path = "../output_tables/all_domains"
+    gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
+    pred_table_path = "../output_tables"
     model_bases = ["biobert","scibert","roberta"]
 
     # evaluate different model-bases

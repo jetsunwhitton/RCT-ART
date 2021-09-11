@@ -84,20 +84,21 @@ def tabulate_pico_entities(input_docs, output_path):
         df.index.name = 'Outcomes'
         df.reset_index(inplace=True)
         df.drop_duplicates(subset=["Arm 1", "Arm 2"], keep='first', inplace=True)
-        with open(output_path, 'w') as output:
+        with open(f"{output_path}/doc{num}.csv", 'w') as output:
             df.to_csv(output)
         num += 1
 
 if __name__ == "__main__":
     # instantiate pipeline inputs
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    nlp = spacy.blank("en")
-    doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-    docs = doc_bin.get_docs(nlp.vocab)
     model_bases = ["biobert", "scibert", "roberta"]
 
     # tabulate predictions from different model bases
     for model_base in model_bases:
+        print(model_base)
+        nlp = spacy.blank("en")
+        doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        docs = doc_bin.get_docs(nlp.vocab)
         ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
         rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
         tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{model_base}")

@@ -36,8 +36,8 @@ def train_across_models(configs):
 
 if __name__ == "__main__":
 
-    model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/ner_scibert.cfg",
-                     "../configs/rel_scibert.cfg", "../configs/ner_roberta.cfg", "../configs/rel_roberta.cfg"]
+    model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/scibert.cfg",
+                     "../configs/rel_scibert.cfg", "../configs/roberta.cfg", "../configs/rel_roberta.cfg"]
 
     # train different language representations
     train_across_models(model_configs)

@@ -1,0 +1,30 @@
+NER_evaluation
+{'token_acc': 1.0, 'token_p': 1.0, 'token_r': 1.0, 'token_f': 1.0, 'ents_p': 0.7742899850523169, 'ents_r': 0.7848484848484848, 'ents_f': 0.7795334838224228, 'ents_per_type': {'MEAS': {'p': 0.8105263157894737, 'r': 0.84, 'f': 0.825}, 'INTV': {'p': 0.7616822429906542, 'r': 0.7477064220183486, 'f': 0.7546296296296297}, 'OC': {'p': 0.7294117647058823, 'r': 0.7425149700598802, 'f': 0.7359050445103856}}, 'speed': 175.89906353660936}
+Rel alone
+threshold 0.00 	 {'rel_micro_p': '4.58', 'rel_micro_r': '100.00', 'rel_micro_f': '8.76'}
+threshold 0.05 	 {'rel_micro_p': '55.98', 'rel_micro_r': '91.49', 'rel_micro_f': '69.46'}
+threshold 0.10 	 {'rel_micro_p': '63.33', 'rel_micro_r': '88.20', 'rel_micro_f': '73.73'}
+threshold 0.20 	 {'rel_micro_p': '69.95', 'rel_micro_r': '82.40', 'rel_micro_f': '75.67'}
+threshold 0.30 	 {'rel_micro_p': '74.59', 'rel_micro_r': '80.08', 'rel_micro_f': '77.24'}
+threshold 0.40 	 {'rel_micro_p': '76.72', 'rel_micro_r': '77.76', 'rel_micro_f': '77.23'}
+threshold 0.50 	 {'rel_micro_p': '77.80', 'rel_micro_r': '76.60', 'rel_micro_f': '77.19'}
+threshold 0.60 	 {'rel_micro_p': '81.36', 'rel_micro_r': '74.27', 'rel_micro_f': '77.65'}
+threshold 0.70 	 {'rel_micro_p': '82.51', 'rel_micro_r': '71.18', 'rel_micro_f': '76.43'}
+threshold 0.80 	 {'rel_micro_p': '85.37', 'rel_micro_r': '67.70', 'rel_micro_f': '75.51'}
+threshold 0.90 	 {'rel_micro_p': '89.24', 'rel_micro_r': '59.38', 'rel_micro_f': '71.31'}
+threshold 0.99 	 {'rel_micro_p': '98.21', 'rel_micro_r': '21.28', 'rel_micro_f': '34.98'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+Joint
+threshold 0.00 	 {'rel_micro_p': '6.30', 'rel_micro_r': '81.24', 'rel_micro_f': '11.69'}
+threshold 0.05 	 {'rel_micro_p': '53.33', 'rel_micro_r': '76.79', 'rel_micro_f': '62.94'}
+threshold 0.10 	 {'rel_micro_p': '57.60', 'rel_micro_r': '74.63', 'rel_micro_f': '65.02'}
+threshold 0.20 	 {'rel_micro_p': '61.16', 'rel_micro_r': '71.39', 'rel_micro_f': '65.88'}
+threshold 0.30 	 {'rel_micro_p': '62.85', 'rel_micro_r': '70.31', 'rel_micro_f': '66.37'}
+threshold 0.40 	 {'rel_micro_p': '63.26', 'rel_micro_r': '68.56', 'rel_micro_f': '65.80'}
+threshold 0.50 	 {'rel_micro_p': '63.75', 'rel_micro_r': '67.88', 'rel_micro_f': '65.75'}
+threshold 0.60 	 {'rel_micro_p': '64.91', 'rel_micro_r': '66.40', 'rel_micro_f': '65.64'}
+threshold 0.70 	 {'rel_micro_p': '64.69', 'rel_micro_r': '64.78', 'rel_micro_f': '64.73'}
+threshold 0.80 	 {'rel_micro_p': '65.22', 'rel_micro_r': '63.02', 'rel_micro_f': '64.10'}
+threshold 0.90 	 {'rel_micro_p': '64.79', 'rel_micro_r': '57.35', 'rel_micro_f': '60.84'}
+threshold 0.99 	 {'rel_micro_p': '56.56', 'rel_micro_r': '35.49', 'rel_micro_f': '43.62'}
+threshold 1.00 	 {'rel_micro_p': '45.80', 'rel_micro_r': '22.81', 'rel_micro_f': '30.45'}
