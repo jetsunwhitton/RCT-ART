@@ -31,25 +31,35 @@ def merge_jsonl(jsonl_dirs, output_path):
                     print(dict)
         output.close()
 
-def merge_domain_train(doc_dirs, output_path):
+def out_of_domain_split(doc_dirs, exclude):
+    """excludes one domain from full domain train and dev sets for use as test set"""
     merged_docs = []
     vocab = Vocab()
     for dir in doc_dirs:
         for files in os.listdir(dir):
             doc_bin = DocBin(store_user_data=True).from_disk(f"{dir}/{files}")
             merged_docs += list(doc_bin.get_docs(vocab))
-    train_dev_test_split(merged_docs, output_path)
-    l = len(train_dev_test_split)
-    train = train_dev_test_split[0:int(l * 0.9)]
-    dev = train_dev_test_split[int(l * 0.9):]
+    l = len(merged_docs)
+    train = merged_docs[0:int(l * 0.9)]
+    dev = merged_docs[int(l * 0.9):]
+
+    test = []
+    test_dir = f"../datasets/preprocessed/{exclude}/results_only"
+    for files in os.listdir(test_dir):
+        doc_bin = DocBin(store_user_data=True).from_disk(f"{test_dir}/{files}")
+        test += list(doc_bin.get_docs(vocab))
 
     docbin = DocBin(docs=train, store_user_data=True)
-    docbin.to_disk(f"{output_path}/train.spacy")
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/train.spacy")
     print(f"{len(train)} training sentences")
 
     docbin = DocBin(docs=dev, store_user_data=True)
-    docbin.to_disk(f"{output_path}/dev.spacy")
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
     print(f"{len(dev)} dev sentences")
+
+    docbin = DocBin(docs=test, store_user_data=True)
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
+    print(f"{len(test)} test sentences")
 
 # This function was adapted from the spaCy relation component
 # template: https://github.com/explosion/projects/tree/v3/tutorials
@@ -283,6 +293,23 @@ if __name__ == "__main__":
          #       restore_ebm_nlp_annos(f"../datasets/preprocessed/{domain}/results_only/{tdt}",f"../datasets/for_annotation/ebm_nlp/{domain}/all_abstract_sentences.jsonl",f"../datasets/preprocessed/{domain}/full_abstracts/{tdt}")
           #   except:
            #     pass
+
+    combo_domain_path = "../datasets/preprocessed/domain_combos"
+    all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
+                       "../datasets/preprocessed/blood_cancer/results_only",
+                       "../datasets/preprocessed/cardiovascular_disease/results_only",
+                       "../datasets/preprocessed/diabetes/results_only",
+                       "../datasets/preprocessed/glaucoma/results_only",
+                       "../datasets/preprocessed/solid_tumour_cancer/results_only"]
+
+    exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
+
+    for exclude in exclude_list:
+        filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
+        out_of_domain_split(filter_domains,exclude)
+
+
+
 
 
 

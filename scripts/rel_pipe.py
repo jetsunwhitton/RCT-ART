@@ -258,7 +258,7 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
         # counts entity false negatives by checking gold ents not appearing in pred ents
         leftover_ents = [ents_left for ents_left in gold_ents if ents_left not in pred_ents]
         for missed_ent in leftover_ents:
-                micro_prf.fn += 1 # incorrectly labelled entity
+                micro_prf.fn += 1 # gold entity missed
 
     return {
         "rel_micro_p": micro_prf.precision,
