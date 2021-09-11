@@ -25,7 +25,7 @@ def train_across_strats(file_dir, config, model_type):
 
 def train_across_models(configs):
     for config in configs:
-        model_base = os.path.basename(config).split(".")[0]
+        model_base = os.path.basename(config).split(".")[0].split("_")[1]
         model_type = os.path.basename(config).split("_")[0]
         os.system(f"python -m spacy train {config} " \
                   f"--output ../trained_models/{model_base}/{model_type}/all_domains " \

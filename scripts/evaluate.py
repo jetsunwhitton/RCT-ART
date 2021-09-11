@@ -209,7 +209,7 @@ if __name__ == "__main__":
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
     rel_model_path = "../trained_models/rel/all_domains/model-best"
     gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
-    pred_table_path = "../output_tables"
+    pred_table_path = "../output_tables/all_domains_"
     model_bases = ["biobert","scibert","roberta"]
 
     # evaluate different model-bases
@@ -223,8 +223,8 @@ if __name__ == "__main__":
         joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best"
                                ,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
         # assess table strict performance
-        evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
         # assess table relaxed performance
-        evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
 
         outfile.close()

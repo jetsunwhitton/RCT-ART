@@ -58,7 +58,7 @@ def out_of_domain_split(doc_dirs, exclude):
     print(f"{len(dev)} dev sentences")
 
     docbin = DocBin(docs=test, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/test.spacy")
     print(f"{len(test)} test sentences")
 
 # This function was adapted from the spaCy relation component
@@ -279,8 +279,8 @@ if __name__ == "__main__":
     #cardiovascular = f"{gold_dir}/cardiovascular_disease/cardiovascular_disease_gold.jsonl"
     #glaucoma = f"{gold_dir}/glaucoma/glaucoma_gold.jsonl"
     #typer.run(annotations_to_spacy)
-    merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
-                      for domain in os.listdir("../datasets/gold_result_annotations") if domain != "all_domains"]
+    #merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
+     #                 for domain in os.listdir("../datasets/gold_result_annotations") if domain != "all_domains"]
 
     #stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
     #parse_accepted(annos)
@@ -294,7 +294,7 @@ if __name__ == "__main__":
           #   except:
            #     pass
 
-    combo_domain_path = "../datasets/preprocessed/domain_combos"
+    #combo_domain_path = "../datasets/preprocessed/domain_combos"
     all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
                        "../datasets/preprocessed/blood_cancer/results_only",
                        "../datasets/preprocessed/cardiovascular_disease/results_only",

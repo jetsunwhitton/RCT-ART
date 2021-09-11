@@ -10,6 +10,7 @@ import scripts.entity_ruler
 from pandas import DataFrame
 import csv
 from spacy.scorer import PRFScore
+import os
 
 
 def named_entity_recognition(ner_model, input_docs):
@@ -92,8 +93,6 @@ if __name__ == "__main__":
     # instantiate pipeline inputs
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
     model_bases = ["biobert", "scibert", "roberta"]
-
-    # tabulate predictions from different model bases
     for model_base in model_bases:
         print(model_base)
         nlp = spacy.blank("en")
@@ -103,6 +102,16 @@ if __name__ == "__main__":
         rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
         tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{model_base}")
 
+    # tabulate predictions from different training size strats
+    doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
+    #nlp = spacy.blank("en")
+    #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+    #docs = doc_bin.get_docs(nlp.vocab)
+    #model_strat = [os.listdir()]
+    for strat in os.listdir():
+        ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
+        rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
+        tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{model_base}")
 
     #ner_model_paths = "../trained_models/ner/all_domains/model-best"
     #rel_model_paths = "../trained_models/rel/all_domains/model-best"
