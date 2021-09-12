@@ -1,0 +1,4 @@
+,Outcomes,Arm 1,Arm 2
+0,intervention,tamoxifen,placebo
+1,CHD,6074,0.83 ( 0.32 to 2.10 )
+2,risk ratios,0.69 ( 0.29 to 1.57 ),0.83 ( 0.32 to 2.10 )
