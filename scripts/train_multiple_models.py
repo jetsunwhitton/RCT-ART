@@ -8,7 +8,7 @@ def train_across_domains(file_dir, config, model_type, domain_cuts):
         os.system(f"python -m spacy train {config} " \
                   f"--output ../trained_models/biobert/{model_type}/{domain_cuts}/{domain} " \
                   f"--paths.train ../datasets/preprocessed/{domain_cuts}/{domain}/train.spacy " \
-                  f"--paths.dev ../datasets/preprocessed/{domain_cuts}/{domain}/dev.spacy " \
+                  f"--paths.dev ../datasets/preprocessed/{domain_cuts}/{domain}/dev.spacy sd" \
                   f"-c ../scripts/custom_functions.py --gpu-id 0")
 
 
