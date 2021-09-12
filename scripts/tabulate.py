@@ -135,7 +135,7 @@ if __name__ == "__main__":
                                              docs)
         rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
                                         ner_preds)
-        tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}")
+        tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
 
     test_sets = ["../datasets/preprocessed/out_of_domain/autism_as_test/train.spacy",
                  "../datasets/preprocessed/out_of_domain/blood_cancer_as_test/train.spacy",
@@ -155,7 +155,7 @@ if __name__ == "__main__":
                                                  docs)
             rel_preds = relation_extraction(f"../trained_models/biobert/rel/incremental_domains/{domain}/model-best",
                                             ner_preds)
-            tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}/{name}")
+            tabulate_pico_entities(rel_preds, f"../output_tables/{domain}/{name}")
 
     #ner_model_paths = "../trained_models/ner/all_domains/model-best"
     #rel_model_paths = "../trained_models/rel/all_domains/model-best"
