@@ -213,6 +213,9 @@ class RelationExtractor(TrainablePipe):
 def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, Any]:
     """Score ner and rel in a batch of examples."""
     micro_prf = PRFScore()
+    a1_res_prf = PRFScore()
+    a2_res_prf = PRFScore()
+    oc_res_prf = PRFScore()
     for example in examples:
         gold_rels = example.reference._.rel
         pred_rels = example.predicted._.rel
@@ -227,11 +230,21 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
                     if v >= threshold:
                         if k in gold_labels:
                             micro_prf.tp += 1
+                            print(k)
+                            if k == "A1_RES": a1_res_prf.tp += 1
+                            elif k == "A2_RES": a2_res_prf.tp += 1
+                            else: oc_res_prf.tp += 1
                         else:
                             micro_prf.fp += 1
+                            if k == "A1_RES": a1_res_prf.fp += 1
+                            elif k == "A2_RES": a2_res_prf.fp += 1
+                            else: oc_res_prf.fp += 1
                     else:
                         if k in gold_labels:
                             micro_prf.fn += 1
+                            if k == "A1_RES": a1_res_prf.fn += 1
+                            elif k == "A2_RES": a2_res_prf.fn += 1
+                            else: oc_res_prf.fn += 1
 
             # keys match the entity indexes of the gold annos, if an entity pair is not in the gold list
             # this second part of the code evaluates if there are correct entities with no relations mapped
@@ -264,4 +277,13 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
         "rel_micro_p": micro_prf.precision,
         "rel_micro_r": micro_prf.recall,
         "rel_micro_f": micro_prf.fscore,
+        "a1_res_p": a1_res_prf.precision,
+        "a1_res_r":a1_res_prf.recall,
+        "a1_res_f": a1_res_prf.fscore,
+        "a2_res_p": a2_res_prf.precision,
+        "a2_res_r": a2_res_prf.recall,
+        "a2_res_f": a2_res_prf.fscore,
+        "oc_res_p": oc_res_prf.precision,
+        "oc_res_r": oc_res_prf.recall,
+        "oc_res_f": oc_res_prf.fscore
     }
