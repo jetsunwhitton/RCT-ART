@@ -333,24 +333,24 @@ if __name__ == "__main__":
            #     pass
 
     #combo_domain_path = "../datasets/preprocessed/domain_combos"
-    #all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
-     #                  "../datasets/preprocessed/blood_cancer/results_only",
-      #                 "../datasets/preprocessed/cardiovascular_disease/results_only",
-       #                "../datasets/preprocessed/diabetes/results_only",
-        #               "../datasets/preprocessed/glaucoma/results_only",
-         #              "../datasets/preprocessed/solid_tumour_cancer/results_only"]
+    all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
+                       "../datasets/preprocessed/blood_cancer/results_only",
+                       "../datasets/preprocessed/cardiovascular_disease/results_only",
+                       "../datasets/preprocessed/diabetes/results_only",
+                       "../datasets/preprocessed/glaucoma/results_only",
+                       "../datasets/preprocessed/solid_tumour_cancer/results_only"]
 
-    #exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
+    exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
 
-    #for exclude in exclude_list:
-     #   filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
-      #  out_of_domain_split(filter_domains,exclude)
-    names = ["cardiovascular_disease","solid_tumour_cancer","glaucoma"]
-    docs = ["../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
-            "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy",
-            "../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy"]
+    for exclude in exclude_list:
+        filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
+        out_of_domain_split(filter_domains,exclude)
+    #names = ["cardiovascular_disease","solid_tumour_cancer","glaucoma"]
+    #docs = ["../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
+     #       "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy",
+      #      "../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy"]
 
-    cap_docs(docs,names, 130)
+    #cap_docs(docs,names, 130)
 
 
 

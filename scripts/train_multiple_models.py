@@ -4,11 +4,12 @@ import re
 
 def train_across_domains(file_dir, config, model_type, domain_cuts):
     for domain in os.listdir(file_dir):
+        print(domain)
         os.system(f"python -m spacy train {config} " \
                   f"--output ../trained_models/biobert/{model_type}/{domain_cuts}/{domain} " \
                   f"--paths.train ../datasets/preprocessed/{domain_cuts}/{domain}/train.spacy " \
-                  f"--paths.dev ../datasets/preprocessed/{domain_cuts}/{domain}/dev.spacy  " \
-                  f"-c ./scripts/custom_functions.py --gpu-id 0")
+                  f"--paths.dev ../datasets/preprocessed/{domain_cuts}/{domain}/dev.spacy " \
+                  f"-c ../scripts/custom_functions.py --gpu-id 0")
 
 
 def train_across_strats(file_dir, config, model_type):
@@ -53,6 +54,12 @@ if __name__ == "__main__":
 
     #train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/ner_biobert.cfg",
      #                   "rel")
+
+    # ner
+    #train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/ner_biobert.cfg", "ner", "out_of_domain")
+
+    # rel
+    #train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/rel_biobert.cfg", "rel", "out_of_domain")
 
     # ner
     train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/ner_biobert.cfg", "ner", "out_of_domain")
