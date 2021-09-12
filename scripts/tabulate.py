@@ -141,12 +141,12 @@ if __name__ == "__main__":
                  "../datasets/preprocessed/out_of_domain/blood_cancer_as_test/train.spacy",
                  "../datasets/preprocessed/out_of_domain/diabetes_as_test/train.spacy"]
 
+    names = ["autism", "blood_cancer","diabetes"]
     # build incremental domain sets
     for domain in os.listdir("../datasets/preprocessed/incremental_domains"):
         print(domain)
-        for test in test_sets:
-            print(test)
-            name = test.split("/")[5].split("_")[0]
+        for test, name in zip(test_sets, names):
+            print(name)
             doc_path = test
             nlp = spacy.blank("en")
             doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
@@ -155,7 +155,7 @@ if __name__ == "__main__":
                                                  docs)
             rel_preds = relation_extraction(f"../trained_models/biobert/rel/incremental_domains/{domain}/model-best",
                                             ner_preds)
-            tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{name}_{domain}")
+            tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}/{name}")
 
     #ner_model_paths = "../trained_models/ner/all_domains/model-best"
     #rel_model_paths = "../trained_models/rel/all_domains/model-best"
