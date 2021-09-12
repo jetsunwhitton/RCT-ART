@@ -204,13 +204,13 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
 
 if __name__ == "__main__":
     #typer.run(ner_rel_evaluate)
-    file_name = "BERT_baselines"
-    outfile = open(f"../evaluation_results/{file_name}.txt", "w")
-    doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
-    pred_table_path = "../output_tables/all_domains_"
-    model_bases = ["biobert","scibert","roberta"]
-    model_strats = "../trained_models/biobert/ner/all_domain_strats"
+    #file_name = "BERT_baselines"
+    #outfile = open(f"../evaluation_results/{file_name}.txt", "w")
+    #doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
+    #gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
+    #pred_table_path = "../output_tables/all_domains_"
+    #model_bases = ["biobert","scibert","roberta"]
+    #model_strats = "../trained_models/biobert/ner/all_domain_strats"
 
     # evaluate different model-bases
    # for model_base in model_bases:
@@ -230,18 +230,40 @@ if __name__ == "__main__":
         #outfile.close()
 
     # evaluate different training size strats
-    for strat in os.listdir(model_strats):
-        outfile = open(f"../evaluation_results/{strat}.txt", "w")
+    #for strat in os.listdir(model_strats):
+     #   outfile = open(f"../evaluation_results/{strat}.txt", "w")
         # assess ner performance
-        ner_evaluate(f"{model_strats}/{strat}/model-best",doc_path)
+      #  ner_evaluate(f"{model_strats}/{strat}/model-best",doc_path)
         # assess rel performance
-        joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
+       # joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
         # assess joint performance
-        joint_ner_rel_evaluate(f"{model_strats}/{strat}/model-best"
-                               ,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
+        #joint_ner_rel_evaluate(f"{model_strats}/{strat}/model-best"
+               #                ,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
         # assess table strict performance
-        evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=True)
+        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=True)
         # assess table relaxed performance
-        evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=False)
+        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=False)
+
+        #outfile.close()
+
+    # evaluate out of domain perfomance
+    for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+        outfile = open(f"../evaluation_results/{domain}.txt", "w")
+        print(domain)
+        doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
+        ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
+        rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
+        gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
+        pred_table_path = f"../output_tables/output_tables/{domain}"
+        # assess ner performance
+        ner_evaluate(ner_model, doc_path)
+        # assess rel performance
+        joint_ner_rel_evaluate(None, rel_model, doc_path, False)
+        # assess joint performance
+        joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
+        # assess table strict performance
+        evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
+        # assess table relaxed performance
+        evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
 
         outfile.close()

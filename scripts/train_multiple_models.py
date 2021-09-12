@@ -62,10 +62,10 @@ if __name__ == "__main__":
     #train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/rel_biobert.cfg", "rel", "out_of_domain")
 
     # ner
-    train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/ner_biobert.cfg", "ner", "out_of_domain")
+    train_across_domains("../datasets/preprocessed/capped_for_comparison", "../configs/ner_biobert.cfg", "ner", "capped_for_comparison")
 
     # rel
-    train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/rel_biobert.cfg", "rel", "out_of_domain")
+    train_across_domains("../datasets/preprocessed/capped_for_comparison", "../configs/rel_biobert.cfg", "rel", "capped_for_comparison")
 
 
 

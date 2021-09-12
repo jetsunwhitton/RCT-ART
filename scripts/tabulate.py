@@ -11,6 +11,7 @@ from pandas import DataFrame
 import csv
 from spacy.scorer import PRFScore
 import os
+import io
 
 
 def named_entity_recognition(ner_model, input_docs):
@@ -85,8 +86,11 @@ def tabulate_pico_entities(input_docs, output_path):
         df.index.name = 'Outcomes'
         df.reset_index(inplace=True)
         df.drop_duplicates(subset=["Arm 1", "Arm 2"], keep='first', inplace=True)
-        with open(f"{output_path}/doc{num}.csv", 'w') as output:
-            df.to_csv(output)
+        with io.open(f"{output_path}/doc{num}.csv", 'w') as output:
+            try:
+                df.to_csv(output)
+            except:
+                print("CSV incompatible: ", doc)
         num += 1
 
 if __name__ == "__main__":
@@ -103,16 +107,39 @@ if __name__ == "__main__":
         #tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{model_base}")
 
     # tabulate predictions from different training size strats
-    doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    for strat in os.listdir("../trained_models/biobert/ner/all_domain_strats"):
-        print(strat)
+    #doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
+    #for strat in os.listdir("../trained_models/biobert/ner/all_domain_strats"):
+     #   print(strat)
+      #  nlp = spacy.blank("en")
+       # doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        #docs = doc_bin.get_docs(nlp.vocab)
+        #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/all_domain_strats/{strat}/model-best", docs)
+        #rel_preds = relation_extraction(f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best", ner_preds)
+        #tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{strat}")
+
+    # create out_of_domain preds or gold (ignore models and use tabulate function straight on docs for gold)
+    for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+        print(domain)
+        doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
         nlp = spacy.blank("en")
         doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
         docs = doc_bin.get_docs(nlp.vocab)
-        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/all_domain_strats/{strat}/model-best", docs)
-        rel_preds = relation_extraction(f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best", ner_preds)
-        tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{strat}")
+        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best", docs)
+        rel_preds = relation_extraction(f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best",ner_preds)
+        tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}")
 
+    # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
+    #for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
+        #print(domain)
+        #doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
+        #nlp = spacy.blank("en")
+        #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        #docs = doc_bin.get_docs(nlp.vocab)
+        #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
+         #                                    docs)
+        #rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
+         #                               ner_preds)
+        #tabulate_pico_entities(docs, f"../datasets/preprocessed/capped_for_comparison/{domain}/gold_tables")
 
 
     #ner_model_paths = "../trained_models/ner/all_domains/model-best"
