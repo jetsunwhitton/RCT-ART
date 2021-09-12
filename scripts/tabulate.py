@@ -114,28 +114,28 @@ if __name__ == "__main__":
         #tabulate_pico_entities(rel_preds, f"../output_tables/all_domains_{strat}")
 
     # create out_of_domain preds or gold (ignore models and use tabulate function straight on docs for gold)
-    for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+   # for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+    #    print(domain)
+     #   doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
+      #  nlp = spacy.blank("en")
+       # doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        #docs = doc_bin.get_docs(nlp.vocab)
+        #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best", docs)
+        #rel_preds = relation_extraction(f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best",ner_preds)
+        #tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}")
+
+    # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
+    for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
         print(domain)
-        doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
+        doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
         nlp = spacy.blank("en")
         doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
         docs = doc_bin.get_docs(nlp.vocab)
-        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best", docs)
-        rel_preds = relation_extraction(f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best",ner_preds)
-        tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
-
-    # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
-    #for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
-        #print(domain)
-        #doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
-        #nlp = spacy.blank("en")
-        #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-        #docs = doc_bin.get_docs(nlp.vocab)
-        #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
-         #                                    docs)
-        #rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
-         #                               ner_preds)
-        #tabulate_pico_entities(docs, f"../datasets/preprocessed/capped_for_comparison/{domain}/gold_tables")
+        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
+                                             docs)
+        rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
+                                        ner_preds)
+        tabulate_pico_entities(docs, f"../datasets/preprocessed/capped_for_comparison/{domain}/gold_tables")
 
 
     #ner_model_paths = "../trained_models/ner/all_domains/model-best"
