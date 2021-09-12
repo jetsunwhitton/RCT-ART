@@ -207,10 +207,10 @@ if __name__ == "__main__":
     file_name = "BERT_baselines"
     outfile = open(f"../evaluation_results/{file_name}.txt", "w")
     doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    rel_model_path = "../trained_models/rel/all_domains/model-best"
     gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
     pred_table_path = "../output_tables/all_domains_"
     model_bases = ["biobert","scibert","roberta"]
+    model_strats = "../trained_models/biobert/ner/all_domain_strats"
 
     # evaluate different model-bases
     for model_base in model_bases:
@@ -226,5 +226,22 @@ if __name__ == "__main__":
         evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
         # assess table relaxed performance
         evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
+
+        outfile.close()
+
+    # evaluate different training size strats
+    for strat in os.listdir(model_strats):
+        outfile = open(f"../evaluation_results/{strat}.txt", "w")
+        # assess ner performance
+        ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best",doc_path)
+        # assess rel performance
+        joint_ner_rel_evaluate(None,f"{model_strats}/{strat}/model-best",doc_path,False)
+        # assess joint performance
+        joint_ner_rel_evaluate(f"{model_strats}/{strat}/model-best"
+                               ,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
+        # assess table strict performance
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=True)
+        # assess table relaxed performance
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=False)
 
         outfile.close()
