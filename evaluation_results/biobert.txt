@@ -1,5 +1,5 @@
 NER_evaluation
-{'token_acc': 1.0, 'token_p': 1.0, 'token_r': 1.0, 'token_f': 1.0, 'ents_p': 0.7742899850523169, 'ents_r': 0.7848484848484848, 'ents_f': 0.7795334838224228, 'ents_per_type': {'MEAS': {'p': 0.8105263157894737, 'r': 0.84, 'f': 0.825}, 'INTV': {'p': 0.7616822429906542, 'r': 0.7477064220183486, 'f': 0.7546296296296297}, 'OC': {'p': 0.7294117647058823, 'r': 0.7425149700598802, 'f': 0.7359050445103856}}, 'speed': 175.89906353660936}
+{'token_acc': 1.0, 'token_p': 1.0, 'token_r': 1.0, 'token_f': 1.0, 'ents_p': 0.7742899850523169, 'ents_r': 0.7848484848484848, 'ents_f': 0.7795334838224228, 'ents_per_type': {'MEAS': {'p': 0.8105263157894737, 'r': 0.84, 'f': 0.825}, 'INTV': {'p': 0.7616822429906542, 'r': 0.7477064220183486, 'f': 0.7546296296296297}, 'OC': {'p': 0.7294117647058823, 'r': 0.7425149700598802, 'f': 0.7359050445103856}}, 'speed': 179.6326965847207}
 Rel alone
 threshold 0.00 	 {'rel_micro_p': '4.58', 'rel_micro_r': '100.00', 'rel_micro_f': '8.76'}
 threshold 0.05 	 {'rel_micro_p': '55.98', 'rel_micro_r': '91.49', 'rel_micro_f': '69.46'}
@@ -28,3 +28,7 @@ threshold 0.80 	 {'rel_micro_p': '65.22', 'rel_micro_r': '63.02', 'rel_micro_f':
 threshold 0.90 	 {'rel_micro_p': '64.79', 'rel_micro_r': '57.35', 'rel_micro_f': '60.84'}
 threshold 0.99 	 {'rel_micro_p': '56.56', 'rel_micro_r': '35.49', 'rel_micro_f': '43.62'}
 threshold 1.00 	 {'rel_micro_p': '45.80', 'rel_micro_r': '22.81', 'rel_micro_f': '30.45'}
+Table_evaluationstrict
+{'rel_micro_p': 0.5459770114942529, 'rel_micro_r': 0.6209150326797386, 'rel_micro_f': 0.5810397553516821}
+Table_evaluationrelaxed
+{'rel_micro_p': 0.7126436781609196, 'rel_micro_r': 0.6813186813186813, 'rel_micro_f': 0.6966292134831461}
