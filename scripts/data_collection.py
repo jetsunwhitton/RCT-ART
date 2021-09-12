@@ -213,7 +213,7 @@ def spacy_to_jsonl(spacy_data, domain_name, add_ids=None, doc_filter=None):
     """
     from spacy.vocab import Vocab
     from spacy.tokens import DocBin
-    from scripts.evaluate import main as evaluate
+    from scripts.evaluate import joint_ner_rel_evaluate as evaluate
     from prodigy.components.preprocess import add_tokens
 
     nlp = spacy.blank("en")

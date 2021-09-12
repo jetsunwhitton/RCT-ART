@@ -17,7 +17,7 @@ from scripts.entity_ruler import custom_entity_ruler
 @Language.component("custom_sentencizer")
 def custom_sentencizer(doc):
     for i, token in enumerate(doc[:-2]):
-        # Define sentence start if pipe + titlecase token
+        # Define sentence start if . + not numeric (e.g decimal point) token after
         if token.text == "." and not doc[i + 1].text.isnumeric():
             doc[i + 1].is_sent_start = True
         else:
@@ -26,11 +26,16 @@ def custom_sentencizer(doc):
             doc[i + 1].is_sent_start = False
     return doc
 
+
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 @spacy.registry.readers("Gold_ents_Corpus.v1")
 def create_docbin_reader(file: Path) -> Callable[["Language"], Iterable[Example]]:
     return partial(read_files, file)
 
 
+# This function was adapated from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 def read_files(file: Path, nlp: "Language") -> Iterable[Example]:
     """Custom reader that keeps the tokenization of the gold data,
     and also adds the gold PICO annotations as we do not attempt to predict these."""

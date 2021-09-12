@@ -31,35 +31,6 @@ def merge_jsonl(jsonl_dirs, output_path):
                     print(dict)
         output.close()
 
-def out_of_domain_split(doc_dirs, exclude):
-    """excludes one domain from full domain train and dev sets for use as test set"""
-    merged_docs = []
-    vocab = Vocab()
-    for dir in doc_dirs:
-        for files in os.listdir(dir):
-            doc_bin = DocBin(store_user_data=True).from_disk(f"{dir}/{files}")
-            merged_docs += list(doc_bin.get_docs(vocab))
-    l = len(merged_docs)
-    train = merged_docs[0:int(l * 0.9)]
-    dev = merged_docs[int(l * 0.9):]
-
-    test = []
-    test_dir = f"../datasets/preprocessed/{exclude}/results_only"
-    for files in os.listdir(test_dir):
-        doc_bin = DocBin(store_user_data=True).from_disk(f"{test_dir}/{files}")
-        test += list(doc_bin.get_docs(vocab))
-
-    docbin = DocBin(docs=train, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/train.spacy")
-    print(f"{len(train)} training sentences")
-
-    docbin = DocBin(docs=dev, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
-    print(f"{len(dev)} dev sentences")
-
-    docbin = DocBin(docs=test, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/test.spacy")
-    print(f"{len(test)} test sentences")
 
 # This function was adapted from the spaCy relation component
 # template: https://github.com/explosion/projects/tree/v3/tutorials
@@ -208,6 +179,73 @@ def stratify_train_examples(doc_path, strats):
         docbin.to_disk(f"../datasets/preprocessed/all_domains/training_stratifications/train_strat_{name}.spacy")
 
 
+def out_of_domain_split(doc_dirs, exclude):
+    """excludes one domain from full domain train and dev sets for use as test set"""
+    merged_docs = []
+    vocab = Vocab()
+    for dir in doc_dirs:
+        for files in os.listdir(dir):
+            doc_bin = DocBin(store_user_data=True).from_disk(f"{dir}/{files}")
+            merged_docs += list(doc_bin.get_docs(vocab))
+    l = len(merged_docs)
+    train = merged_docs[0:int(l * 0.9)]
+    dev = merged_docs[int(l * 0.9):]
+
+    test = []
+    test_dir = f"../datasets/preprocessed/{exclude}/results_only"
+    for files in os.listdir(test_dir):
+        doc_bin = DocBin(store_user_data=True).from_disk(f"{test_dir}/{files}")
+        test += list(doc_bin.get_docs(vocab))
+
+    docbin = DocBin(docs=train, store_user_data=True)
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/train.spacy")
+    print(f"{len(train)} training sentences")
+
+    docbin = DocBin(docs=dev, store_user_data=True)
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
+    print(f"{len(dev)} dev sentences")
+
+    docbin = DocBin(docs=test, store_user_data=True)
+    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/test.spacy")
+    print(f"{len(test)} test sentences")
+
+
+def cap_docs(doc_dirs, names, cap):
+    """Caps number of examples in datasets for comparison, outputting both individual sets and merged sets for
+    incremental evaluation"""
+    vocab = Vocab()
+    merged_docs = []
+    merged_names = ""
+    count = 0
+    for docs, name in zip(doc_dirs, names):
+        doc_bin = DocBin(store_user_data=True).from_disk(docs)
+        capped = list(doc_bin.get_docs(vocab))[:cap-1]
+        random.shuffle(capped)
+        l = len(capped)
+        train = capped[:int(l*0.7)]
+        dev = capped[int(l*0.8):int(l*0.9)]
+        test = capped[int(l*0.9):]
+        capped_train = DocBin(docs=train, store_user_data=True)
+        capped_train.to_disk(f"../datasets/preprocessed/capped_for_comparison/{name}/train.spacy")
+        capped_dev = DocBin(docs=dev, store_user_data=True)
+        capped_dev.to_disk(f"../datasets/preprocessed/capped_for_comparison/{name}/dev.spacy")
+        capped_test = DocBin(docs=test, store_user_data=True)
+        capped_test.to_disk(f"../datasets/preprocessed/capped_for_comparison/{name}/test.spacy")
+
+        # output merged sets of capped docs for incremental domain increase evaluation
+        merged_docs += capped
+        merged_names += name + "_"
+        if count > 0:
+            random.shuffle(merged_docs)
+            train = merged_docs[:int(len(merged_docs)*0.9)]
+            dev = merged_docs[int(len(merged_docs)*0.9):]
+            merged_train = DocBin(docs= train, store_user_data=True)
+            merged_train.to_disk(f"../datasets/preprocessed/capped_for_comparison/{merged_names[:-1]}/train.spacy")
+            merged_dev = DocBin(docs=dev, store_user_data=True)
+            merged_dev.to_disk(f"../datasets/preprocessed/capped_for_comparison/{merged_names[:-1]}/dev.spacy")
+        count += 1
+
+
 #  this function was developed but not used in the primary study
 def restore_ebm_nlp_annos(results, full_abstracts, output):
     """Adds back rest of the entity annotated sentences from the ebm_nlp dataset to the processed result sentences"""
@@ -295,18 +333,24 @@ if __name__ == "__main__":
            #     pass
 
     #combo_domain_path = "../datasets/preprocessed/domain_combos"
-    all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
-                       "../datasets/preprocessed/blood_cancer/results_only",
-                       "../datasets/preprocessed/cardiovascular_disease/results_only",
-                       "../datasets/preprocessed/diabetes/results_only",
-                       "../datasets/preprocessed/glaucoma/results_only",
-                       "../datasets/preprocessed/solid_tumour_cancer/results_only"]
+    #all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
+     #                  "../datasets/preprocessed/blood_cancer/results_only",
+      #                 "../datasets/preprocessed/cardiovascular_disease/results_only",
+       #                "../datasets/preprocessed/diabetes/results_only",
+        #               "../datasets/preprocessed/glaucoma/results_only",
+         #              "../datasets/preprocessed/solid_tumour_cancer/results_only"]
 
-    exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
+    #exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
 
-    for exclude in exclude_list:
-        filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
-        out_of_domain_split(filter_domains,exclude)
+    #for exclude in exclude_list:
+     #   filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
+      #  out_of_domain_split(filter_domains,exclude)
+    names = ["cardiovascular_disease","solid_tumour_cancer","glaucoma"]
+    docs = ["../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
+            "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy",
+            "../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy"]
+
+    cap_docs(docs,names, 130)
 
 
 
