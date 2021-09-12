@@ -247,13 +247,35 @@ if __name__ == "__main__":
         #outfile.close()
 
     # evaluate out of domain perfomance
-    for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+    #for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+     #   outfile = open(f"../evaluation_results/{domain}.txt", "w")
+      #  print(domain)
+       # doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
+        #ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
+        #rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
+        #gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
+        #pred_table_path = f"../output_tables/{domain}"
+        # assess ner performance
+        #ner_evaluate(ner_model, doc_path)
+        # assess rel performance
+        #joint_ner_rel_evaluate(None, rel_model, doc_path, False)
+        # assess joint performance
+        #joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
+        # assess table strict performance
+        #evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
+        # assess table relaxed performance
+        #evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
+
+        #outfile.close()
+
+    # evaluate out of capped domain performance perfomance
+    for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
         outfile = open(f"../evaluation_results/{domain}.txt", "w")
         print(domain)
-        doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
-        ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
-        rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
-        gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
+        doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
+        ner_model = f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best"
+        rel_model = f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best"
+        gold_table_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/gold_tables"
         pred_table_path = f"../output_tables/{domain}"
         # assess ner performance
         ner_evaluate(ner_model, doc_path)
@@ -267,3 +289,29 @@ if __name__ == "__main__":
         evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
 
         outfile.close()
+
+    inc_test_domains = ["autism","blood_cancer","diabetes"]
+
+    # evaluate out of capped domain performance perfomance
+    for domain in os.listdir("../datasets/preprocessed/incremental_domains"):
+        print(domain)
+        for test in inc_test_domains:
+            outfile = open(f"../evaluation_results/{domain}.txt", "w")
+            print(test)
+            doc_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/test.spacy"
+            ner_model = f"../trained_models/biobert/ner/incremental_domains/{domain}/model-best"
+            rel_model = f"../trained_models/biobert/rel/incremental_domains/{domain}/model-best"
+            gold_table_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/gold_tables"
+            pred_table_path = f"../output_tables/{domain}"
+            # assess ner performance
+            ner_evaluate(ner_model, doc_path)
+            # assess rel performance
+            joint_ner_rel_evaluate(None, rel_model, doc_path, False)
+            # assess joint performance
+            joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
+            # assess table strict performance
+            evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
+            # assess table relaxed performance
+            evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
+
+            outfile.close()
