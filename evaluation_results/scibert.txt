@@ -1,33 +1,33 @@
 NER_evaluation
-{'token_acc': 1.0, 'token_p': 1.0, 'token_r': 1.0, 'token_f': 1.0, 'ents_p': 0.770893371757925, 'ents_r': 0.8106060606060606, 'ents_f': 0.7902511078286558, 'ents_per_type': {'MEAS': {'p': 0.8006872852233677, 'r': 0.8472727272727273, 'f': 0.8233215547703181}, 'INTV': {'p': 0.78125, 'r': 0.8027522935779816, 'f': 0.7918552036199096}, 'OC': {'p': 0.7094972067039106, 'r': 0.7604790419161677, 'f': 0.7341040462427746}}, 'speed': 199.79857855949214}
+{'token_acc': 1.0, 'token_p': 1.0, 'token_r': 1.0, 'token_f': 1.0, 'ents_p': 0.770893371757925, 'ents_r': 0.8106060606060606, 'ents_f': 0.7902511078286558, 'ents_per_type': {'MEAS': {'p': 0.8006872852233677, 'r': 0.8472727272727273, 'f': 0.8233215547703181}, 'INTV': {'p': 0.78125, 'r': 0.8027522935779816, 'f': 0.7918552036199096}, 'OC': {'p': 0.7094972067039106, 'r': 0.7604790419161677, 'f': 0.7341040462427746}}, 'speed': 202.5512149145413}
 Rel alone
-threshold 0.00 	 {'rel_micro_p': '4.58', 'rel_micro_r': '100.00', 'rel_micro_f': '8.76'}
-threshold 0.05 	 {'rel_micro_p': '55.07', 'rel_micro_r': '93.42', 'rel_micro_f': '69.30'}
-threshold 0.10 	 {'rel_micro_p': '60.46', 'rel_micro_r': '91.68', 'rel_micro_f': '72.87'}
-threshold 0.20 	 {'rel_micro_p': '65.90', 'rel_micro_r': '88.59', 'rel_micro_f': '75.58'}
-threshold 0.30 	 {'rel_micro_p': '69.39', 'rel_micro_r': '85.49', 'rel_micro_f': '76.60'}
-threshold 0.40 	 {'rel_micro_p': '72.57', 'rel_micro_r': '82.40', 'rel_micro_f': '77.17'}
-threshold 0.50 	 {'rel_micro_p': '74.86', 'rel_micro_r': '80.08', 'rel_micro_f': '77.38'}
-threshold 0.60 	 {'rel_micro_p': '77.50', 'rel_micro_r': '77.95', 'rel_micro_f': '77.72'}
-threshold 0.70 	 {'rel_micro_p': '81.00', 'rel_micro_r': '75.05', 'rel_micro_f': '77.91'}
-threshold 0.80 	 {'rel_micro_p': '83.18', 'rel_micro_r': '69.83', 'rel_micro_f': '75.92'}
-threshold 0.90 	 {'rel_micro_p': '85.49', 'rel_micro_r': '62.67', 'rel_micro_f': '72.32'}
-threshold 0.99 	 {'rel_micro_p': '92.00', 'rel_micro_r': '26.69', 'rel_micro_f': '41.38'}
-threshold 1.00 	 {'rel_micro_p': '75.00', 'rel_micro_r': '0.58', 'rel_micro_f': '1.15'}
+threshold 0.00 	 {'rel_micro_p': '4.58', 'rel_micro_r': '100.00', 'rel_micro_f': '8.76', 'a1_res_p': '3.61', 'a1_res_r': '100.00', 'a1_res_f': '6.97', 'a2_res_p': '2.90', 'a2_res_r': '100.00', 'a2_res_f': '5.63', 'oc_res_p': '7.23', 'oc_res_r': '100.00', 'oc_res_f': '13.48'}
+threshold 0.05 	 {'rel_micro_p': '55.07', 'rel_micro_r': '93.42', 'rel_micro_f': '69.30', 'a1_res_p': '56.36', 'a1_res_r': '91.18', 'a1_res_f': '69.66', 'a2_res_p': '57.56', 'a2_res_r': '90.83', 'a2_res_f': '70.46', 'oc_res_p': '53.61', 'oc_res_r': '95.59', 'oc_res_f': '68.69'}
+threshold 0.10 	 {'rel_micro_p': '60.46', 'rel_micro_r': '91.68', 'rel_micro_f': '72.87', 'a1_res_p': '63.73', 'a1_res_r': '90.44', 'a1_res_f': '74.77', 'a2_res_p': '63.87', 'a2_res_r': '90.83', 'a2_res_f': '75.00', 'oc_res_p': '57.80', 'oc_res_r': '92.65', 'oc_res_f': '71.19'}
+threshold 0.20 	 {'rel_micro_p': '65.90', 'rel_micro_r': '88.59', 'rel_micro_f': '75.58', 'a1_res_p': '70.93', 'a1_res_r': '89.71', 'a1_res_f': '79.22', 'a2_res_p': '67.13', 'a2_res_r': '88.07', 'a2_res_f': '76.19', 'oc_res_p': '63.16', 'oc_res_r': '88.24', 'oc_res_f': '73.62'}
+threshold 0.30 	 {'rel_micro_p': '69.39', 'rel_micro_r': '85.49', 'rel_micro_f': '76.60', 'a1_res_p': '73.33', 'a1_res_r': '88.97', 'a1_res_f': '80.40', 'a2_res_p': '69.12', 'a2_res_r': '86.24', 'a2_res_f': '76.73', 'oc_res_p': '67.56', 'oc_res_r': '83.46', 'oc_res_f': '74.67'}
+threshold 0.40 	 {'rel_micro_p': '72.57', 'rel_micro_r': '82.40', 'rel_micro_f': '77.17', 'a1_res_p': '73.42', 'a1_res_r': '85.29', 'a1_res_f': '78.91', 'a2_res_p': '72.80', 'a2_res_r': '83.49', 'a2_res_f': '77.78', 'oc_res_p': '72.04', 'oc_res_r': '80.51', 'oc_res_f': '76.04'}
+threshold 0.50 	 {'rel_micro_p': '74.86', 'rel_micro_r': '80.08', 'rel_micro_f': '77.38', 'a1_res_p': '74.36', 'a1_res_r': '85.29', 'a1_res_f': '79.45', 'a2_res_p': '74.38', 'a2_res_r': '82.57', 'a2_res_f': '78.26', 'oc_res_p': '75.36', 'oc_res_r': '76.47', 'oc_res_f': '75.91'}
+threshold 0.60 	 {'rel_micro_p': '77.50', 'rel_micro_r': '77.95', 'rel_micro_f': '77.72', 'a1_res_p': '76.35', 'a1_res_r': '83.09', 'a1_res_f': '79.58', 'a2_res_p': '77.39', 'a2_res_r': '81.65', 'a2_res_f': '79.46', 'oc_res_p': '78.21', 'oc_res_r': '73.90', 'oc_res_f': '75.99'}
+threshold 0.70 	 {'rel_micro_p': '81.00', 'rel_micro_r': '75.05', 'rel_micro_f': '77.91', 'a1_res_p': '78.32', 'a1_res_r': '82.35', 'a1_res_f': '80.29', 'a2_res_p': '82.41', 'a2_res_r': '81.65', 'a2_res_f': '82.03', 'oc_res_p': '82.02', 'oc_res_r': '68.75', 'oc_res_f': '74.80'}
+threshold 0.80 	 {'rel_micro_p': '83.18', 'rel_micro_r': '69.83', 'rel_micro_f': '75.92', 'a1_res_p': '78.10', 'a1_res_r': '78.68', 'a1_res_f': '78.39', 'a2_res_p': '84.47', 'a2_res_r': '79.82', 'a2_res_f': '82.08', 'oc_res_p': '86.08', 'oc_res_r': '61.40', 'oc_res_f': '71.67'}
+threshold 0.90 	 {'rel_micro_p': '85.49', 'rel_micro_r': '62.67', 'rel_micro_f': '72.32', 'a1_res_p': '78.40', 'a1_res_r': '72.06', 'a1_res_f': '75.10', 'a2_res_p': '86.67', 'a2_res_r': '71.56', 'a2_res_f': '78.39', 'oc_res_p': '90.24', 'oc_res_r': '54.41', 'oc_res_f': '67.89'}
+threshold 0.99 	 {'rel_micro_p': '92.00', 'rel_micro_r': '26.69', 'rel_micro_f': '41.38', 'a1_res_p': '89.19', 'a1_res_r': '48.53', 'a1_res_f': '62.86', 'a2_res_p': '97.06', 'a2_res_r': '30.28', 'a2_res_f': '46.15', 'oc_res_p': '92.86', 'oc_res_r': '14.34', 'oc_res_f': '24.84'}
+threshold 1.00 	 {'rel_micro_p': '75.00', 'rel_micro_r': '0.58', 'rel_micro_f': '1.15', 'a1_res_p': '66.67', 'a1_res_r': '1.47', 'a1_res_f': '2.88', 'a2_res_p': '100.00', 'a2_res_r': '0.92', 'a2_res_f': '1.82', 'oc_res_p': '0.00', 'oc_res_r': '0.00', 'oc_res_f': '0.00'}
 Joint
-threshold 0.00 	 {'rel_micro_p': '6.90', 'rel_micro_r': '85.40', 'rel_micro_f': '12.77'}
-threshold 0.05 	 {'rel_micro_p': '53.93', 'rel_micro_r': '81.72', 'rel_micro_f': '64.98'}
-threshold 0.10 	 {'rel_micro_p': '57.25', 'rel_micro_r': '80.86', 'rel_micro_f': '67.04'}
-threshold 0.20 	 {'rel_micro_p': '59.83', 'rel_micro_r': '79.14', 'rel_micro_f': '68.15'}
-threshold 0.30 	 {'rel_micro_p': '61.38', 'rel_micro_r': '77.42', 'rel_micro_f': '68.48'}
-threshold 0.40 	 {'rel_micro_p': '62.64', 'rel_micro_r': '75.71', 'rel_micro_f': '68.56'}
-threshold 0.50 	 {'rel_micro_p': '63.40', 'rel_micro_r': '74.60', 'rel_micro_f': '68.55'}
-threshold 0.60 	 {'rel_micro_p': '64.13', 'rel_micro_r': '73.50', 'rel_micro_f': '68.50'}
-threshold 0.70 	 {'rel_micro_p': '65.11', 'rel_micro_r': '71.90', 'rel_micro_f': '68.34'}
-threshold 0.80 	 {'rel_micro_p': '65.97', 'rel_micro_r': '69.94', 'rel_micro_f': '67.90'}
-threshold 0.90 	 {'rel_micro_p': '65.45', 'rel_micro_r': '65.77', 'rel_micro_f': '65.61'}
-threshold 0.99 	 {'rel_micro_p': '59.78', 'rel_micro_r': '45.77', 'rel_micro_f': '51.84'}
-threshold 1.00 	 {'rel_micro_p': '50.82', 'rel_micro_r': '30.31', 'rel_micro_f': '37.97'}
+threshold 0.00 	 {'rel_micro_p': '6.90', 'rel_micro_r': '85.40', 'rel_micro_f': '12.77', 'a1_res_p': '3.87', 'a1_res_r': '100.00', 'a1_res_f': '7.46', 'a2_res_p': '3.25', 'a2_res_r': '100.00', 'a2_res_f': '6.29', 'oc_res_p': '7.00', 'oc_res_r': '100.00', 'oc_res_f': '13.08'}
+threshold 0.05 	 {'rel_micro_p': '53.93', 'rel_micro_r': '81.72', 'rel_micro_f': '64.98', 'a1_res_p': '59.57', 'a1_res_r': '90.32', 'a1_res_f': '71.79', 'a2_res_p': '58.75', 'a2_res_r': '90.38', 'a2_res_f': '71.21', 'oc_res_p': '53.33', 'oc_res_r': '96.43', 'oc_res_f': '68.68'}
+threshold 0.10 	 {'rel_micro_p': '57.25', 'rel_micro_r': '80.86', 'rel_micro_f': '67.04', 'a1_res_p': '68.94', 'a1_res_r': '89.52', 'a1_res_f': '77.89', 'a2_res_p': '65.49', 'a2_res_r': '89.42', 'a2_res_f': '75.61', 'oc_res_p': '57.65', 'oc_res_r': '94.20', 'oc_res_f': '71.53'}
+threshold 0.20 	 {'rel_micro_p': '59.83', 'rel_micro_r': '79.14', 'rel_micro_f': '68.15', 'a1_res_p': '74.83', 'a1_res_r': '88.71', 'a1_res_f': '81.18', 'a2_res_p': '70.54', 'a2_res_r': '87.50', 'a2_res_f': '78.11', 'oc_res_p': '62.50', 'oc_res_r': '89.29', 'oc_res_f': '73.53'}
+threshold 0.30 	 {'rel_micro_p': '61.38', 'rel_micro_r': '77.42', 'rel_micro_f': '68.48', 'a1_res_p': '76.76', 'a1_res_r': '87.90', 'a1_res_f': '81.95', 'a2_res_p': '72.13', 'a2_res_r': '84.62', 'a2_res_f': '77.88', 'oc_res_p': '67.38', 'oc_res_r': '84.82', 'oc_res_f': '75.10'}
+threshold 0.40 	 {'rel_micro_p': '62.64', 'rel_micro_r': '75.71', 'rel_micro_f': '68.56', 'a1_res_p': '77.21', 'a1_res_r': '84.68', 'a1_res_f': '80.77', 'a2_res_p': '75.22', 'a2_res_r': '81.73', 'a2_res_f': '78.34', 'oc_res_p': '72.05', 'oc_res_r': '81.70', 'oc_res_f': '76.57'}
+threshold 0.50 	 {'rel_micro_p': '63.40', 'rel_micro_r': '74.60', 'rel_micro_f': '68.55', 'a1_res_p': '78.36', 'a1_res_r': '84.68', 'a1_res_f': '81.40', 'a2_res_p': '77.27', 'a2_res_r': '81.73', 'a2_res_f': '79.44', 'oc_res_p': '74.68', 'oc_res_r': '77.68', 'oc_res_f': '76.15'}
+threshold 0.60 	 {'rel_micro_p': '64.13', 'rel_micro_r': '73.50', 'rel_micro_f': '68.50', 'a1_res_p': '79.07', 'a1_res_r': '82.26', 'a1_res_f': '80.63', 'a2_res_p': '80.19', 'a2_res_r': '81.73', 'a2_res_f': '80.95', 'oc_res_p': '77.42', 'oc_res_r': '75.00', 'oc_res_f': '76.19'}
+threshold 0.70 	 {'rel_micro_p': '65.11', 'rel_micro_r': '71.90', 'rel_micro_f': '68.34', 'a1_res_p': '80.95', 'a1_res_r': '82.26', 'a1_res_f': '81.60', 'a2_res_p': '82.18', 'a2_res_r': '79.81', 'a2_res_f': '80.98', 'oc_res_p': '82.20', 'oc_res_r': '70.09', 'oc_res_f': '75.66'}
+threshold 0.80 	 {'rel_micro_p': '65.97', 'rel_micro_r': '69.94', 'rel_micro_f': '67.90', 'a1_res_p': '80.83', 'a1_res_r': '78.23', 'a1_res_f': '79.51', 'a2_res_p': '85.42', 'a2_res_r': '78.85', 'a2_res_f': '82.00', 'oc_res_p': '88.55', 'oc_res_r': '65.62', 'oc_res_f': '75.38'}
+threshold 0.90 	 {'rel_micro_p': '65.45', 'rel_micro_r': '65.77', 'rel_micro_f': '65.61', 'a1_res_p': '79.82', 'a1_res_r': '70.16', 'a1_res_f': '74.68', 'a2_res_p': '86.21', 'a2_res_r': '72.12', 'a2_res_f': '78.53', 'oc_res_p': '92.20', 'oc_res_r': '58.04', 'oc_res_f': '71.23'}
+threshold 0.99 	 {'rel_micro_p': '59.78', 'rel_micro_r': '45.77', 'rel_micro_f': '51.84', 'a1_res_p': '86.76', 'a1_res_r': '47.58', 'a1_res_f': '61.46', 'a2_res_p': '96.97', 'a2_res_r': '30.77', 'a2_res_f': '46.72', 'oc_res_p': '92.68', 'oc_res_r': '16.96', 'oc_res_f': '28.68'}
+threshold 1.00 	 {'rel_micro_p': '50.82', 'rel_micro_r': '30.31', 'rel_micro_f': '37.97', 'a1_res_p': '66.67', 'a1_res_r': '1.61', 'a1_res_f': '3.15', 'a2_res_p': '100.00', 'a2_res_r': '0.96', 'a2_res_f': '1.90', 'oc_res_p': '0.00', 'oc_res_r': '0.00', 'oc_res_f': '0.00'}
 Table_evaluationstrict
 {'rel_micro_p': 0.4869109947643979, 'rel_micro_r': 0.6940298507462687, 'rel_micro_f': 0.5723076923076924}
 Table_evaluationrelaxed

@@ -230,7 +230,6 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
                     if v >= threshold:
                         if k in gold_labels:
                             micro_prf.tp += 1
-                            print(k)
                             if k == "A1_RES": a1_res_prf.tp += 1
                             elif k == "A2_RES": a2_res_prf.tp += 1
                             else: oc_res_prf.tp += 1
