@@ -254,7 +254,7 @@ if __name__ == "__main__":
         ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
         rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
         gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
-        pred_table_path = f"../output_tables/output_tables/{domain}"
+        pred_table_path = f"../output_tables/{domain}"
         # assess ner performance
         ner_evaluate(ner_model, doc_path)
         # assess rel performance

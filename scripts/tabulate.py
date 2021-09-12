@@ -1,5 +1,4 @@
 import spacy
-from spacy.scorer import PRFScore
 from spacy.tokens import DocBin, Doc
 from spacy.training.example import Example
 import operator
@@ -9,7 +8,6 @@ from scripts.rel_model import create_relation_model, create_classification_layer
 import scripts.entity_ruler
 from pandas import DataFrame
 import csv
-from spacy.scorer import PRFScore
 import os
 import io
 
@@ -71,13 +69,11 @@ def tabulate_pico_entities(input_docs, output_path):
                         final_dict[oc_description]["Arm 2"] = list(filter(lambda x: x.start == a2key[1], doc.ents))[0].text  # gets result entity
         else:
             for a1_rel, a1key in rel_dict["arm_1"]:
-                if ockey[1] == a1key[1]:
-                    final_dict["OC unspecified"]["Arm 1"] = list(filter(lambda x: x.start == a1key[1], doc.ents))[0].text  # gets result entity
-                    final_dict["intervention"]["Arm 1"] = list(filter(lambda x: x.start == a1key[0], doc.ents))[0].text  # gets arm 1 entity
+                final_dict["OC unspecified"]["Arm 1"] = list(filter(lambda x: x.start == a1key[1], doc.ents))[0].text  # gets result entity
+                final_dict["intervention"]["Arm 1"] = list(filter(lambda x: x.start == a1key[0], doc.ents))[0].text  # gets arm 1 entity
             for a2_rel, a2key in rel_dict["arm_2"]:
-                if ockey[1] == a2key[1]:
-                    final_dict["OC unspecified"]["Arm 2"] = list(filter(lambda x: x.start == a2key[1], doc.ents))[0].text  # gets result entity
-                    final_dict["intervention"]["Arm 2"] = list(filter(lambda x: x.start == a2key[0], doc.ents))[0].text  # gets arm 2 entity
+                final_dict["OC unspecified"]["Arm 2"] = list(filter(lambda x: x.start == a2key[1], doc.ents))[0].text  # gets result entity
+                final_dict["intervention"]["Arm 2"] = list(filter(lambda x: x.start == a2key[0], doc.ents))[0].text  # gets arm 2 entity
 
         # create dataframe from dictionary
         df = DataFrame.from_dict(final_dict, orient='columns', dtype=None, columns=None).transpose()
@@ -126,7 +122,7 @@ if __name__ == "__main__":
         docs = doc_bin.get_docs(nlp.vocab)
         ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best", docs)
         rel_preds = relation_extraction(f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best",ner_preds)
-        tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}")
+        tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
 
     # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
     #for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
