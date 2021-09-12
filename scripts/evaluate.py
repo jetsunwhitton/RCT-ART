@@ -233,9 +233,9 @@ if __name__ == "__main__":
     for strat in os.listdir(model_strats):
         outfile = open(f"../evaluation_results/{strat}.txt", "w")
         # assess ner performance
-        ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best",doc_path)
+        ner_evaluate(f"{model_strats}/{strat}/model-best",doc_path)
         # assess rel performance
-        joint_ner_rel_evaluate(None,f"{model_strats}/{strat}/model-best",doc_path,False)
+        joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
         # assess joint performance
         joint_ner_rel_evaluate(f"{model_strats}/{strat}/model-best"
                                ,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
