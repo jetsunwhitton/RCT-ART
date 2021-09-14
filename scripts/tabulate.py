@@ -81,7 +81,7 @@ def tabulate_pico_entities(input_docs, output_path):
         df = df.reindex(columns=columns_titles)
         df.index.name = 'Outcomes'
         df.reset_index(inplace=True)
-        df.drop_duplicates(subset=["Arm 1", "Arm 2"], keep='first', inplace=True)
+        df.drop_duplicates(subset=["Arm 1", "Arm 2"], keep='first', inplace=True) #  don't allow duplicates of same result tuple
         with io.open(f"{output_path}/doc{num}.csv", 'w') as output:
             try:
                 df.to_csv(output)
@@ -125,17 +125,17 @@ if __name__ == "__main__":
         #tabulate_pico_entities(rel_preds, f"../output_tables/output_tables/{domain}")
 
     # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
-    for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
-        print(domain)
-        doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
-        nlp = spacy.blank("en")
-        doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-        docs = doc_bin.get_docs(nlp.vocab)
-        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
-                                             docs)
-        rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
-                                        ner_preds)
-        tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
+    #for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
+     #   print(domain)
+      #  doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
+       # nlp = spacy.blank("en")
+        #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        #docs = doc_bin.get_docs(nlp.vocab)
+        #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
+         #                                    docs)
+        #rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
+         #                               ner_preds)
+        #tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
 
     test_sets = ["../datasets/preprocessed/out_of_domain/autism_as_test/train.spacy",
                  "../datasets/preprocessed/out_of_domain/blood_cancer_as_test/train.spacy",
@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
     names = ["autism", "blood_cancer","diabetes"]
     # build incremental domain sets
-    for domain in os.listdir("../datasets/preprocessed/incremental_domains"):
+    for domain in os.listdir("../datasets/preprocessed/capped_mix"):
         print(domain)
         for test, name in zip(test_sets, names):
             print(name)
@@ -151,9 +151,9 @@ if __name__ == "__main__":
             nlp = spacy.blank("en")
             doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
             docs = doc_bin.get_docs(nlp.vocab)
-            ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/incremental_domains/{domain}/model-best",
+            ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_mix/{domain}/model-best",
                                                  docs)
-            rel_preds = relation_extraction(f"../trained_models/biobert/rel/incremental_domains/{domain}/model-best",
+            rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_mix/{domain}/model-best",
                                             ner_preds)
             tabulate_pico_entities(rel_preds, f"../output_tables/{domain}/{name}")
 

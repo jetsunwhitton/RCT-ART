@@ -240,9 +240,9 @@ def cap_docs(doc_dirs, names, cap):
             train = merged_docs[:int(len(merged_docs)*0.9)]
             dev = merged_docs[int(len(merged_docs)*0.9):]
             merged_train = DocBin(docs= train, store_user_data=True)
-            merged_train.to_disk(f"../datasets/preprocessed/capped_for_comparison/{merged_names[:-1]}/train.spacy")
+            merged_train.to_disk(f"../datasets/preprocessed/capped_mix/{merged_names[:-1]}/train.spacy")
             merged_dev = DocBin(docs=dev, store_user_data=True)
-            merged_dev.to_disk(f"../datasets/preprocessed/capped_for_comparison/{merged_names[:-1]}/dev.spacy")
+            merged_dev.to_disk(f"../datasets/preprocessed/capped_mix/{merged_names[:-1]}/dev.spacy")
         count += 1
 
 
@@ -342,15 +342,15 @@ if __name__ == "__main__":
 
     exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
 
-    for exclude in exclude_list:
-        filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
-        out_of_domain_split(filter_domains,exclude)
-    #names = ["cardiovascular_disease","solid_tumour_cancer","glaucoma"]
-    #docs = ["../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
-     #       "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy",
-      #      "../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy"]
+    #for exclude in exclude_list:
+     #   filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
+      #  out_of_domain_split(filter_domains,exclude)
+    names = ["glaucoma","cardiovascular_disease","solid_tumour_cancer"]
+    docs = ["../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy",
+            "../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
+            "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"]
 
-    #cap_docs(docs,names, 130)
+    cap_docs(docs,names, 72)
 
 
 

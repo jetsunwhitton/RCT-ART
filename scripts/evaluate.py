@@ -155,7 +155,7 @@ def _score_and_format(examples, thresholds, task):
 def evaluate_result_tables(gold_path, predicted_path, strict = True):
     """ Evaluates performance of model on tabulation task, compares prediction tables vs gold tables"""
     print("|| Evaluating table task performance")
-    micro_prf = PRFScore()
+    prf = PRFScore()
     examples = []
     for gold_csv, pred_csv in zip(os.listdir(gold_path), os.listdir(predicted_path)):
         gold_open = open(os.path.join(gold_path, gold_csv), newline='')
@@ -176,25 +176,25 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
 
     if strict: # assess table with exact entity matches
         for example in examples:
-            if not example["pred"]: micro_prf.fn += 1
+            if not example["pred"]: prf.fn += 1
             else:
-                if example["pred"] == example["gold"]: micro_prf.tp += 1
-                else: micro_prf.fp += 1
+                if example["pred"] == example["gold"]: prf.tp += 1
+                else: prf.fp += 1
 
-    else: # assess tables with less strict entity criteria, checking if pred entity is within gold entity boundary
+    else: # assess tables with less strict entity criteria, checking if gold and pred entity boundaries overlap
         for example in examples:
             relaxed_match = True
-            if not example["pred"]: micro_prf.fn += 1 # empty prediction for existing gold table, false negative
+            if not example["pred"]: prf.fn += 1 # empty prediction for existing gold table, false negative
             else:
                 for pval, gval in zip(example["pred"].values(), example["gold"].values()):
-                    if pval not in gval and example["pred"]:
+                    if gval not in pval and pval not in gval:
                         relaxed_match = False
-                if relaxed_match: micro_prf.tp += 1
-                else: micro_prf.fp += 1
+                if relaxed_match: prf.tp += 1
+                else: prf.fp += 1
 
-    output = {"rel_micro_p": micro_prf.precision,
-              "rel_micro_r": micro_prf.recall,
-              "rel_micro_f": micro_prf.fscore,}
+    output = {"rel_micro_p": prf.precision,
+              "rel_micro_r": prf.recall,
+              "rel_micro_f": prf.fscore,}
     outfile.write("Table_evaluation")
     if strict: outfile.write("strict\n")
     else: outfile.write("relaxed\n")
@@ -203,29 +203,30 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
 
 
 if __name__ == "__main__":
+    # some of these paths require trained models to be in place already
     #typer.run(ner_rel_evaluate)
     #file_name = "BERT_baselines"
     #outfile = open(f"../evaluation_results/{file_name}.txt", "w")
-    #doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    #gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
-    #pred_table_path = "../output_tables/all_domains_"
-    #model_bases = ["biobert","scibert","roberta"]
-    #model_strats = "../trained_models/biobert/ner/all_domain_strats"
+    doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
+    gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
+    pred_table_path = "../output_tables/all_domains_"
+    model_bases = ["biobert","scibert","roberta"]
+    model_strats = "../trained_models/biobert/ner/all_domain_strats"
 
     # evaluate different model-bases
    # for model_base in model_bases:
     #    outfile = open(f"../evaluation_results/{model_base}.txt", "w")
         # assess ner performance
-     #   ner_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best",doc_path)
+        #ner_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best",doc_path)
         # assess rel performance
-      #  joint_ner_rel_evaluate(None,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
+        #joint_ner_rel_evaluate(None,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
         # assess joint performance
-       # joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best"
-        #                       ,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
+        #joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best"
+         #                      ,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
         # assess table strict performance
         #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
         # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
+     #   evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
 
         #outfile.close()
 
@@ -247,14 +248,14 @@ if __name__ == "__main__":
         #outfile.close()
 
     # evaluate out of domain perfomance
-    #for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
-     #   outfile = open(f"../evaluation_results/{domain}.txt", "w")
-      #  print(domain)
-       # doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
+    for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
+        outfile = open(f"../evaluation_results/{domain}.txt", "w")
+        print(domain)
+        doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
         #ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
         #rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
-        #gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
-        #pred_table_path = f"../output_tables/{domain}"
+        gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
+        pred_table_path = f"../output_tables/{domain}"
         # assess ner performance
         #ner_evaluate(ner_model, doc_path)
         # assess rel performance
@@ -292,24 +293,27 @@ if __name__ == "__main__":
 
     inc_test_domains = ["autism","blood_cancer","diabetes"]
 
-    # evaluate out of capped domain performance perfomance
-    for test in inc_test_domains:
-        outfile = open(f"../evaluation_results/train_0_test_{test}.txt", "w")
-        print(test)
-        doc_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/test.spacy"
-        ner_model = f"../trained_models/biobert/ner/capped_for_comparison/cardiovascular_disease/model-best"
-        rel_model = f"../trained_models/biobert/rel/capped_for_comparison/cardiovascular_disease/model-best"
-        gold_table_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/gold_tables"
-        pred_table_path = f"../output_tables/cardiovascular_disease"
-        # assess ner performance
-        ner_evaluate(ner_model, doc_path)
-        # assess rel performance
-        joint_ner_rel_evaluate(None, rel_model, doc_path, False)
-        # assess joint performance
-        joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
-        # assess table strict performance
-        evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
-        # assess table relaxed performance
-        evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
+    # evaluate out of mix capped domain performance
+    for domain in os.listdir("../datasets/preprocessed/capped_mix"):
+        count = 0
+        for test in inc_test_domains:
+            outfile = open(f"../evaluation_results/train_{count}_test_{test}.txt", "w")
+            print(test)
+            doc_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/test.spacy"
+            ner_model = f"../trained_models/biobert/ner/capped_mix/{domain}/model-best"
+            rel_model = f"../trained_models/biobert/rel/capped_mix/{domain}/model-best"
+            gold_table_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/gold_tables"
+            pred_table_path = f"../output_tables/{domain}"
+            # assess ner performance
+            ner_evaluate(ner_model, doc_path)
+            # assess rel performance
+            joint_ner_rel_evaluate(None, rel_model, doc_path, False)
+            # assess joint performance
+            joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
+            # assess table strict performance
+            evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
+            # assess table relaxed performance
+            evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
 
-        outfile.close()
+            outfile.close()
+        count += 1
