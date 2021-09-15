@@ -137,9 +137,9 @@ if __name__ == "__main__":
          #                               ner_preds)
         #tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
 
-    test_sets = ["../datasets/preprocessed/out_of_domain/autism_as_test/train.spacy",
-                 "../datasets/preprocessed/out_of_domain/blood_cancer_as_test/train.spacy",
-                 "../datasets/preprocessed/out_of_domain/diabetes_as_test/train.spacy"]
+    test_sets = ["../datasets/preprocessed/out_of_domain/autism_as_test/test.spacy",
+                 "../datasets/preprocessed/out_of_domain/blood_cancer_as_test/test.spacy",
+                 "../datasets/preprocessed/out_of_domain/diabetes_as_test/test.spacy"]
 
     names = ["autism", "blood_cancer","diabetes"]
     # build incremental domain sets
