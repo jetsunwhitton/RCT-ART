@@ -1,5 +1,5 @@
 """
-An
+A script for rules-based entity recognition. Unused in final system, but made available for further development.
 """
 from spacy import load
 import re
