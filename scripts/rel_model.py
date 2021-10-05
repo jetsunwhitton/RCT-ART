@@ -1,11 +1,15 @@
+"""
+This script defines the layers of the RE model and decorates them for
+access by the RE model config file.
+"""
 from typing import List, Tuple, Callable
-
 import spacy
 from spacy.tokens import Doc, Span
 from thinc.types import Floats2d, Ints1d, Ragged, cast
 from thinc.api import Model, Linear, chain, Logistic
 
-
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 @spacy.registry.architectures("rel_model.v1")
 def create_relation_model(
     create_instance_tensor: Model[List[Doc], Floats2d],
@@ -16,7 +20,8 @@ def create_relation_model(
         model.attrs["get_instances"] = create_instance_tensor.attrs["get_instances"]
     return model
 
-
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 @spacy.registry.architectures("rel_classification_layer.v1")
 def create_classification_layer(
     nO: int = None, nI: int = None
@@ -24,7 +29,8 @@ def create_classification_layer(
     with Model.define_operators({">>": chain}):
         return Linear(nO=nO, nI=nI) >> Logistic()
 
-
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 @spacy.registry.misc("rel_instance_generator.v1")
 def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]]:
     def get_instances(doc: Doc) -> List[Tuple[Span, Span]]:
@@ -53,7 +59,8 @@ def create_instances(max_length: int) -> Callable[[Doc], List[Tuple[Span, Span]]
 
     #return get_instances
 
-
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 @spacy.registry.architectures("rel_instance_tensor.v1")
 def create_tensors(
     tok2vec: Model[List[Doc], List[Floats2d]],
@@ -70,7 +77,8 @@ def create_tensors(
         init=instance_init,
     )
 
-
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 def instance_forward(model: Model[List[Doc], Floats2d], docs: List[Doc], is_train: bool) -> Tuple[Floats2d, Callable]:
     pooling = model.get_ref("pooling")
     tok2vec = model.get_ref("tok2vec")
@@ -117,7 +125,8 @@ def instance_forward(model: Model[List[Doc], Floats2d], docs: List[Doc], is_trai
 
     return relations, backprop
 
-
+# This function was sourced from the spaCy relation component
+# template: https://github.com/explosion/projects/tree/v3/tutorials
 def instance_init(model: Model, X: List[Doc] = None, Y: Floats2d = None) -> Model:
     tok2vec = model.get_ref("tok2vec")
     if X is not None:

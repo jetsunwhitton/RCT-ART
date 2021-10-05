@@ -1,3 +1,6 @@
+"""
+Custom helper functions used to support other modules
+"""
 from functools import partial
 from pathlib import Path
 from typing import Iterable, Callable

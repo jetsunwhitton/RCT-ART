@@ -1,16 +1,12 @@
-import random
-import typer
-from pathlib import Path
-import spacy
+"""
+Evaluate the five NLP tasks of the RCT-ART system: NER, RE, JOINT NER + RE,
+TABULATION (STRICT), TABULATION (RELAXED). Also generate confusion matrices.
+"""
+import spacy, operator, csv, os
 from spacy.tokens import DocBin, Doc
 from spacy.training.example import Example
-import scripts.entity_ruler
-import operator
-import csv
 from spacy.scorer import Scorer,PRFScore
-import os
-from collections import defaultdict
-
+from spacy.vocab import Vocab
 
 # make the factory work
 from rel_pipe import make_relation_extractor, score_relations
@@ -20,7 +16,7 @@ from rel_model import create_relation_model, create_classification_layer, create
 
 
 def ner_evaluate(ner_model_path,test_data):
-    """ Evaluates NER scores of model on test data"""
+    """ Evaluates NER scores of model on test data, can output to console and/or file"""
     print("|| Loading model for NER task")
     nlp = spacy.load(ner_model_path)
     doc_bin = DocBin(store_user_data=True).from_disk(test_data)
@@ -39,8 +35,8 @@ def ner_evaluate(ner_model_path,test_data):
 # template: https://github.com/explosion/projects/tree/v3/tutorials
 # it can now be used to evaluate joint entity--relation extraction performance
 def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_details: bool):
-    """Evaluates joint performance of ner and rel extraction model, as well as the rel model alone
-    if only rel model provided"""
+    """Evaluates joint performance of ner and rel extraction model,
+    as well as the rel model alone if only rel model provided"""
     if ner_model_path != None:
         print("|| Loading models for joint task")
         ner = spacy.load(ner_model_path)
@@ -102,35 +98,7 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
                                 print(child_ent, "incorrect entity")
                             assessed_ents.append(child_ent)
             print()
-    random_examples = []
-    docs = doc_bin.get_docs(rel.vocab)
-    for gold in docs:
-        pred = Doc(
-            rel.vocab,
-            words=[t.text for t in gold],
-            spaces=[t.whitespace_ for t in gold],
-        )
-        if ner_model_path != None:
-            pred.ents = ner(gold.text).ents
-        else:
-            pred.ents = gold.ents
-        relation_extractor = rel.get_pipe("relation_extractor")
-        get_instances = relation_extractor.model.attrs["get_instances"]
-        for (e1, e2) in get_instances(pred):
-            offset = (e1.start, e2.start)
-            if offset not in pred._.rel:
-                pred._.rel[offset] = {}
-            for label in relation_extractor.labels:
-                pred._.rel[offset][label] = random.uniform(0, 1)
-        random_examples.append(Example(pred, gold))
-
     thresholds = [0.000, 0.050, 0.100, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99, 0.999]
-    #print()
-    #print("Random baseline:")
-    #if ner_model_path != None:
-     #   task = True
-    #_score_and_format(examples, thresholds, task)
-
     print()
     print("Results of the trained model:")
     #outfile.write()
@@ -141,19 +109,21 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
 
 
 def _score_and_format(examples, thresholds, task):
-    if task:
-        outfile.write("Joint\n")
-    else:
-        outfile.write("Rel alone\n")
+    """outputs rel and joint performance scores, to console and/or txt file"""
+    #if task:
+        #outfile.write("Joint\n")
+    #else:
+        #outfile.write("Rel alone\n")
     for threshold in thresholds:
         r = score_relations(examples, threshold)
         results = {k: "{:.2f}".format(v * 100) for k, v in r.items()}
         print(f"threshold {'{:.2f}'.format(threshold)} \t {results}")
-        outfile.write(f"threshold {'{:.2f}'.format(threshold)} \t {results}\n")
+        #outfile.write(f"threshold {'{:.2f}'.format(threshold)} \t {results}\n")
 
 
 def evaluate_result_tables(gold_path, predicted_path, strict = True):
-    """ Evaluates performance of model on tabulation task, compares prediction tables vs gold tables"""
+    """ Evaluates performance of model on tabulation task, compares prediction tables
+    vs gold tables, can output to console and/or txt file"""
     print("|| Evaluating table task performance")
     prf = PRFScore()
     examples = []
@@ -181,10 +151,10 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
                 if example["pred"] == example["gold"]: prf.tp += 1
                 else: prf.fp += 1
 
-    else: # assess tables with less strict entity criteria, checking if gold and pred entity boundaries overlap
+    else: # assess tables with less strict entity criteria -- gold/pred entity boundary overlap
         for example in examples:
             relaxed_match = True
-            if not example["pred"]: prf.fn += 1 # empty prediction for existing gold table, false negative
+            if not example["pred"]: prf.fn += 1 # empty prediction --> false negative
             else:
                 for pval, gval in zip(example["pred"].values(), example["gold"].values()):
                     if gval not in pval and pval not in gval:
@@ -202,118 +172,114 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
     print(output)
 
 
+def create_ner_confusion_matrix(model_path, test_path):
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import ConfusionMatrixDisplay
+    import matplotlib.pyplot as plt
+
+    ner = spacy.load(model_path)
+    doc_bin = DocBin(store_user_data=True).from_disk(test_path)
+    gold_docs = list(doc_bin.get_docs(ner.vocab))
+    pred_docs = [ner(gold_doc.text) for gold_doc in gold_docs]
+    gold_array = []
+    pred_array = []
+    for gold_doc, pred_doc in zip(gold_docs, pred_docs):
+        for g_tok,p_tok in zip(gold_doc, pred_doc):
+            if g_tok.ent_type_ == '':
+                gold_array.append("NO_ENT")
+            else:
+                gold_array.append(g_tok.ent_type_)
+            if p_tok.ent_type_ == '':
+                pred_array.append("NO_ENT")
+            else:
+                pred_array.append(p_tok.ent_type_)
+    cm = confusion_matrix(gold_array, pred_array,
+                          labels=["OC","INTV","MEAS","NO_ENT"],
+                          sample_weight=None, normalize='true')
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm,
+                                  display_labels=["OC","INTV","MEAS","NO_ENT"])
+    font = {'family': 'normal',
+            'weight': 'normal',
+            'size': 24}
+    plt.rc('font', **font)
+    fig, ax = plt.subplots(figsize=(12, 12))
+    disp = disp.plot(include_values=True,
+             cmap=plt.cm.Blues, ax=ax, xticks_rotation='vertical')
+
+    plt.show()
+
+
+def create_rel_confusion_matrix(model_path, test_path):
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import ConfusionMatrixDisplay
+    import matplotlib.pyplot as plt
+    from scripts.tabulate import relation_extraction
+    vocab = Vocab()
+    doc_bin = DocBin(store_user_data=True).from_disk(test_path)
+    for_pred = list(doc_bin.get_docs(vocab))
+    pred_docs = relation_extraction(model_path, for_pred)
+    doc_bin = DocBin(store_user_data=True).from_disk(test_path)
+    gold_docs = list(doc_bin.get_docs(vocab))
+    pred_array, pred_keys, gold_keys, gold_array = [], [], [], []
+    for pred_doc, gold_doc in zip(pred_docs,gold_docs):
+        for pkey, p_rel_dict in pred_doc._.rel.items():
+            pred_keys.append(pkey)
+            if pkey in gold_doc._.rel.keys():
+                gold_keys.append(pkey)
+                gold_rel = gold_doc._.rel[pkey]  # get relation
+                max_gold = max(gold_rel.items(),
+                              key=operator.itemgetter(1))  # selects highest probability relation
+                if max_gold[1] > 0.5:  # includes relation if above set threshold for probability
+                    gold_array.append(max_gold[0])
+                else:
+                    gold_array.append("NO_RE")
+                pred_rel = pred_doc._.rel[pkey]  # get relation
+                max_pred = max(pred_rel.items(),
+                              key=operator.itemgetter(1))  # selects highest probability relation
+                if max_pred[1] > 0.5:  # includes relation if above set threshold for probability
+                    pred_array.append(max_pred[0])
+                else:
+                    pred_array.append("NO_RE")
+
+    cm = confusion_matrix(gold_array, pred_array, labels=["A1_RES", "A2_RES", "OC_RES", "NO_RE"],
+                          sample_weight=None, normalize='true')
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["A1_RES", "A2_RES", "OC_RES", "NO_RE"])
+    font = {'family': 'normal',
+            'weight': 'normal',
+            'size': 24}
+    plt.rc('font', **font)
+    fig, ax = plt.subplots(figsize=(12, 12))
+    disp = disp.plot(include_values=True,
+                     cmap=plt.cm.Blues, ax=ax, xticks_rotation='vertical')
+
+    plt.show()
+
+
+
 if __name__ == "__main__":
     # some of these paths require trained models to be in place already
-    #typer.run(ner_rel_evaluate)
-    #file_name = "BERT_baselines"
-    #outfile = open(f"../evaluation_results/{file_name}.txt", "w")
-    doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
+    doc_path = "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"
     gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
     pred_table_path = "../output_tables/all_domains_"
     model_bases = ["biobert","scibert","roberta"]
-    model_strats = "../trained_models/biobert/ner/all_domain_strats"
 
     # evaluate different model-bases
-   # for model_base in model_bases:
-    #    outfile = open(f"../evaluation_results/{model_base}.txt", "w")
+    for model_base in model_bases:
+        outfile = open(f"../evaluation_results/{model_base}.txt", "w")
         # assess ner performance
-        #ner_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best",doc_path)
+        ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best",doc_path)
         # assess rel performance
-        #joint_ner_rel_evaluate(None,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
+        joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domains/model-best",doc_path,False)
         # assess joint performance
-        #joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best"
-         #                      ,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
+        joint_ner_rel_evaluate(None,
+                           f"../trained_models/rel/all_domains/model-best",doc_path,True)
         # assess table strict performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
         # assess table relaxed performance
-     #   evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
 
-        #outfile.close()
+        outfile.close()
 
-    # evaluate different training size strats
-    #for strat in os.listdir(model_strats):
-     #   outfile = open(f"../evaluation_results/{strat}.txt", "w")
-        # assess ner performance
-      #  ner_evaluate(f"{model_strats}/{strat}/model-best",doc_path)
-        # assess rel performance
-       # joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
-        # assess joint performance
-        #joint_ner_rel_evaluate(f"{model_strats}/{strat}/model-best"
-               #                ,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
-        # assess table strict performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=True)
-        # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=False)
+    create_ner_confusion_matrix("../trained_models/ner/all_domains/model-best", doc_path)
+    create_rel_confusion_matrix("../trained_models/rel/all_domains/model-best", doc_path)
 
-        #outfile.close()
-
-    # evaluate out of domain perfomance
-    for domain in os.listdir("../datasets/preprocessed/out_of_domain"):
-        outfile = open(f"../evaluation_results/{domain}.txt", "w")
-        print(domain)
-        doc_path = f"../datasets/preprocessed/out_of_domain/{domain}/test.spacy"
-        #ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
-        #rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
-        gold_table_path = f"../datasets/preprocessed/out_of_domain/{domain}/gold_tables"
-        pred_table_path = f"../output_tables/{domain}"
-        # assess ner performance
-        #ner_evaluate(ner_model, doc_path)
-        # assess rel performance
-        #joint_ner_rel_evaluate(None, rel_model, doc_path, False)
-        # assess joint performance
-        #joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
-        # assess table strict performance
-        #evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
-        # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
-
-        #outfile.close()
-
-    # evaluate out of capped domain performance perfomance
-    #for domain in os.listdir("../datasets/preprocessed/capped_for_comparison"):
-     #   outfile = open(f"../evaluation_results/{domain}.txt", "w")
-      #  print(domain)
-       # doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
-        #ner_model = f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best"
-        #rel_model = f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best"
-        #gold_table_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/gold_tables"
-        #pred_table_path = f"../output_tables/{domain}"
-        # assess ner performance
-        #ner_evaluate(ner_model, doc_path)
-        # assess rel performance
-        #joint_ner_rel_evaluate(None, rel_model, doc_path, False)
-        # assess joint performance
-        #joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
-        # assess table strict performance
-        #evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
-        # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
-
-        #outfile.close()
-
-    inc_test_domains = ["autism","blood_cancer","diabetes"]
-
-    # evaluate out of mix capped domain performance
-    for domain in os.listdir("../datasets/preprocessed/capped_mix"):
-        count = 0
-        for test in inc_test_domains:
-            outfile = open(f"../evaluation_results/train_{count}_test_{test}.txt", "w")
-            print(test)
-            doc_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/test.spacy"
-            ner_model = f"../trained_models/biobert/ner/capped_mix/{domain}/model-best"
-            rel_model = f"../trained_models/biobert/rel/capped_mix/{domain}/model-best"
-            gold_table_path = f"../datasets/preprocessed/out_of_domain/{test}_as_test/gold_tables"
-            pred_table_path = f"../output_tables/{domain}"
-            # assess ner performance
-            ner_evaluate(ner_model, doc_path)
-            # assess rel performance
-            joint_ner_rel_evaluate(None, rel_model, doc_path, False)
-            # assess joint performance
-            joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
-            # assess table strict performance
-            evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
-            # assess table relaxed performance
-            evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
-
-            outfile.close()
-        count += 1

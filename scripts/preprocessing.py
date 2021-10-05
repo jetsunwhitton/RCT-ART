@@ -1,17 +1,11 @@
 """
-This preprocesing script parses annotated relations and entities from the prodigy jsonl output files.
+This preprocesing script parses annotated relations and entities from
+the prodigy jsonln output files. Also includes splitting functions.
 """
-import json
-import typer
-from pathlib import Path
+import json, random, os, ast
 from spacy.tokens import DocBin, Doc
 from spacy.vocab import Vocab
 from wasabi import Printer
-import random
-import re
-import os
-import ast
-
 
 def merge_jsonl(jsonl_dirs, output_path):
     """Merges gold standard JSONL files from different disease area domains"""
@@ -100,7 +94,7 @@ def annotations_to_spacy(json_loc):
                         pmid = ast.literal_eval(example["user_data"])
                         doc.user_data["pmid"] = pmid["pmid"]
                     except KeyError:
-                        pass # print("Skipping glaucoma dataset as no pmid") # pmids have not been added to glaucoma dataset
+                        pass # pmids have not been added to glaucoma dataset
                     docs.append(doc)
 
                 except KeyError as e:
@@ -115,7 +109,6 @@ def train_dev_test_split(docs,output_dir):
     :param docs: list
     :return: train dev and test spacy files for model training and testing
     """
-
     pmid_set = set()
     with_pmid = []
     without_pmid = []
@@ -176,7 +169,8 @@ def stratify_train_examples(doc_path, strats):
             name = str(strat)[-1] + "%"
         doc_strat = docs[:int(l*strat)]
         docbin = DocBin(docs=doc_strat, store_user_data=True)
-        docbin.to_disk(f"../datasets/preprocessed/all_domains/training_stratifications/train_strat_{name}.spacy")
+        docbin.to_disk(f"../datasets/preprocessed/all_domains/training_stratifications/"
+                       f"train_strat_{name}.spacy")
 
 
 def out_of_domain_split(doc_dirs, exclude):
@@ -211,8 +205,8 @@ def out_of_domain_split(doc_dirs, exclude):
 
 
 def cap_docs(doc_dirs, names, cap):
-    """Caps number of examples in datasets for comparison, outputting both individual sets and merged sets for
-    incremental evaluation"""
+    """Caps number of examples in datasets for comparison, outputting both individual
+    sets and merged sets for incremental evaluation"""
     vocab = Vocab()
     merged_docs = []
     merged_names = ""
@@ -246,105 +240,20 @@ def cap_docs(doc_dirs, names, cap):
         count += 1
 
 
-#  this function was developed but not used in the primary study
-def restore_ebm_nlp_annos(results, full_abstracts, output):
-    """Adds back rest of the entity annotated sentences from the ebm_nlp dataset to the processed result sentences"""
-    pmid_set = set()
-    text_set = set()
-    vocab = Vocab()
-    doc_bin = DocBin(store_user_data=True).from_disk(results)
-    result_docs = list(doc_bin.get_docs(vocab))
-    full_abstract_docs = []
-    with open(full_abstracts, "r", encoding="utf8") as jsonfile:
-        for line in jsonfile:
-            example = json.loads(line)
-            span_starts = set()
-
-            # Parse the tokens
-            words = [t["text"] for t in example["tokens"]]
-            spaces = [t["ws"] for t in example["tokens"]]
-            doc = Doc(vocab, words=words, spaces=spaces)
-
-            # Parse the PICO entities
-            spans = example["spans"]
-            entities = []
-            span_end_to_start = {}
-            for span in spans:
-                entity = doc.char_span(
-                    span["start"], span["end"], label=span["label"]
-                )
-                span_end_to_start[span["token_end"]] = span["token_start"]
-                entities.append(entity)
-                span_starts.add(span["token_start"])
-            doc.ents = entities
-            doc.user_data = ast.literal_eval(example["user_data"])
-            full_abstract_docs.append(doc)
-    for rdoc in result_docs:
-        try:
-            pmid_set.add(rdoc.user_data["pmid"])
-            text_set.add(rdoc.text)
-        except:
-            pass # skips glaucoma examples
-    for fadoc in full_abstract_docs:
-        try:
-
-            if fadoc.user_data["pmid"] in pmid_set and fadoc.text not in text_set:
-                result_docs.append(fadoc)
-        except:
-            pass # skips glaucoma examples
-    doc_bin = DocBin(docs=result_docs, store_user_data=True)
-    print(f"{len(result_docs)} {os.path.basename(full_abstracts)}{output} sentences")
-    doc_bin.to_disk(output)
-
-
-#  this function was developed but not used in the primary study
-def parse_accepted(examples_path):
-    """redundant helper function for annotation processing"""
-    loaded = open(examples_path,"r").read()
-    examples = loaded.split("\n")
-    with open(examples_path, "w") as output:
-        for example in examples:
-            if example == "\n":
-                print("Parse success")
-            else:
-                example = json.loads(example)
-                if example["answer"] == "accept":
-                    output.write(json.dumps(example) + "\n")
-        output.close()
-
-
 if __name__ == "__main__":
-    #cardiovascular = f"{gold_dir}/cardiovascular_disease/cardiovascular_disease_gold.jsonl"
-    #glaucoma = f"{gold_dir}/glaucoma/glaucoma_gold.jsonl"
-    #typer.run(annotations_to_spacy)
-    #merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
-     #                 for domain in os.listdir("../datasets/gold_result_annotations") if domain != "all_domains"]
+    gold_dir = "../datasets/gold_result_annotations"
+    cardiovascular = f"{gold_dir}/cardiovascular_disease/cardiovascular_disease_gold.jsonl"
+    glaucoma = f"{gold_dir}/glaucoma/glaucoma_gold.jsonl"
+    merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
+                    for domain in os.listdir("../datasets/gold_result_annotations")
+                      if domain != "all_domains"]
 
-    #stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
-    #parse_accepted(annos)
-    #merge_examples(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
-    #for domain in os.listdir("../datasets/gold_result_annotations"):
-     #    docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
-      #   train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
-       #  for tdt in os.listdir(f"../datasets/preprocessed/{domain}/results_only"):
-        #     try:
-         #       restore_ebm_nlp_annos(f"../datasets/preprocessed/{domain}/results_only/{tdt}",f"../datasets/for_annotation/ebm_nlp/{domain}/all_abstract_sentences.jsonl",f"../datasets/preprocessed/{domain}/full_abstracts/{tdt}")
-          #   except:
-           #     pass
+    stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
+    merge_jsonl(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
+    for domain in os.listdir("../datasets/gold_result_annotations"):
+         docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
+         train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
 
-    #combo_domain_path = "../datasets/preprocessed/domain_combos"
-    all_domain_dirs = ["../datasets/preprocessed/autism/results_only",
-                       "../datasets/preprocessed/blood_cancer/results_only",
-                       "../datasets/preprocessed/cardiovascular_disease/results_only",
-                       "../datasets/preprocessed/diabetes/results_only",
-                       "../datasets/preprocessed/glaucoma/results_only",
-                       "../datasets/preprocessed/solid_tumour_cancer/results_only"]
-
-    exclude_list = ["autism", "blood_cancer", "cardiovascular_disease", "diabetes", "glaucoma", "solid_tumour_cancer"]
-
-    #for exclude in exclude_list:
-     #   filter_domains = [dirs for dirs in all_domain_dirs if exclude not in dirs]
-      #  out_of_domain_split(filter_domains,exclude)
     names = ["glaucoma","cardiovascular_disease","solid_tumour_cancer"]
     docs = ["../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy",
             "../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",

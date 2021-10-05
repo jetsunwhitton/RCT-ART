@@ -1,18 +1,18 @@
-import spacy
+"""
+The data collection component includes a class for querying and processing
+annotations from the EBM-NLP corpus, as well as helper functions for processing
+and filtering in line with our study inclusion criteria text before annotation
+"""
+import spacy, os, tarfile, json, re, pickle, operator
 from glob import glob
-import os
 from collections import defaultdict
 from Bio import Entrez
-import tarfile
-import json
-import re
 from pathlib import Path
-import pickle
-import operator
 
 
 class ProcessEbmNlp:
-    ###!!!!!! consider adding annotation adjustment functionality
+    """Class for querying and prcessing the EBM-NLP corpus, requires corpus to zip
+    to be within for_preprocessing folder"""
     def __init__(self):
         self.queries = {}
         self.ebm_nlp = '../datasets/for_preprocessing/ebm_nlp'
@@ -26,8 +26,8 @@ class ProcessEbmNlp:
         """
         Add query for filtering the ebm-nlp corpus into a domain
         :param query: string for querying ids on pubmed
-        :param domain: single-word name for query and resulting domain, should be same as query if one query
-        is one word
+        :param domain: single-word name for query and resulting domain, should be same as
+        query if one queryis one word
         """
         self.queries[domain] = query
 
@@ -53,7 +53,8 @@ class ProcessEbmNlp:
         batches = []
         seperator = "," #  seperator for join function below needed to convert pmid batch to string
         for i in range(10,0,-1):
-            batches.append(seperator.join(pmids[int(l*(1/i-0.1)):int(l*1/i)])) #  converts to string and adds to batch list
+            #  converts to string and adds to batch list
+            batches.append(seperator.join(pmids[int(l*(1/i-0.1)):int(l*1/i)]))
         return batches
 
     def pmid_db_query(self, batch, query):
@@ -65,7 +66,8 @@ class ProcessEbmNlp:
         Entrez.email = 'jetsun.whitton.20@ucl.ac.uk'
         post = Entrez.epost("pubmed", id=batch)
         p = Entrez.read(post) # query keys of posted pmids
-        search = Entrez.esearch("pubmed",query,usehistory='y',WebEnv=p['WebEnv'],query_key=p['QueryKey'],retmax=500)
+        search = Entrez.esearch("pubmed",query,usehistory='y',
+                                WebEnv=p['WebEnv'],query_key=p['QueryKey'],retmax=500)
         results = Entrez.read(search)
         return results
 
@@ -84,8 +86,8 @@ class ProcessEbmNlp:
     def generate_ebm_nlp_iob(self, domain_name, domain):
         """
         Formats the filtered ebm-nlp domains into iob files.
-        Domain functionality was added to iob formatter code from original Nye et al. github:
-        https://github.com/bepnye/EBM-NLP
+        Domain functionality was added to iob formatter code from original
+        Nye et al. github:https://github.com/bepnye/EBM-NLP
         :param domain_name: the name of the filtered domain
         :param domain: the domain set of ebm-nlp data i.e. the labelled abstracts
         :return: iob files for each filtered domain
@@ -111,7 +113,8 @@ class ProcessEbmNlp:
             batch_to_labels[phase][pio] = {}
             print(f'Reading files for {phase} {pio}')
             for fdir in ['train', 'test/gold']:
-              ann_fnames = glob(f'{self.ebm_nlp}/ebm_nlp_2_00/annotations/aggregated/{phase}/{pio}/{fdir}/*.ann')
+              ann_fnames = glob(f'{self.ebm_nlp}/'
+                                f'ebm_nlp_2_00/annotations/aggregated/{phase}/{pio}/{fdir}/*.ann')
               for fname in ann_fnames:
                   pmid = self.fname_to_pmid(fname)
                   if pmid in domain:
@@ -168,6 +171,7 @@ class ProcessEbmNlp:
                 print(pmid, " error")
 
     def output_iob(self):
+        """outputs retrieved EBM-NLP annotations as IOB files"""
         print("Batching PMIDs for querying")
         batches = self.ebm_nlp_pmid_batch()
         filtered_domains = defaultdict(list)
@@ -191,7 +195,8 @@ class ProcessEbmNlp:
     def convert_iob_to_spacy(self):
         print(f"Coverting iob ebm-nlp annotations into spacy files")
         for filename in os.listdir(f"{self.ebm_nlp}/ebm_nlp_iob"):
-            os.system(f"python -m spacy convert {self.ebm_nlp}/ebm_nlp_iob/{filename} {self.ebm_nlp}/ebm_nlp_spacy")
+            os.system(f"python -m spacy convert {self.ebm_nlp}/ebm_nlp_iob/"
+                      f"{filename} {self.ebm_nlp}/ebm_nlp_spacy")
 
 
 def add_pmids_to_doc(docs,pmids):
@@ -204,8 +209,9 @@ def add_pmids_to_doc(docs,pmids):
 
 def spacy_to_jsonl(spacy_data, domain_name, add_ids=None, doc_filter=None):
     """
-    Converts the spacy data format used by the pipeline and its models into the jsonl format used by the prodigy
-    annotation software.
+    Converts the spacy data format used by the pipeline and its models into
+    the jsonl format used by the prodigy annotation software.
+    This function requires the prodigy library to be installed.
     :param spacy_data: spacy files
     :add_ids: add back in pubmed id or custom id for doc
     :doc_filter: filter doc if missing certain pre-annotations
@@ -234,7 +240,8 @@ def spacy_to_jsonl(spacy_data, domain_name, add_ids=None, doc_filter=None):
                 print(tokens[count].pop())
                 continue
         try:
-            spans = [{"start": ent.start_char, "end": ent.end_char, "label": ent.label_} for ent in doc.ents]
+            spans = [{"start": ent.start_char, "end": ent.end_char, "label": ent.label_}
+                     for ent in doc.ents]
         except AttributeError:
             print("doc has no entities")
             if doc_filter == "missing_entities":
@@ -268,9 +275,10 @@ def spacy_to_jsonl(spacy_data, domain_name, add_ids=None, doc_filter=None):
 def filter_sentences(annotation_data, sent_filter, domain_name):
     """
     Filters sentences from domains
+    This function requires the prodigy library to be installed.
     :param annotation_data: jsonl sentences for annotation
-    :param sent_filter: filter predicates,
-    :param domain_name:
+    :param sent_filter: string for filterering predicates,
+    :param domain_name: domain in for_annotation folder to filter
     :return:
     """
     from prodigy.components.preprocess import split_sentences
@@ -308,13 +316,13 @@ def filter_sentences(annotation_data, sent_filter, domain_name):
 
 def model_pre_annotate(data,ner_model=None,rel_model=None,filter=None):
     """
-    Use existing trained models to pre-annotate data with predicted labels to speed up the annotation process
+    Use existing trained models to pre-annotate data with predicted labels
+    to speed up the annotation process
     :param ner_model: trained named entity recognition model
     :param rel_model: trained named relation extraction model
     :param data: pre-gold data for annotation
     :return: data with pre-annoation for review by user in prodigy
     """
-
     updated_data = []
     if ner_model != None:
         import scripts.entity_ruler
@@ -338,8 +346,9 @@ def model_pre_annotate(data,ner_model=None,rel_model=None,filter=None):
                     relations = []
                     try:
                         for key in rel_doc._.rel:
-                            pred_rel = max(rel_doc._.rel[key].items(), key=operator.itemgetter(1)) # selects rel with highest probability
-                            if pred_rel[1] > 0.1: # probability threshold for inclusion
+                            # selects rel with highest probability
+                            pred_rel = max(rel_doc._.rel[key].items(), key=operator.itemgetter(1))
+                            if pred_rel[1] > 0.5: # probability threshold for inclusion
                                 relations.append({"child": key[1], "head": key[0], "label": pred_rel[0]})
                     except AttributeError:
                         print("Unable to add annotations for doc")
@@ -351,18 +360,18 @@ def model_pre_annotate(data,ner_model=None,rel_model=None,filter=None):
 
 
 if __name__ == "__main__":
-        ## default query terms used by the PICO_ner_rel system
+    ## default query terms used by the PICO_ner_rel system
     query_terms = {"diabetes":"diabetes",
                    "solid_tumour_cancer":"(breast cancer OR ovarian cancer OR prostate cancer OR lung cancer)",
                    "blood_cancer": "(lymphoma OR leukemia OR myeloma)",
                    "autism":"autism",
                    "cardiovascular_disease":
                        "(stroke OR myocardial infarction OR thrombosis OR heart attack OR heart failure)"}
-    #pp_ebm_nlp = PreprocessEbmNlp()
-    #for term in query_terms:
-    #     pp_ebm_nlp.add_queries(query_terms[term], term)
-    #pp_ebm_nlp.output_iob()
-    #pp_ebm_nlp.convert_iob_to_spacy()
+    pp_ebm_nlp = ProcessEbmNlp()
+    for term in query_terms:
+        pp_ebm_nlp.add_queries(query_terms[term], term)
+    pp_ebm_nlp.output_iob()
+    pp_ebm_nlp.convert_iob_to_spacy()
     prepro_ebm_dir = "../datasets/for_preprocessing/ebm_nlp"
     anno_ebm_dir = "../datasets/for_annotation/ebm_nlp"
     spacy_dir = f"{prepro_ebm_dir}/ebm_nlp_spacy"
@@ -372,31 +381,14 @@ if __name__ == "__main__":
     rel_model = "../trained_model/rel_pipeline/glaucoma/model-best"
     filter = ["POPU","INTV","OC"]
 
-    for sfn, pfn in zip(os.listdir(spacy_dir), os.listdir(pmid_dir)):
-
-     #   fn_split = re.search("(?<=(nlp_))[_a-z]*(?=\.)", sfn)
-      #  name = fn_split.group(0)
-
-       # pmids = pickle.load(open(f'{pmid_dir}/{pfn}', 'rb'))
-        #spacy_files = f"{spacy_dir}/{sfn}"
-
-        #if os.path.isdir(f"../datasets/for_annotation/ebm_nlp/{name}") == False:
-         #   print("Converting spacy files to jsonl for prodigy annotation")
-          #  spacy_to_jsonl(spacy_files, name, add_ids=pmids, doc_filter="missing_entities")
-
-     for domain in os.listdir(anno_ebm_dir):
-         annotation_data = json.load(open(f"../datasets/for_annotation/ebm_nlp/{domain}/unfiltered.jsonl", "r"))
+    for domain in os.listdir(anno_ebm_dir):
+         annotation_data = \
+             json.load(open(
+                 f"../datasets/for_annotation/ebm_nlp/{domain}/unfiltered.jsonl", "r"))
          result_sent_filter = {"start_parse": "RESULT", "stop_parse": "CONCLUSION"}
          no_filter = {}
          filter_sentences(annotation_data, no_filter, domain)
 
-        #for domain in os.listdir(fanno_dir):
-     #   data = open(f"{fanno_dir}/{domain}/RESULT.jsonl","r")
-      #  preannotated = model_pre_annotate(data, ner_model=ner_model, rel_model=rel_model, filter=filter)
-       # with open(f"{fanno_dir}/{domain}/RESULT_preannotated.jsonl", 'w') as preannotated_output:
-        #        for line in preannotated:
-         #               preannotated_output.write(json.dumps(line) + "\n")
-          #      preannotated_output.close()
 
 
 

@@ -1,8 +1,7 @@
-import subprocess
-import os
-import re
+import subprocess, os, re
 
 def train_across_domains(file_dir, config, model_type, domain_cuts):
+    """Trains models on different domain sets"""
     for domain in os.listdir(file_dir):
         print(domain)
         os.system(f"python -m spacy train {config} " \
@@ -13,6 +12,7 @@ def train_across_domains(file_dir, config, model_type, domain_cuts):
 
 
 def train_across_strats(file_dir, config, model_type):
+    """ trains different models on different all domains size stratifications"""
     for strat in os.listdir(file_dir):
         print(strat)
         name = "strat_" + re.search("\d+\%",strat).group(0)
@@ -25,6 +25,7 @@ def train_across_strats(file_dir, config, model_type):
 
 
 def train_across_models(configs):
+    """Trains different BERT-based models from different configs"""
     for config in configs:
         model_base = os.path.basename(config).split(".")[0].split("_")[1]
         model_type = os.path.basename(config).split("_")[0]

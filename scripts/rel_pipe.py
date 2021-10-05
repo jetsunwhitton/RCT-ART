@@ -1,9 +1,14 @@
+"""
+This script defines the relation extractor component for use as part of a spaCy pipeline.
+It includes functions for training the relation extraction model, as well as for evaluating
+its performance both alone and jointly after named entity recognition
+"""
 from itertools import islice
 from typing import Tuple, List, Iterable, Optional, Dict, Callable, Any
 
 from spacy.scorer import PRFScore
 from thinc.types import Floats2d
-import numpy
+import numpy, operator
 from spacy.training.example import Example
 from thinc.api import Model, Optimizer
 from spacy.tokens.doc import Doc
@@ -12,7 +17,6 @@ from spacy.vocab import Vocab
 from spacy import Language
 from thinc.model import set_dropout_rate
 from wasabi import Printer
-import operator
 
 
 Doc.set_extension("rel", default={}, force=True)
@@ -178,8 +182,8 @@ class RelationExtractor(TrainablePipe):
         doc_sample = [eg.reference for eg in subbatch]
         label_sample = self._examples_to_truth(subbatch)
         if label_sample is None:
-            raise ValueError("Call begin_training with relevant entities and relations annotated in "
-                             "at least a few reference examples!")
+            raise ValueError("Call begin_training with relevant entities and relations "
+                             "annotated in at least a few reference examples!")
         self.model.initialize(X=doc_sample, Y=label_sample)
 
     def _examples_to_truth(self, examples: List[Example]) -> Optional[numpy.ndarray]:
@@ -245,8 +249,9 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
                             elif k == "A2_RES": a2_res_prf.fn += 1
                             else: oc_res_prf.fn += 1
 
-            # keys match the entity indexes of the gold annos, if an entity pair is not in the gold list
-            # this second part of the code evaluates if there are correct entities with no relations mapped
+            # keys match the entity indexes of the gold annos, if an entity pair
+            # is not in the gold list this second part of the code evaluates
+            # if there are correct entities with no relations mapped
             else:
                 pred_rel = max(pred_dict.items(), key=operator.itemgetter(1))
                 if pred_rel[1] > 0.5:
@@ -256,13 +261,13 @@ def score_relations(examples: Iterable[Example], threshold: float) -> Dict[str, 
                     child_ent = list(filter(lambda x: x.start == key[1], example.predicted.ents))[0].text
                     if parent_ent not in assessed_ents:
                         if parent_ent in gold_ents:
-                            micro_prf.tp += 1 # correctly labelled entity and didn't choose relation
+                            micro_prf.tp += 1 # correctly labelled entity and no relation
                         else:
                             micro_prf.fp += 1  # incorrectly labelled entity
                         assessed_ents.append(parent_ent)
                     if child_ent not in assessed_ents:
                         if child_ent in gold_ents:
-                            micro_prf.tp += 1  # correctly labelled entity and didn't choose relation
+                            micro_prf.tp += 1  # correctly labelled entity and no relation
                         else:
                             micro_prf.fp += 1 # incorrectly labelled entity
                         assessed_ents.append(child_ent)

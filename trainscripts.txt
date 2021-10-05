@@ -1,5 +1,0 @@
-python -m spacy train ner_config.cfg --output trained_model/ner/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
-
-python -m spacy train configs/ner_scibert.cfg --output trained_models/sci_bert/ner/all_domains --paths.train datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev datasets/preprocessed/all_domains/results_only/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
-
-python -m spacy train configs/rel_biobert.cfg --output trained_models --paths.train datasets/preprocessed/out_of_domain/autism_as_test/train.spacy --paths.dev datasets/preprocessed/out_of_domain/autism_as_test/dev.spacy -c ./scripts/custom_functions.py --gpu-id 0
