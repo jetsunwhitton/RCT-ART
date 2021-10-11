@@ -1,6 +1,6 @@
 <p align="center"><img width="50%" src="logo.jpg" /></p>
 
-## Randomised clinical trial abstract result tabulator
+## Randomised controlled trial abstract result tabulator
 
 
 RCT-ART is an NLP pipeline built with spaCy for converting clinical trial result sentences into tables through jointly extracting 
