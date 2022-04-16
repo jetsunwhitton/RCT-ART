@@ -240,12 +240,9 @@ def cap_docs(doc_dirs, names, cap):
 
 
 if __name__ == "__main__":
-    #gold_dir = "../datasets/gold_result_annotations"
-    #cardiovascular = f"{gold_dir}/cardiovascular_disease/cardiovascular_disease_gold.jsonl"
-    #glaucoma = f"{gold_dir}/glaucoma/glaucoma_gold.jsonl"
-    #merge_all_list = [f'../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl'
-     #               for domain in os.listdir("../datasets/gold_result_annotations")
-      #                if domain != "all_domains"]
+    gold_dir = "../datasets/expert_annotation_sets/gold_corpus/ner_alone/all_domains_ner_gold.jsonl"
+    docs = annotations_to_spacy(gold_dir)
+    train_dev_test_split(docs, (f"../datasets/expert_annotation_sets/preprocessed/all_domains"))
 
     #stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
     #merge_jsonl(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
@@ -258,9 +255,6 @@ if __name__ == "__main__":
      #       "../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
       #      "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"]
 
-    #cap_docs(docs,names, 72)
-    egg = annotations_to_spacy("../datasets/expert_annotation_sets/for_preprocessing/ner/annotator1_ner_labels.jsonl")
-    print("s")
 
 
 
