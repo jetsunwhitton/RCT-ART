@@ -1,5 +1,5 @@
 import numpy as np
-import spacy, operator, csv, os
+import spacy, os
 from spacy.tokens import DocBin, Doc
 from spacy.training.example import Example
 from spacy.vocab import Vocab
@@ -8,30 +8,47 @@ import sys
 # make the factory work
 from rel_pipe import make_relation_extractor, score_relations
 
-def create_token_lookup(path):
+# make the config work
+from rel_model import create_relation_model, create_classification_layer, create_instances, create_tensors
+
+
+def get_all_token_ner_labels(annotator_path):
     nlp = spacy.load("../trained_models/biobert/ner/all_domains/model-best")
-    doc_bin = DocBin(store_user_data=True).from_disk(path)
+    doc_bin = DocBin(store_user_data=True).from_disk(annotator_path)
+    #print(doc_bin.__len__())
     docs = doc_bin.get_docs(nlp.vocab)
-    lookup = {}
-    count = 0
+    all_token_labels = []
     for gold in docs:
-        sent_pos = 0
-        for tok in gold:
-            lookup[str(count)] = (tok, sent_pos, gold.text)
-            count += 1
-            sent_pos += 1
-    # print(len(all_token_labels))
-    return lookup
+        all_token_labels += [ner.ent_type_ for ner in gold]
+    #print(len(all_token_labels))
+    return all_token_labels
 
 
-def create_annotation_matrix(label_list):
+def get_all_pair_rel_labels(annotator_path):
+    rel = spacy.load("../trained_models/biobert/rel/all_domains/model-best")
+    doc_bin = DocBin(store_user_data=True).from_disk(annotator_path)
+    docs = doc_bin.get_docs(rel.vocab)
+    all_ent_pair_rel_labels = []
+    value_list = []
+    for gold in docs:
+        for value, rel_dict in gold._.rel.items():
+            value_list.append(value)
+            label = [k for (k, v) in gold._.rel[value].items() if v == 1.0]
+            if label != []:
+                all_ent_pair_rel_labels.append(label[0])
+            else:
+                all_ent_pair_rel_labels.append('')
+    print(value_list)
+    return all_ent_pair_rel_labels
+
+
+def create_ner_annotation_matrix(label_list):
     # initialise matrix with first rows
-    #print(label_list)
-    if label_list[1] == "INTV":
+    if label_list[0] == "INTV":
         am = np.matrix([[1, 0, 0, 0]])
-    elif label_list[1] == "OC":
+    elif label_list[0] == "OC":
         am = np.matrix([[0, 1, 0, 0]])
-    elif label_list[1] == "MEAS":
+    elif label_list[0] == "MEAS":
         am = np.matrix([[0, 0, 1, 0]])
     else:
         am = np.matrix([[0, 0, 0, 1]])
@@ -49,14 +66,29 @@ def create_annotation_matrix(label_list):
     return am
 
 
-def identify_disagreement(matrix, lookup):
-    count = 0
-    disagree_list = []
-    for row in matrix:
-        if 3 not in row:
-            disagree_list.append((row,lookup[str(count)]))
-        count += 1
-    return disagree_list
+def create_rel_annotation_matrix(label_list):
+    # initialise matrix with first rows
+    if label_list[0] == "A1_RES":
+        am = np.matrix([[1, 0, 0, 0]])
+    elif label_list[0] == "A2_RES":
+        am = np.matrix([[0, 1, 0, 0]])
+    elif label_list[0] == "OC_RES":
+        am = np.matrix([[0, 0, 1, 0]])
+    else:
+        am = np.matrix([[0, 0, 0, 1]])
+
+    # add more rows
+    for label in label_list[1:]:
+        if label == "A1_RES":
+            am = np.vstack([am, [1, 0, 0, 0]])
+        elif label == "A2_RES":
+            am = np.vstack([am, [0, 1, 0, 0]])
+        elif label == "OC_RES":
+            am = np.vstack([am, [0, 0, 1, 0]])
+        else:
+            am = np.vstack([am, [0, 0, 0, 1]])
+    return am
+
 
 def fleiss_kappa(table, method='fleiss'):
     """Computes Fleiss' kappa for group of annotators.
@@ -89,62 +121,52 @@ def fleiss_kappa(table, method='fleiss'):
     return kappa
 
 
-# annotator data input paths
-a1_input = "../datasets/expert_annotation_sets/for_statistics/ner/annotator1_ner_labels.spacy"
-a2_input = "../datasets/expert_annotation_sets/for_statistics/ner/annotator2_ner_labels.spacy"
-a3_input = "../datasets/expert_annotation_sets/for_statistics/ner/annotator3_ner_labels.spacy"
-anno_paths = [a1_input, a2_input,a3_input]
+if __name__ == "__main__":
 
-def get_all_token_labels(annotator_path):
-    nlp = spacy.load("../trained_models/biobert/ner/all_domains/model-best")
-    doc_bin = DocBin(store_user_data=True).from_disk(annotator_path)
-    #print(doc_bin.__len__())
-    docs = doc_bin.get_docs(nlp.vocab)
-    all_token_labels = []
-    for gold in docs:
-        all_token_labels += [ent.ent_type_ for ent in gold]
-    #print(len(all_token_labels))
-    return all_token_labels
+    # REL LABEL IAA
 
-anno_matrix_list = []
-for path in anno_paths:
-    all_token_labels= get_all_token_labels(path)
-    anno_matrix_list.append(create_annotation_matrix(all_token_labels))
+    # annotator data input paths
+    d_rel = "../datasets/2_expert_annotation_sets/for_statistics/rel"
+    rel_anno_paths = os.listdir(d_rel)
 
-# create token lookup dictionary
-lookup = create_token_lookup(a1_input)
+    # construct matrices out of rel annotations
+    rel_anno_matrix_list = []
+    for path in rel_anno_paths:
+        all_rel_labels = get_all_pair_rel_labels(os.path.join(d_rel,path))
+        rel_anno_matrix_list.append(create_rel_annotation_matrix(all_rel_labels))
 
-#print(lookup)
+    # sum all annotator matrices and convert back to array for statistics
+    all_rel_annotator_matrix = np.squeeze(np.asarray(sum(rel_anno_matrix_list)))
 
-# sum all annotator matrices and convert back to array for statistics
-all_annotator_matrix = np.squeeze(np.asarray(sum(anno_matrix_list)))
+    # remove rows where all made no label
+    all_rel_annotator_matrix = np.delete(all_rel_annotator_matrix, np.where((all_rel_annotator_matrix[:, 3] == 3))[0], axis=0)
 
-# remove all entries where all made no label
-all_annotator_matrix = np.delete(all_annotator_matrix, np.where((all_annotator_matrix[:, 3] == 3))[0], axis=0)
+    print(all_rel_annotator_matrix, all_rel_annotator_matrix.shape)
 
-# intv matrix
-#all_annotator_matrix = np.delete(all_annotator_matrix, np.where((all_annotator_matrix[:, 0] == 0))[0], axis=0)
-
-# oc matrix
-#all_annotator_matrix = np.delete(all_annotator_matrix, np.where((all_annotator_matrix[:, 1] == 0))[0], axis=0)
-
-# meas matrix
-#all_annotator_matrix = np.delete(all_annotator_matrix, np.where((all_annotator_matrix[:, 2] == 0))[0], axis=0)
-
-# print(all_annotator_matrix, all_annotator_matrix.shape)
-
-print(fleiss_kappa(all_annotator_matrix))
-
-disagree_list = identify_disagreement(all_annotator_matrix,lookup)
-
-output = open("disagree_list.txt", "w")
+    # output fleiss_kappa score
+    print(fleiss_kappa(all_rel_annotator_matrix))
 
 
-for out in disagree_list:
-    try:
-        output.write(str(out) + "\n")
-    except:
-        output.write(str("error") + "\n")
+    # ENTITY LABEL IAA
 
-output.close()
-print("success")
+    # annotator data input paths
+    d_ner = "../datasets/2_expert_annotation_sets/for_statistics/ner"
+    ner_anno_paths =  os.listdir(d_ner)
+
+    ner_anno_matrix_list = []
+    for path in ner_anno_paths:
+        all_token_labels = get_all_token_ner_labels(os.path.join(d_ner,path))
+        ner_anno_matrix_list.append(create_ner_annotation_matrix(all_token_labels))
+
+    # sum all annotator matrices and convert back to array for statistics
+    all_ner_annotator_matrix = np.squeeze(np.asarray(sum(ner_anno_matrix_list)))
+
+    # remove rows where all made no label
+    all_ner_annotator_matrix = np.delete(all_ner_annotator_matrix, np.where((all_ner_annotator_matrix[:, 3] == 3))[0], axis=0)
+
+    print(all_ner_annotator_matrix, all_ner_annotator_matrix.shape)
+
+    print(fleiss_kappa(all_ner_annotator_matrix))
+
+
+

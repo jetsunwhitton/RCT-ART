@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/datasets/expert_annotation_sets/merged/ner/merged_ner.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/all_domains_ner_gold.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datasets/2_expert_annotation_sets/merged/ner/merged_ner.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datasets/3_gold_corpus/all_domains.jsonl" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/examples3.jsonl" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/examples4.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fixed3.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ner_fixed.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rejects_and_issues.jsonl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rel_annotations.jsonl" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/second_pass.jsonl" charset="UTF-8" />
   </component>
 </project>

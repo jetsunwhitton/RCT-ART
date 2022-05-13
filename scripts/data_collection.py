@@ -12,10 +12,10 @@ from pathlib import Path
 
 class ProcessEbmNlp:
     """Class for querying and prcessing the EBM-NLP corpus, requires corpus to zip
-    to be within for_preprocessing folder"""
+    to be within 0_data_collection folder"""
     def __init__(self):
         self.queries = {}
-        self.ebm_nlp = '../datasets/for_preprocessing/ebm_nlp'
+        self.ebm_nlp = '../datasets/0_data_collection/ebm_nlp'
         if os.path.isdir(f"{self.ebm_nlp}/ebm_nlp_2_00") == False:
             print("extracting ebm-nlp corpus -- this may take some time")
             tar = tarfile.open(f"{self.ebm_nlp}/ebm_nlp_2_00.tar.gz")
@@ -42,7 +42,7 @@ class ProcessEbmNlp:
         Batches the ebm-nlp corpus pmids for joining with queries
         :return: list of batched pmid strings
         """
-        pmids = "../datasets/for_preprocessing/ebm_nlp/ebm-nlp_pmids.txt"
+        pmids = "../datasets/0_data_collection/ebm_nlp/ebm-nlp_pmids.txt"
         try:
             ebm_nlp_pmids = open(pmids, "r")
         except FileNotFoundError:
@@ -264,7 +264,7 @@ def spacy_to_jsonl(spacy_data, domain_name, add_ids=None, doc_filter=None):
                 print(tokens[count].pop())
                 continue
         count += 1
-    folder = f"../datasets/for_annotation/ebm_nlp/{domain_name}"
+    folder = f"../datasets/1_raw_datasets/ebm_nlp/{domain_name}"
     Path(folder).mkdir(parents=True, exist_ok=True)
     with open(f"{folder}/unfiltered.jsonl", 'w') as domain_output:
             domain_output.write(json.dumps(tokens) + "\n")
@@ -278,7 +278,7 @@ def filter_sentences(annotation_data, sent_filter, domain_name):
     This function requires the prodigy library to be installed.
     :param annotation_data: jsonl sentences for annotation
     :param sent_filter: string for filterering predicates,
-    :param domain_name: domain in for_annotation folder to filter
+    :param domain_name: domain in 1_raw_datasets folder to filter
     :return:
     """
     from prodigy.components.preprocess import split_sentences
@@ -286,7 +286,7 @@ def filter_sentences(annotation_data, sent_filter, domain_name):
     nlp = spacy.load("en_core_web_sm")
     nlp.add_pipe("custom_sentencizer", before="parser")
     stream = split_sentences(nlp, annotation_data, min_length=30)
-    folder = f"../datasets/for_annotation/ebm_nlp/{domain_name}"
+    folder = f"../datasets/1_raw_datasets/ebm_nlp/{domain_name}"
     if sent_filter != {}:
         with open(f"{folder}/{sent_filter['start_parse']}.jsonl", 'w') as filter_output:
             count = 0
@@ -372,11 +372,11 @@ if __name__ == "__main__":
         pp_ebm_nlp.add_queries(query_terms[term], term)
     pp_ebm_nlp.output_iob()
     pp_ebm_nlp.convert_iob_to_spacy()
-    prepro_ebm_dir = "../datasets/for_preprocessing/ebm_nlp"
-    anno_ebm_dir = "../datasets/for_annotation/ebm_nlp"
+    prepro_ebm_dir = "../datasets/0_data_collection/ebm_nlp"
+    anno_ebm_dir = "../datasets/1_raw_datasets/ebm_nlp"
     spacy_dir = f"{prepro_ebm_dir}/ebm_nlp_spacy"
     pmid_dir = f"{prepro_ebm_dir}/domain_pmids"
-    fanno_dir = "../datasets/for_annotation/ebm_nlp"
+    fanno_dir = "../datasets/1_raw_datasets/ebm_nlp"
     ner_model = "../trained_model/ner/glaucoma/model-best"
     rel_model = "../trained_model/rel_pipeline/glaucoma/model-best"
     filter = ["POPU","INTV","OC"]
@@ -384,7 +384,7 @@ if __name__ == "__main__":
     for domain in os.listdir(anno_ebm_dir):
          annotation_data = \
              json.load(open(
-                 f"../datasets/for_annotation/ebm_nlp/{domain}/unfiltered.jsonl", "r"))
+                 f"../datasets/1_raw_datasets/ebm_nlp/{domain}/unfiltered.jsonl", "r"))
          result_sent_filter = {"start_parse": "RESULT", "stop_parse": "CONCLUSION"}
          no_filter = {}
          filter_sentences(annotation_data, no_filter, domain)

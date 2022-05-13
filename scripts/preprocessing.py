@@ -98,61 +98,35 @@ def annotations_to_spacy(json_loc):
                     docs.append(doc)
                 except KeyError as e:
                     msg.fail(f"Skipping doc because of key error")
-    print(len(docs))
+                    print(doc)
+    random.shuffle(docs)
+    print(json_loc," --> #", len(docs))
     return docs
 
 
 def train_dev_test_split(docs,output_dir):
     """
-    Splits spaCy docs collection into train test and dev datasets based on pmid
+    Splits spaCy docs collection into train test and dev datasets
     :param docs: list
     :return: train dev and test spacy files for model training and testing
     """
-    pmid_set = set()
-    with_pmid = []
-    without_pmid = []
-    for doc in docs:
-        try:
-            pmid_set.add(doc.user_data["pmid"])
-            with_pmid.append(doc)
-        except KeyError: #  primarily for glaucoma dataset in instance of this study
-            without_pmid.append(doc)
-    pmid_list = list(pmid_set)
-    random.shuffle(pmid_list)  # randomise pmids before train, dev, test split
-    l = len(pmid_list)
-    train = pmid_list[0:int(l * 0.7)]
-    dev = pmid_list[int(l * 0.7):int(l * 0.8)]
+    random.shuffle(docs)  # randomise pmids before train, dev, test split
+    l = len(docs)
+    train = docs[0:int(l * 0.7)]
+    dev = docs[int(l * 0.7):int(l * 0.8)]
+    test = docs[int(l * 0.8):]
 
-    w_train, w_dev, w_test = [],[],[]
-    for doc in with_pmid:
-        if doc.user_data["pmid"] in train:
-            w_train.append(doc)
-        elif  doc.user_data["pmid"] in dev:
-            w_dev.append(doc)
-        else:
-            w_test.append(doc)
-
-    random.shuffle(without_pmid)  # randomise sentences without pubmed ids for dividing across sets
-    l = len(without_pmid)
-    wo_train = without_pmid[0:int(l * 0.7)]
-    wo_dev = without_pmid[int(l * 0.7):int(l * 0.8)]
-    wo_test = without_pmid[int(l * 0.8):]
-
-    joined_train = w_train + wo_train
-    joined_dev = w_dev + wo_dev
-    joined_test = w_test + wo_test
-
-    docbin = DocBin(docs=joined_train, store_user_data=True)
+    docbin = DocBin(docs=train, store_user_data=True)
     docbin.to_disk(f"{output_dir}/train.spacy")
-    print(f"{len(joined_train)} training sentences")
+    print(f"{len(train)} training sentences")
 
-    docbin = DocBin(docs=joined_dev, store_user_data=True)
+    docbin = DocBin(docs=dev, store_user_data=True)
     docbin.to_disk(f"{output_dir}/dev.spacy")
-    print(f"{len(joined_dev)} dev sentences")
+    print(f"{len(dev)} dev sentences")
 
-    docbin = DocBin(docs=joined_test, store_user_data=True)
+    docbin = DocBin(docs=test, store_user_data=True)
     docbin.to_disk(f"{output_dir}/test.spacy")
-    print(f"{len(joined_test)} test sentences")
+    print(f"{len(test)} test sentences")
 
 
 def stratify_train_examples(doc_path, strats):
@@ -172,34 +146,35 @@ def stratify_train_examples(doc_path, strats):
                        f"train_strat_{name}.spacy")
 
 
-def out_of_domain_split(doc_dirs, exclude):
-    """excludes one domain from full domain train and dev sets for use as test set"""
-    merged_docs = []
-    vocab = Vocab()
-    for dir in doc_dirs:
-        for files in os.listdir(dir):
-            doc_bin = DocBin(store_user_data=True).from_disk(f"{dir}/{files}")
-            merged_docs += list(doc_bin.get_docs(vocab))
+def out_of_domain_split(doc_dict, exclude):
+    """excludes one domain from full domain train and dev sets for use as test set,
+    input dictionary of docs with domains as keys"""
+    merged_docs = list()
+
+    for key in doc_dict:
+        if key == exclude:
+            continue
+        merged_docs.extend(doc_dict[key])
+
+    random.shuffle(merged_docs)
     l = len(merged_docs)
     train = merged_docs[0:int(l * 0.9)]
     dev = merged_docs[int(l * 0.9):]
 
-    test = []
-    test_dir = f"../datasets/preprocessed/{exclude}/results_only"
-    for files in os.listdir(test_dir):
-        doc_bin = DocBin(store_user_data=True).from_disk(f"{test_dir}/{files}")
-        test += list(doc_bin.get_docs(vocab))
+    test = doc_dict[exclude]
+    random.shuffle(test)
+
 
     docbin = DocBin(docs=train, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/train.spacy")
+    docbin.to_disk(f"../datasets/4_preprocessed/out_of_domain/{exclude}_as_test/train.spacy")
     print(f"{len(train)} training sentences")
 
     docbin = DocBin(docs=dev, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
+    docbin.to_disk(f"../datasets/4_preprocessed/out_of_domain/{exclude}_as_test/dev.spacy")
     print(f"{len(dev)} dev sentences")
 
     docbin = DocBin(docs=test, store_user_data=True)
-    docbin.to_disk(f"../datasets/preprocessed/out_of_domain/{exclude}_as_test/test.spacy")
+    docbin.to_disk(f"../datasets/4_preprocessed/out_of_domain/{exclude}_as_test/test.spacy")
     print(f"{len(test)} test sentences")
 
 
@@ -240,9 +215,20 @@ def cap_docs(doc_dirs, names, cap):
 
 
 if __name__ == "__main__":
-    gold_dir = "../datasets/expert_annotation_sets/gold_corpus/ner_alone/all_domains_ner_gold.jsonl"
-    docs = annotations_to_spacy(gold_dir)
-    train_dev_test_split(docs, (f"../datasets/expert_annotation_sets/preprocessed/all_domains"))
+    #All domains processing
+    all_domain_docs = annotations_to_spacy("../datasets/3_gold_corpus/all_domains.jsonl")
+    train_dev_test_split(all_domain_docs,"../datasets/4_preprocessed/all_domains")
+
+    #Out of domain processing
+    domain_path = "../datasets/3_gold_corpus/domains"
+    doc_dict = {}
+    exclude_list = ["autism","blood_cancer","cardiovascular_disease","diabetes","glaucoma","solid_tumour_cancer"]
+    for domain in os.listdir(domain_path):
+        doc_dict[domain.replace(".jsonl","")] = annotations_to_spacy(os.path.join(domain_path, domain))
+    for exclude in exclude_list:
+        out_of_domain_split(doc_dict,exclude)
+
+    #train_dev_test_split(docs, (f"../datasets/2_expert_annotation_sets/preprocessed/all_domains"))
 
     #stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
     #merge_jsonl(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")

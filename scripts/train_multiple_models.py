@@ -31,18 +31,18 @@ def train_across_models(configs):
         model_type = os.path.basename(config).split("_")[0]
         os.system(f"python -m spacy train {config} " \
                   f"--output ../trained_models/{model_base}/{model_type}/all_domains " \
-                  f"--paths.train ../datasets/preprocessed/all_domains/results_only/train.spacy " \
-                  f"--paths.dev ../datasets/preprocessed/all_domains/results_only/dev.spacy " \
+                  f"--paths.train ../datasets/4_preprocessed/all_domains/train.spacy " \
+                  f"--paths.dev ../datasets/4_preprocessed/all_domains/dev.spacy " \
                   f"-c ../scripts/custom_functions.py --gpu-id 0")
 
 
 if __name__ == "__main__":
 
-    # train different language representations
-    #model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/scibert.cfg",
-     #                "../configs/rel_scibert.cfg", "../configs/roberta.cfg", "../configs/rel_roberta.cfg"]
+    #train different language representations
+    model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/scibert.cfg",
+                     "../configs/rel_scibert.cfg", "../configs/roberta.cfg", "../configs/rel_roberta.cfg"]
 
-    #train_across_models(model_configs)
+    train_across_models(model_configs)
 
     #train_across_domains("../datasets/preprocessed", "configs/ner_biobert.cfg", "ner")
 

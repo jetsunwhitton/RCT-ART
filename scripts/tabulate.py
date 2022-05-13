@@ -47,7 +47,7 @@ def tabulate_pico_entities(doc):
     #iterate through docs and extract relations
     rel_dict = {"arm_1":[], "arm_2":[], "outcomes":[]}
     for key in doc._.rel:
-        rel = doc._.rel[key] # get relation
+        rel = doc._.rel[key] # get relation !!!!
         pred_rel = max(rel.items(),key=operator.itemgetter(1))  # selects relation type with highest probability
 
         if pred_rel[1] > 0.5:  # includes relation if above set threshold for probability

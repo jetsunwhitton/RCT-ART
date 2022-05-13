@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="Events Test Scheme">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Events Test Scheme" />
+              <option name="relativePathToSchema" value="jar://$APPLICATION_HOME_DIR$/lib/platform-statistics-devkit.jar!/schemas/events-test-scheme.schema.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="datasets/3_gold_corpus/gold_corpus_all_domains.jsonl" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="JSON Schema version 7">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="JSON Schema version 7" />
+              <option name="relativePathToSchema" value="http://json-schema.org/draft-07/schema" />
+              <option name="schemaVersion" value="JSON Schema version 7" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="rel/explore.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
