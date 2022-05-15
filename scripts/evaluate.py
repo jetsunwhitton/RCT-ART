@@ -133,8 +133,13 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
         gold_list = [d for d in csv.DictReader(gold_open)]
         pred_list = [d for d in csv.DictReader(pred_open)]
         for gold, pred in zip_longest(gold_list,pred_list,fillvalue=False):
-            if gold != False: del gold['']
+            if gold != False: del gold[''] # remove extra CSV formatting
             if pred != False: del pred['']
+
+            # set pred to false for false negative if intv row empty when gold isn't
+            if pred == {'outcome': 'intervention', 'arm 1': '', 'arm 2': ''} \
+                    and gold != {'outcome': 'intervention', 'arm 1': '', 'arm 2': ''}: pred = False
+
             examples.append({"gold":gold,"pred":pred})
         if gold_list == []:
             print("error")
