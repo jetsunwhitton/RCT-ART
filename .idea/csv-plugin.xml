@@ -822,6 +822,76 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_10%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_20%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_30%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_40%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_5%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_50%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_60%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_70%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_80%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_strats\train_strat_90%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\out_of_domain\autism_as_test\result_tab_0.csv">
           <value>
             <Attribute>
