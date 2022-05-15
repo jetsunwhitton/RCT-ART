@@ -38,30 +38,27 @@ def train_across_models(configs):
 
 if __name__ == "__main__":
 
-    #train different language representations
-    model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/ner_scibert.cfg",
-                     "../configs/rel_scibert.cfg", "../configs/ner_roberta.cfg", "../configs/rel_roberta.cfg"]
-    train_across_models(model_configs)
+    # train different language representations
+    #model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/ner_scibert.cfg",
+     #                "../configs/rel_scibert.cfg", "../configs/ner_roberta.cfg", "../configs/rel_roberta.cfg"]
 
     #train_across_models(model_configs)
 
-    #train_across_domains("../datasets/preprocessed", "configs/ner_biobert.cfg", "ner")
+    # train across strats
 
     # ner
-    #train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/ner_biobert.cfg", "ner")
+    train_across_strats("../datasets/4_preprocessed/all_domains/stratifications", "../configs/ner_biobert.cfg", "ner")
 
     # rel
-    #train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/ner_biobert.cfg",
-     #                   "ner")
+    train_across_strats("../datasets/4_preprocessed/all_domains/stratifications", "../configs/rel_biobert.cfg", "rel")
 
-    #train_across_strats("../datasets/preprocessed/all_domains/training_stratifications", "../configs/ner_biobert.cfg",
-     #                   "rel")
+    # train across domains
 
     # ner
-    #train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/ner_biobert.cfg", "ner", "out_of_domain")
+    train_across_domains("../datasets/4_preprocessed/out_of_domain", "../configs/ner_biobert.cfg", "ner", "out_of_domain")
 
     # rel
-    #train_across_domains("../datasets/preprocessed/out_of_domain", "../configs/rel_biobert.cfg", "rel", "out_of_domain")
+    train_across_domains("../datasets/4_preprocessed/out_of_domain", "../configs/rel_biobert.cfg", "rel", "out_of_domain")
 
     # ner
     #train_across_domains("../datasets/preprocessed/capped_for_comparison", "../configs/ner_biobert.cfg", "ner", "capped_for_comparison")
