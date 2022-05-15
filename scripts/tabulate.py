@@ -155,8 +155,10 @@ if __name__ == "__main__":
         docs = doc_bin.get_docs(nlp.vocab)
         ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
         rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
-        dataframes = tabulate_pico_entities(rel_preds)
-        output_csvs(dataframes, f"../output_tables/all_domains_{model_base}")
+        dfs = []
+        for doc in rel_preds:
+            dfs.tabulate_pico_entities(rel_preds)
+        output_csvs(dfs, f"../output_tables/all_domains_{model_base}")
 
     # tabulate gold tables from test set
     nlp = spacy.load("../trained_models/biobert/rel/all_domains/model-best")
