@@ -156,7 +156,7 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
                     print("TRUE POSTIVE ->", example)
                 else:
                     prf.fp += 1
-                    print("FALSE POSITIVE ->", example)s
+                    print("FALSE POSITIVE ->", example)
 
     else: # assess tables with less strict entity criteria -- gold/pred entity boundary overlap
         for example in examples:
