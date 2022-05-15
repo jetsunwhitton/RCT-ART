@@ -100,8 +100,6 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
                             assessed_ents.append(child_ent)
             print()
     thresholds = [0.000, 0.050, 0.100, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99, 0.999]
-    #print()
-    #print("Results of the trained model:")
     task = False
     if ner_model_path != None:
         task = True
@@ -143,9 +141,8 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
             examples.append({"gold":gold,"pred":pred})
         if gold_list == []:
             print("error")
-            continue # empty lists in gold are error in data
+            continue # empty lists in gold are error in data az
         if pred_list == []: # empty lists in pred are false negatives if not empty in gold
-            print("")
             for gold in gold_list:
                 del gold['']
                 examples.append({"gold": gold, "pred": {}})
@@ -154,16 +151,16 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
         for example in examples:
             if not example["pred"]:
                 prf.fn += 1
-                print("FALSE NEGATIVE ->", example)
+                print("FN ----> ", example)
             elif not example["gold"]:
                 prf.fp += 1
             else:
                 if example["pred"] == example["gold"]:
                     prf.tp += 1
-                    print("TRUE POSTIVE ->", example)
+                    print("TP ----> ", example)
                 else:
                     prf.fp += 1
-                    print("FALSE POSITIVE ->", example)
+                    print("FP ----> ", example)
 
     else: # assess tables with less strict entity criteria -- gold/pred entity boundary overlap
         for example in examples:
@@ -273,7 +270,7 @@ def create_rel_confusion_matrix(model_path, test_path):
 
 if __name__ == "__main__":
     # some of these paths require trained models to be in place already
-    doc_path = "../ddatasets/4_preprocessed/all_domains/test.spacy"
+    doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
     gold_table_path = "../datasets/5_gold_tables/all_domains"
     pred_table_path = "../output_tables/all_domains_"
     model_bases = ["biobert","scibert","roberta"]

@@ -19,7 +19,7 @@ def train_across_strats(file_dir, config, model_type):
         print(name)
         os.system(f"python -m spacy train {config} " \
                   f"--output ../trained_models/biobert/{model_type}/all_domain_strats/{name} " \
-                  f"--paths.train ../datasets/preprocessed/all_domains/training_stratifications/{strat} " \
+                  f"--paths.train ../datasets/preprocessed/all_domains/stratifications/{strat} " \
                   f"--paths.dev ../datasets/preprocessed/all_domains/results_only/dev.spacy " \
                   f"-c ../scripts/custom_functions.py --gpu-id 0")
 
