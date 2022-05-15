@@ -6,8 +6,8 @@ def train_across_domains(file_dir, config, model_type, domain_cuts):
         print(domain)
         os.system(f"python -m spacy train {config} " \
                   f"--output ../trained_models/biobert/{model_type}/{domain_cuts}/{domain} " \
-                  f"--paths.train ../datasets/preprocessed/{domain_cuts}/{domain}/train.spacy " \
-                  f"--paths.dev ../datasets/preprocessed/{domain_cuts}/{domain}/dev.spacy " \
+                  f"--paths.train ../datasets/4_preprocessed/{domain_cuts}/{domain}/train.spacy " \
+                  f"--paths.dev ../datasets/4_preprocessed/{domain_cuts}/{domain}/dev.spacy " \
                   f"-c ../scripts/custom_functions.py --gpu-id 0")
 
 
@@ -39,10 +39,8 @@ def train_across_models(configs):
 if __name__ == "__main__":
 
     #train different language representations
-    model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/scibert.cfg",
-                     "../configs/rel_scibert.cfg", "../configs/roberta.cfg", "../configs/rel_roberta.cfg"]
-
-    train_across_models(model_configs)
+    model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/ner_scibert.cfg",
+                     "../configs/rel_scibert.cfg", "../configs/ner_roberta.cfg", "../configs/rel_roberta.cfg"]
 
     #train_across_domains("../datasets/preprocessed", "configs/ner_biobert.cfg", "ner")
 
@@ -69,12 +67,12 @@ if __name__ == "__main__":
  #   train_across_domains("../datasets/preprocessed/capped_for_comparison", "../configs/rel_biobert.cfg", "rel", "capped_for_comparison")
 
     # ner mixed domain comparison
-    train_across_domains("../datasets/preprocessed/capped_mix", "../configs/ner_biobert.cfg", "ner",
-                         "capped_mix")
+  #  train_across_domains("../datasets/preprocessed/capped_mix", "../configs/ner_biobert.cfg", "ner",
+   #                      "capped_mix")
 
     # rel mixed domain comparison
-    train_across_domains("../datasets/preprocessed/capped_mix", "../configs/rel_biobert.cfg", "rel",
-                         "capped_mix")
+    #train_across_domains("../datasets/preprocessed/capped_mix", "../configs/rel_biobert.cfg", "rel",
+     #                    "capped_mix")
 
 
 

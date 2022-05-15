@@ -138,7 +138,8 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
             examples.append({"gold":gold,"pred":pred})
             continue
         if gold_list == []:
-            continue # empty lists in gold are error in data and should be skipped
+            print("error")
+            continue # empty lists in gold are error in data az
         if pred_list == []: # empty lists in pred are false negatives if not empty in gold
             for gold in gold_list:
                 del gold['']
@@ -261,25 +262,25 @@ if __name__ == "__main__":
     doc_path = "../datasets/2_expert_annotation_sets/preprocessed/all_domains/test.spacy"
     #gold_table_path = "../datasets/preprocessed/all_domains/gold_tables"
     #pred_table_path = "../output_tables/all_domains_"
-    #model_bases = ["biobert","scibert","roberta"]
+    model_bases = ["biobert","scibert","roberta"]
     ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best", doc_path)
 
     # evaluate different model-bases
-    #for model_base in model_bases:
-     #   outfile = open(f"../evaluation_results/{model_base}.txt", "w")
+    for model_base in model_bases:
+        outfile = open(f"../evaluation_results/{model_base}.txt", "w")
         # assess ner performance
-      #  ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best",doc_path)
+        ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best",doc_path)
         # assess rel performance
-       # joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domains/model-best",doc_path,False)
+        joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domains/model-best",doc_path,False)
         # assess joint performance
-        #joint_ner_rel_evaluate(None,
-         #                  f"../trained_models/rel/all_domains/model-best",doc_path,True)
+        joint_ner_rel_evaluate(None,
+                           f"../trained_models/rel/all_domains/model-best",doc_path,True)
         # assess table strict performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
         # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
+        evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
 
-        #outfile.close()
+        outfile.close()
 
     #create_ner_confusion_matrix("../trained_models/ner/all_domains/model-best", doc_path)
     #create_rel_confusion_matrix("../trained_models/rel/all_domains/model-best", doc_path)

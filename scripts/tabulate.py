@@ -12,7 +12,7 @@ from collections import defaultdict
 from evaluate import joint_ner_rel_evaluate as evaluate
 # used by custom models
 from rel_model import create_relation_model, create_classification_layer, create_instances
-from pandas import DataFrame
+import pandas as pd
 
 
 def named_entity_recognition(ner_model, input_docs):
@@ -42,48 +42,97 @@ def relation_extraction(rel_model, input_docs):
 
 def tabulate_pico_entities(doc):
     """Tabulates the predicted result sentence entities using the extracted relations"""
-    print("|| Tabulating docs")
+    print("\n\n","|| Tabulating docs")
+    print(doc.text)
 
-    #iterate through docs and extract relations
-    rel_dict = {"arm_1":[], "arm_2":[], "outcomes":[]}
+    # create dictionaries for sorting entities into
+    intv_dict = {"arm 1": set(), "arm 2": set()}
+    meas_dict = defaultdict(lambda: defaultdict(set))
+
+    # extract sorting infromation from relations into dictionaries
     for key in doc._.rel:
-        rel = doc._.rel[key] # get relation !!!!
-        pred_rel = max(rel.items(),key=operator.itemgetter(1))  # selects relation type with highest probability
-
+        rel = doc._.rel[key]  # get relation !!!!
+        pred_rel = max(rel.items(), key=operator.itemgetter(1))  # selects relation type with highest probability
         if pred_rel[1] > 0.5:  # includes relation if above set threshold for probability
-            if pred_rel[0] == "A1_RES": rel_dict["arm_1"].append((pred_rel,key))
-            elif pred_rel[0] == "A2_RES": rel_dict["arm_2"].append((pred_rel,key))
-            else: rel_dict["outcomes"].append((pred_rel,key))
-    # structure entities as dictionary using relations
-    final_dict = defaultdict(dict)
-    if rel_dict["outcomes"] != []:
-        for oc_rel,ockey in rel_dict["outcomes"]:
-            oc_description = list(filter(lambda x: x.start == ockey[0], doc.ents))[0].text  # gets arm 1 entity
-            for a1_rel,a1key in rel_dict["arm_1"]:
-                if ockey[1] == a1key[1]:
-                    final_dict["intervention"]["Arm 1"] = list(filter(lambda x: x.start == a1key[0], doc.ents))[0].text  # gets arm 1 entity
-                    final_dict[oc_description]["Arm 1"] = list(filter(lambda x: x.start == a1key[1], doc.ents))[0].text  # gets result entity
-            for a2_rel, a2key in rel_dict["arm_2"]:
-                if ockey[1] == a2key[1]:
-                    final_dict["intervention"]["Arm 2"] = list(filter(lambda x: x.start == a2key[0], doc.ents))[0].text  # gets arm 2 entity
-                    final_dict[oc_description]["Arm 2"] = list(filter(lambda x: x.start == a2key[1], doc.ents))[0].text  # gets result entity
-    else:
-        for a1_rel, a1key in rel_dict["arm_1"]:
-            final_dict["OC unspecified"]["Arm 1"] = list(filter(lambda x: x.start == a1key[1], doc.ents))[0].text  # gets result entity
-            final_dict["intervention"]["Arm 1"] = list(filter(lambda x: x.start == a1key[0], doc.ents))[0].text  # gets arm 1 entity
-        for a2_rel, a2key in rel_dict["arm_2"]:
-            final_dict["OC unspecified"]["Arm 2"] = list(filter(lambda x: x.start == a2key[1], doc.ents))[0].text  # gets result entity
-            final_dict["intervention"]["Arm 2"] = list(filter(lambda x: x.start == a2key[0], doc.ents))[0].text  # gets arm 2 entity
+            entity = [ent.text for ent in doc.ents if ent.start == key[0]][0] # gets intv or outcome entity
+            if pred_rel[0] == "A1_RES":
+                intv_dict["arm 1"].add(entity)
+                meas_dict[key[1]]["arm"].add(1)
+            elif pred_rel[0] == "A2_RES":
+                intv_dict["arm 2"].add(entity)
+                meas_dict[key[1]]["arm"].add(2)
+            else:
+                meas_dict[key[1]]["outcomes"].add(entity)
 
-    # create dataframe from dictionary
-    df = DataFrame.from_dict(final_dict, orient='columns', dtype=None, columns=None).transpose()
-    columns_titles = ["Arm 1","Arm 2"]
-    df = df.reindex(columns=columns_titles)
-    df.index.name = 'Outcomes'
-    df.reset_index(inplace=True)
-    df.drop_duplicates(subset=["Arm 1", "Arm 2"], keep='first', inplace=True) #  don't allow duplicates of same result tuple
-    return df
+    # create intv entity row of table
+    arm_1 = ', '.join(sorted(str(x) for x in intv_dict["arm 1"])) # convert set to string
+    arm_2 = ', '.join(sorted(str(x) for x in intv_dict["arm 2"])) # convert set to string
+    intv_row = pd.DataFrame([["intervention", arm_1, arm_2]], columns=["outcome", "arm 1", "arm 2"])
 
+    # seperate measures into a dictionary of respective outcomes and arms
+    oc_dict = defaultdict(lambda: defaultdict(set))
+    for k, v in meas_dict.copy().items():
+        outcome = ', '.join(str(x) for x in v["outcomes"])
+        meas = [ent.text for ent in doc.ents if ent.start == k][0]  # get full measure entity
+        if v["arm"] == {1,2}:
+            oc_dict[outcome]["arm_1"].add(meas)
+            oc_dict[outcome]["arm_2"].add(meas)
+            meas_dict.pop(k)
+        elif v["arm"] == {1}:
+            oc_dict[outcome]["arm_1"].add(meas)
+            meas_dict.pop(k)
+        elif v["arm"] == {2}:
+            oc_dict[outcome]["arm_2"].add(meas)
+            meas_dict.pop(k)
+
+    for k, v in meas_dict.copy().items(): # sort measures with no associated intv in sentences with intvs
+        outcome = ', '.join(str(x) for x in v["outcomes"])
+        meas = [ent.text for ent in doc.ents if ent.start == k][0]  # get full measure entity
+        if "arm_1" and "arm_2" in oc_dict.copy()[outcome]:
+            print("GOOOOOD")
+            print(meas_dict.copy())
+            oc_dict[outcome + ", total study group"]["arm_1"].add(meas)
+            oc_dict[outcome + ", total study group"]["arm_2"].add(meas)
+            meas_dict.pop(k)
+        elif "arm_1" in oc_dict.copy()[outcome]:  # add measures to opposite arm if intv name missing
+            print("WORKKKING ", meas)
+            oc_dict[outcome]["arm_2"].add(meas)
+            meas_dict.pop(k)
+        elif "arm_2" in oc_dict.copy()[outcome]:
+            print("WORKKKING", meas)
+            oc_dict[outcome]["arm_1"].add(meas)
+            meas_dict.pop(k)
+
+    for k, v in sorted(meas_dict.copy().items()): # sort measures in sentences with no intv by first mention
+        outcome = ', '.join(str(x) for x in v["outcomes"])
+        meas = [ent.text for ent in doc.ents if ent.start == k][0]  # get full measure entity
+        print(len(intv_dict))
+        if len(intv_dict) == 2:
+            oc_dict[outcome + ", total study group"]["arm_1"].add(meas)
+            oc_dict[outcome + ", total study group"]["arm_2"].add(meas)
+            meas_dict.pop(k)
+        elif outcome in oc_dict.copy():
+            print("ISSSUEE222")
+            oc_dict[outcome]["arm_2"].add(meas)
+            meas_dict.pop(k)
+        else:
+            print("ISSSUEE111")
+            oc_dict[outcome]["arm_1"].add(meas)
+            meas_dict.pop(k)
+
+    frames = [intv_row]
+    for oc in oc_dict:
+        if "arm_1" not in oc_dict[oc]:
+            oc_dict[oc]["arm_1"].add("NR") # if meas missing, then included as not reported (NR)
+        if "arm_2" not in oc_dict[oc]:
+            oc_dict[oc]["arm_2"].add("NR")
+        m_arm_1 = ', '.join(sorted(str(x) for x in oc_dict[oc]["arm_1"]))  # convert set to string
+        m_arm_2 = ', '.join(sorted(str(x) for x in oc_dict[oc]["arm_2"]))  # convert set to string
+        oc_row = pd.DataFrame([[oc, m_arm_1, m_arm_2]], columns=["outcome", "arm 1", "arm 2"])
+        frames.append(oc_row)
+    table = pd.concat(frames)
+    print(table)
+    return table
 
 def output_csvs(dataframes, output_path):
     """
@@ -91,24 +140,34 @@ def output_csvs(dataframes, output_path):
     """
     num = 0
     for df in dataframes:
-        with io.open(f"{output_path}/result_tab_{num}.csv", 'w') as output:
-            try:
-                df.to_csv(output)
-            except:
-                print("CSV incompatible: ", df)
+        with io.open(f"{output_path}/result_tab_{num}.csv", 'w', encoding='utf-8') as output:
+            df.to_csv(output)
             num += 1
 
 if __name__ == "__main__":
     # tabulate predictions from different models
-    doc_path = "../datasets/preprocessed/all_domains/results_only/test.spacy"
-    model_bases = ["biobert", "scibert", "roberta"]
-    for model_base in model_bases:
-        print(model_base)
-        nlp = spacy.blank("en")
-        doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-        docs = doc_bin.get_docs(nlp.vocab)
-        ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
-        rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
-        dataframes = tabulate_pico_entities(rel_preds)
-        output_csvs(dataframes, f"../output_tables/all_domains_{model_base}")
+    doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
+    #model_bases = ["biobert", "scibert", "roberta"]
+    #for model_base in model_bases:
+     #   print(model_base)
+        #nlp = spacy.blank("en")
+      #  doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+       # docs = doc_bin.get_docs(nlp.vocab)
+     #   ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
+      #  rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
+       # dataframes = tabulate_pico_entities(rel_preds)
+        #output_csvs(dataframes, f"../output_tables/all_domains_{model_base}")
+    nlp = spacy.load("../trained_models/biobert/rel/all_domains/model-best")
+    doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+    docs = doc_bin.get_docs(nlp.vocab)
+    dfs = []
+    count = 0
+    for doc in docs:
+        print(count)
+        dfs.append(tabulate_pico_entities(doc))
+        count += 1
+    output_csvs(dfs, "../datasets/5_gold_tables/all_domains")
+
+
+
 

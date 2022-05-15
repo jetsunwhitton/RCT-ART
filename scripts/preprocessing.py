@@ -142,7 +142,7 @@ def stratify_train_examples(doc_path, strats):
             name = str(strat)[-1] + "%"
         doc_strat = docs[:int(l*strat)]
         docbin = DocBin(docs=doc_strat, store_user_data=True)
-        docbin.to_disk(f"../datasets/preprocessed/all_domains/training_stratifications/"
+        docbin.to_disk(f"../datasets/4_preprocessed/all_domains/stratifications/"
                        f"train_strat_{name}.spacy")
 
 
@@ -194,11 +194,11 @@ def cap_docs(doc_dirs, names, cap):
         dev = capped[int(l*0.8):int(l*0.9)]
         test = capped[int(l*0.9):]
         capped_train = DocBin(docs=train, store_user_data=True)
-        capped_train.to_disk(f"../datasets/preprocessed/capped_for_comparison/{name}/train.spacy")
+        capped_train.to_disk(f"../datasets/4_preprocessed/capped_for_comparison/{name}/train.spacy")
         capped_dev = DocBin(docs=dev, store_user_data=True)
-        capped_dev.to_disk(f"../datasets/preprocessed/capped_for_comparison/{name}/dev.spacy")
+        capped_dev.to_disk(f"../datasets/4_preprocessed/capped_for_comparison/{name}/dev.spacy")
         capped_test = DocBin(docs=test, store_user_data=True)
-        capped_test.to_disk(f"../datasets/preprocessed/capped_for_comparison/{name}/test.spacy")
+        capped_test.to_disk(f"../datasets/4_preprocessed/capped_for_comparison/{name}/test.spacy")
 
         # output merged sets of capped docs for incremental domain increase evaluation
         merged_docs += capped
@@ -208,9 +208,9 @@ def cap_docs(doc_dirs, names, cap):
             train = merged_docs[:int(len(merged_docs)*0.9)]
             dev = merged_docs[int(len(merged_docs)*0.9):]
             merged_train = DocBin(docs= train, store_user_data=True)
-            merged_train.to_disk(f"../datasets/preprocessed/capped_mix/{merged_names[:-1]}/train.spacy")
+            merged_train.to_disk(f"../datasets/4_preprocessed/capped_mix/{merged_names[:-1]}/train.spacy")
             merged_dev = DocBin(docs=dev, store_user_data=True)
-            merged_dev.to_disk(f"../datasets/preprocessed/capped_mix/{merged_names[:-1]}/dev.spacy")
+            merged_dev.to_disk(f"../datasets/4_preprocessed/capped_mix/{merged_names[:-1]}/dev.spacy")
         count += 1
 
 
@@ -228,9 +228,10 @@ if __name__ == "__main__":
     for exclude in exclude_list:
         out_of_domain_split(doc_dict,exclude)
 
-    #train_dev_test_split(docs, (f"../datasets/2_expert_annotation_sets/preprocessed/all_domains"))
+    #Stratify train examples
+    stratify_train_examples("../datasets/4_preprocessed/all_domains/train.spacy",[0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,
+                                                                                  0.9])
 
-    #stratify_train_examples("../datasets/preprocessed/all_domains/results_only/train.spacy",[0.05,0.5])
     #merge_jsonl(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
     #for domain in os.listdir("../datasets/gold_result_annotations"):
      #    docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
