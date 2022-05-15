@@ -1,4 +1,4 @@
 ,outcome,arm 1,arm 2
 0,intervention,MMC,OLO
 0,"SD-OCT analysis of successful/unsuccessful bleb in patients with or without complete success at IOP =17  mm Hg, specificity",75%,67%
-0,"SD-OCT analysis of successful/unsuccessful bleb in patients with or without complete success at IOP =17  mm Hg, sensitivity",83%,73%
+0,"sensitivity, SD-OCT analysis of successful/unsuccessful bleb in patients with or without complete success at IOP =17  mm Hg",83%,73%

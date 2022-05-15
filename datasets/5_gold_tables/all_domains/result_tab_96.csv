@@ -1,6 +1,6 @@
 ,outcome,arm 1,arm 2
 0,intervention,BTFC,TTFC
-0,"16 mm Hg, 2 weeks, IOPs",28 (70%),16 (40%) eyes
-0,"16 mm Hg, 6 months, IOPs",30 (75%),18 (45%) eyes
-0,"18 mm Hg, 2 weeks, IOPs",36 (90.8%),22 (55%) eyes
-0,"18 mm Hg, 6 months, IOPs",38 (95%),28 (70%) eyes
+0,"2 weeks, IOPs, 16 mm Hg",28 (70%),16 (40%) eyes
+0,"IOPs, 6 months, 16 mm Hg",30 (75%),18 (45%) eyes
+0,"2 weeks, IOPs, 18 mm Hg",36 (90.8%),22 (55%) eyes
+0,"IOPs, 6 months, 18 mm Hg",38 (95%),28 (70%) eyes

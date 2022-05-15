@@ -42,7 +42,7 @@ def relation_extraction(rel_model, input_docs):
 
 def tabulate_pico_entities(doc):
     """Tabulates the predicted result sentence entities using the extracted relations"""
-    print("\n\n","|| Tabulating docs")
+    print("|| Tabulating docs")
 
     # create dictionaries for sorting entities into
     intv_dict = {"arm 1": set(), "arm 2": set()}
