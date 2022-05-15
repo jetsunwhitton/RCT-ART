@@ -296,7 +296,7 @@ if __name__ == "__main__":
     # evaluate different training size strats
     model_strats = "../trained_models/biobert/ner/all_domain_strats"
     gold_table_path = "../datasets/5_gold_tables/all_domains"
-    pred_table_path = "../output_tables/all_domains_"
+    pred_table_path = "../output_tables/all_domains_strats/train_"
     for strat in os.listdir(model_strats):
         outfile = open(f"../evaluation_results/{strat}.txt", "w")
         # assess ner performance
