@@ -43,7 +43,6 @@ def relation_extraction(rel_model, input_docs):
 def tabulate_pico_entities(doc):
     """Tabulates the predicted result sentence entities using the extracted relations"""
     print("\n\n","|| Tabulating docs")
-    print(doc.text)
 
     # create dictionaries for sorting entities into
     intv_dict = {"arm 1": set(), "arm 2": set()}
@@ -89,34 +88,27 @@ def tabulate_pico_entities(doc):
         outcome = ', '.join(str(x) for x in v["outcomes"])
         meas = [ent.text for ent in doc.ents if ent.start == k][0]  # get full measure entity
         if "arm_1" and "arm_2" in oc_dict.copy()[outcome]:
-            print("GOOOOOD")
-            print(meas_dict.copy())
             oc_dict[outcome + ", total study group"]["arm_1"].add(meas)
             oc_dict[outcome + ", total study group"]["arm_2"].add(meas)
             meas_dict.pop(k)
         elif "arm_1" in oc_dict.copy()[outcome]:  # add measures to opposite arm if intv name missing
-            print("WORKKKING ", meas)
             oc_dict[outcome]["arm_2"].add(meas)
             meas_dict.pop(k)
         elif "arm_2" in oc_dict.copy()[outcome]:
-            print("WORKKKING", meas)
             oc_dict[outcome]["arm_1"].add(meas)
             meas_dict.pop(k)
 
     for k, v in sorted(meas_dict.copy().items()): # sort measures in sentences with no intv by first mention
         outcome = ', '.join(str(x) for x in v["outcomes"])
         meas = [ent.text for ent in doc.ents if ent.start == k][0]  # get full measure entity
-        print(len(intv_dict))
         if len(intv_dict) == 2:
             oc_dict[outcome + ", total study group"]["arm_1"].add(meas)
             oc_dict[outcome + ", total study group"]["arm_2"].add(meas)
             meas_dict.pop(k)
         elif outcome in oc_dict.copy():
-            print("ISSSUEE222")
             oc_dict[outcome]["arm_2"].add(meas)
             meas_dict.pop(k)
         else:
-            print("ISSSUEE111")
             oc_dict[outcome]["arm_1"].add(meas)
             meas_dict.pop(k)
 
@@ -131,7 +123,6 @@ def tabulate_pico_entities(doc):
         oc_row = pd.DataFrame([[oc, m_arm_1, m_arm_2]], columns=["outcome", "arm 1", "arm 2"])
         frames.append(oc_row)
     table = pd.concat(frames)
-    print(table)
     return table
 
 def output_csvs(dataframes, output_path):
