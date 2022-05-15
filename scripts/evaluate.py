@@ -101,7 +101,6 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
     thresholds = [0.000, 0.050, 0.100, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99, 0.999]
     #print()
     #print("Results of the trained model:")
-    outfile.write()
     task = False
     if ner_model_path != None:
         task = True
@@ -133,25 +132,31 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
         gold_list = [d for d in csv.DictReader(gold_open)]
         pred_list = [d for d in csv.DictReader(pred_open)]
         for gold, pred in zip(gold_list,pred_list):
-            print(gold,pred)
             del gold['']
             del pred['']
             examples.append({"gold":gold,"pred":pred})
             continue
         if gold_list == []:
             print("error")
-            continue # empty lists in gold are error in data az
+            continue # empty lists in gold are error in data
         if pred_list == []: # empty lists in pred are false negatives if not empty in gold
+            print("")
             for gold in gold_list:
                 del gold['']
                 examples.append({"gold": gold, "pred": {}})
 
     if strict: # assess table with exact entity matches
         for example in examples:
-            if not example["pred"]: prf.fn += 1
+            if not example["pred"]:
+                prf.fn += 1
+                print("FALSE NEGATIVE ->", example)
             else:
-                if example["pred"] == example["gold"]: prf.tp += 1
-                else: prf.fp += 1
+                if example["pred"] == example["gold"]:
+                    prf.tp += 1
+                    print("TRUE POSTIVE ->", example)
+                else:
+                    prf.fp += 1
+                    print("FALSE POSITIVE ->", example)
 
     else: # assess tables with less strict entity criteria -- gold/pred entity boundary overlap
         for example in examples:
