@@ -216,32 +216,33 @@ def cap_docs(doc_dirs, names, cap):
 
 if __name__ == "__main__":
     #All domains processing
-    all_domain_docs = annotations_to_spacy("../datasets/3_gold_corpus/all_domains.jsonl")
-    train_dev_test_split(all_domain_docs,"../datasets/4_preprocessed/all_domains")
+    #all_domain_docs = annotations_to_spacy("../datasets/3_gold_corpus/all_domains.jsonl")
+    #train_dev_test_split(all_domain_docs,"../datasets/4_preprocessed/all_domains")
 
     #Out of domain processing
-    domain_path = "../datasets/3_gold_corpus/domains"
-    doc_dict = {}
-    exclude_list = ["autism","blood_cancer","cardiovascular_disease","diabetes","glaucoma","solid_tumour_cancer"]
-    for domain in os.listdir(domain_path):
-        doc_dict[domain.replace(".jsonl","")] = annotations_to_spacy(os.path.join(domain_path, domain))
-    for exclude in exclude_list:
-        out_of_domain_split(doc_dict,exclude)
+    #domain_path = "../datasets/3_gold_corpus/domains"
+    #doc_dict = {}
+    #exclude_list = ["autism","blood_cancer","cardiovascular_disease","diabetes","glaucoma","solid_tumour_cancer"]
+    #for domain in os.listdir(domain_path):
+     #   doc_dict[domain.replace(".jsonl","")] = annotations_to_spacy(os.path.join(domain_path, domain))
+    #for exclude in exclude_list:
+     #   out_of_domain_split(doc_dict,exclude)
 
     #Stratify train examples
-    stratify_train_examples("../datasets/4_preprocessed/all_domains/train.spacy",[0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,
-                                                                                  0.9])
+    #stratify_train_examples("../datasets/4_preprocessed/all_domains/train.spacy",[0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,
+     #                                                                             0.9])
 
     #merge_jsonl(merge_all_list, "../datasets/gold_result_annotations/all_domains/all_domains_gold.jsonl")
     #for domain in os.listdir("../datasets/gold_result_annotations"):
      #    docs = annotations_to_spacy(f"../datasets/gold_result_annotations/{domain}/{domain}_gold.jsonl")
       #   train_dev_test_split(docs,(f"../datasets/preprocessed/{domain}/results_only"))
 
-    #names = ["glaucoma","cardiovascular_disease","solid_tumour_cancer"]
-    #docs = ["../datasets/preprocessed/out_of_domain/glaucoma_as_test/test.spacy",
-     #       "../datasets/preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
-      #      "../datasets/preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"]
+    names = ["glaucoma", "cardiovascular_disease", "solid_tumour_cancer"]
+    docs = ["../datasets/4_preprocessed/out_of_domain/glaucoma_as_test/test.spacy",
+            "../datasets/4_preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
+            "../datasets/4_preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"]
 
+    cap_docs(docs, names, 72)
 
 
 

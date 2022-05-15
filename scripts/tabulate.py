@@ -137,32 +137,47 @@ def output_csvs(dataframes, output_path):
 
 if __name__ == "__main__":
     # tabulate predictions from different models
-    doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
-    model_bases = ["biobert", "scibert", "roberta"]
-    for model_base in model_bases:
-        print(model_base)
-        nlp = spacy.blank("en")
-        doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-        docs = doc_bin.get_docs(nlp.vocab)
-        ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
-        rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
-        dfs = []
-        for doc in rel_preds:
-            dfs.append(tabulate_pico_entities(doc))
-        output_csvs(dfs, f"../output_tables/all_domains_{model_base}")
+    #doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
+    #model_bases = ["biobert", "scibert", "roberta"]
+    #for model_base in model_bases:
+     #   print(model_base)
+      #  nlp = spacy.blank("en")
+       # doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        #docs = doc_bin.get_docs(nlp.vocab)
+        #ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
+        #rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
+        #dfs = []
+        #for doc in rel_preds:
+         #   dfs.append(tabulate_pico_entities(doc))
+        #output_csvs(dfs, f"../output_tables/all_domains_{model_base}")
 
     # tabulate gold tables from test set
-    nlp = spacy.load("../trained_models/biobert/rel/all_domains/model-best")
-    doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-    docs = doc_bin.get_docs(nlp.vocab)
-    dfs = []
-    count = 0
-    for doc in docs:
-        print(count)
-        dfs.append(tabulate_pico_entities(doc))
-        count += 1
-    output_csvs(dfs, "../datasets/5_gold_tables/all_domains")
+    #nlp = spacy.load("../trained_models/biobert/rel/all_domains/model-best")
+    #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+    #docs = doc_bin.get_docs(nlp.vocab)
+    #dfs = []
+    #count = 0
+    #for doc in docs:
+     #   print(count)
+      #  dfs.append(tabulate_pico_entities(doc))
+       # count += 1
+    #output_csvs(dfs, "../datasets/5_gold_tables/all_domains")
 
+    # tabulate predictions from different models
+    doc_path = os.listdir("../datasets/4_preprocessed/out_of_domain")
+    for path in doc_path:
+        domain = path.replace("_as_test","")
+        print(domain)
+        nlp = spacy.blank("en")
+        doc_bin = DocBin(store_user_data=True).from_disk(f"../datasets/4_preprocessed/out_of_domain/{path}/test.spacy")
+        docs = doc_bin.get_docs(nlp.vocab)
+        #ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
+        #rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
+        dfs = []
+        for doc in docs:
+            dfs.append(tabulate_pico_entities(doc))
+        #output_csvs(dfs, f"../output_tables/out_of_domain/{domain}")
+        output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}")
 
 
 
