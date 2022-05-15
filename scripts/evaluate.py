@@ -164,6 +164,7 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
         for example in examples:
             relaxed_match = True
             if not example["pred"]: prf.fn += 1 # empty prediction --> false negative
+            elif not example["gold"]: prf.fp += 1 # prediction made when no gold tuple --> false postive
             else:
                 for pval, gval in zip(example["pred"].values(), example["gold"].values()):
                     if gval not in pval and pval not in gval:
