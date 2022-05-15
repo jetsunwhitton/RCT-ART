@@ -164,6 +164,48 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\autism\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\blood_cancer\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\cardiovascular_disease\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\diabetes\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\glaucoma\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\solid_tumour_cancer\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_0.csv">
           <value>
             <Attribute>
@@ -774,6 +816,48 @@
           </value>
         </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_94.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\out_of_domain\autism_as_test\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\out_of_domain\blood_cancer_as_test\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\out_of_domain\cardiovascular_disease_as_test\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\out_of_domain\diabetes_as_test\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\out_of_domain\glaucoma_as_test\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\out_of_domain\solid_tumour_cancer_as_test\result_tab_0.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
