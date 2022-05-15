@@ -148,7 +148,7 @@ if __name__ == "__main__":
         rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
         dfs = []
         for doc in rel_preds:
-            dfs.tabulate_pico_entities(rel_preds)
+            dfs.tabulate_pico_entities(doc)
         output_csvs(dfs, f"../output_tables/all_domains_{model_base}")
 
     # tabulate gold tables from test set
