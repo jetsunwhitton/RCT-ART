@@ -7,6 +7,7 @@ from spacy.tokens import DocBin, Doc
 from spacy.training.example import Example
 from spacy.scorer import Scorer,PRFScore
 from spacy.vocab import Vocab
+from itertools import zip_longest
 
 # make the factory work
 from rel_pipe import make_relation_extractor, score_relations
@@ -131,11 +132,10 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
         pred_open = open(os.path.join(predicted_path, pred_csv), newline='')
         gold_list = [d for d in csv.DictReader(gold_open)]
         pred_list = [d for d in csv.DictReader(pred_open)]
-        for gold, pred in zip(gold_list,pred_list):
+        for gold, pred in zip_longest(gold_list,pred_list,fillvalue=False):
             del gold['']
             del pred['']
             examples.append({"gold":gold,"pred":pred})
-            continue
         if gold_list == []:
             print("error")
             continue # empty lists in gold are error in data
@@ -150,6 +150,8 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
             if not example["pred"]:
                 prf.fn += 1
                 print("FALSE NEGATIVE ->", example)
+            elif not example["gold"]:
+                prf.fp += 1
             else:
                 if example["pred"] == example["gold"]:
                     prf.tp += 1

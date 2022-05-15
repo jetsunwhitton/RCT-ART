@@ -178,6 +178,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_10.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_101.csv">
           <value>
             <Attribute>
@@ -213,7 +220,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_12.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_13.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_14.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_15.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -227,7 +255,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_17.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_18.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_19.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -242,6 +284,13 @@
           </value>
         </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_20.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_21.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -269,7 +318,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_25.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_26.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_27.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_28.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -290,7 +360,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_30.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_31.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_32.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_33.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -318,6 +409,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_38.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_39.csv">
           <value>
             <Attribute>
@@ -332,7 +430,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_40.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_42.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_43.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_44.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -353,7 +472,42 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_48.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_49.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_50.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_51.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_52.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -368,6 +522,20 @@
           </value>
         </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_54.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_55.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_56.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -409,7 +577,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_61.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_62.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_63.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -451,7 +633,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_69.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_7.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_70.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -472,6 +668,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_75.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_76.csv">
           <value>
             <Attribute>
@@ -480,6 +683,27 @@
           </value>
         </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_78.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_79.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_8.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_80.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -500,7 +724,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_83.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_84.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\all_domains_biobert\result_tab_85.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\all_domains_biobert\result_tab_86.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
