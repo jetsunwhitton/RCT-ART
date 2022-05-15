@@ -65,10 +65,10 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
 
         # Print the gold and prediction, if gold label is not 0
         if print_details:
-            print()
-            print(f"Text: {gold.text}")
-            print(f"gold_spans: {[(e.start, e.text, e.label_) for e in gold.ents]}")
-            print(f"pred_spans: {[(e.start, e.text, e.label_) for e in pred.ents]}")
+            #print()
+            #print(f"Text: {gold.text}")
+            #print(f"gold_spans: {[(e.start, e.text, e.label_) for e in gold.ents]}")
+            #print(f"pred_spans: {[(e.start, e.text, e.label_) for e in pred.ents]}")
             gold_ents = [e.text for e in gold.ents]
             assessed_ents = []
             for value, rel_dict in pred._.rel.items():
@@ -99,9 +99,9 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
                             assessed_ents.append(child_ent)
             print()
     thresholds = [0.000, 0.050, 0.100, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99, 0.999]
-    print()
-    print("Results of the trained model:")
-    #outfile.write()
+    #print()
+    #print("Results of the trained model:")
+    outfile.write()
     task = False
     if ner_model_path != None:
         task = True
@@ -110,15 +110,15 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
 
 def _score_and_format(examples, thresholds, task):
     """outputs rel and joint performance scores, to console and/or txt file"""
-    #if task:
-        #outfile.write("Joint\n")
-    #else:
-        #outfile.write("Rel alone\n")
+    if task:
+        outfile.write("Joint\n")
+    else:
+        outfile.write("Rel alone\n")
     for threshold in thresholds:
         r = score_relations(examples, threshold)
         results = {k: "{:.2f}".format(v * 100) for k, v in r.items()}
-        print(f"threshold {'{:.2f}'.format(threshold)} \t {results}")
-        #outfile.write(f"threshold {'{:.2f}'.format(threshold)} \t {results}\n")
+        #print(f"threshold {'{:.2f}'.format(threshold)} \t {results}")
+        outfile.write(f"threshold {'{:.2f}'.format(threshold)} \t {results}\n")
 
 
 def evaluate_result_tables(gold_path, predicted_path, strict = True):
@@ -133,6 +133,7 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
         gold_list = [d for d in csv.DictReader(gold_open)]
         pred_list = [d for d in csv.DictReader(pred_open)]
         for gold, pred in zip(gold_list,pred_list):
+            print(gold,pred)
             del gold['']
             del pred['']
             examples.append({"gold":gold,"pred":pred})
@@ -273,8 +274,8 @@ if __name__ == "__main__":
         # assess rel performance
         joint_ner_rel_evaluate(None,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
         # assess joint performance
-        joint_ner_rel_evaluate(None,
-                           f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,True)
+        joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best"
+                               ,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
         # assess table strict performance
         evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
         # assess table relaxed performance
