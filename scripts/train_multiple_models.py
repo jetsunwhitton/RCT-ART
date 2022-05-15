@@ -42,6 +42,8 @@ if __name__ == "__main__":
     model_configs = ["../configs/ner_biobert.cfg", "../configs/rel_biobert.cfg", "../configs/ner_scibert.cfg",
                      "../configs/rel_scibert.cfg", "../configs/ner_roberta.cfg", "../configs/rel_roberta.cfg"]
 
+    #train_across_models(model_configs)
+
     #train_across_domains("../datasets/preprocessed", "configs/ner_biobert.cfg", "ner")
 
     # ner
