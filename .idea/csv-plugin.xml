@@ -934,6 +934,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\output_tables\capped_mix\glaucoma\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\output_tables\out_of_domain\autism_as_test\result_tab_0.csv">
           <value>
             <Attribute>

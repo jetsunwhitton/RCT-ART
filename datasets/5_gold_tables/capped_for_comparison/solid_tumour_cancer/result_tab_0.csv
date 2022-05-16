@@ -1,4 +1,3 @@
 ,outcome,arm 1,arm 2
-0,intervention,SH patients,MM patient
-0,partial residual prolapse,"( 7.5 % ), 4","( 1.8 % ), 1"
-0,"needed a second procedure for recurrence within 2 years, total study group",No patient,No patient
+0,intervention,CEE,placebo group
+0,"year 1, mammographic percent density","1.6 percentage points ( 95 % CI , 0.8 to 2.4 ), mean increase","mean decrease of 1.0 percentage point ( 95 % CI , -1.7 to -0.4 )"
