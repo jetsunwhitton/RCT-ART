@@ -61,18 +61,18 @@ if __name__ == "__main__":
     #train_across_domains("../datasets/4_preprocessed/out_of_domain", "../configs/rel_biobert.cfg", "rel", "out_of_domain")
 
     # ner
-    train_across_domains("../datasets/4_preprocessed/capped_for_comparison", "../configs/ner_biobert.cfg", "ner",
-                         "capped_for_comparison")
+    #train_across_domains("../datasets/4_preprocessed/capped_for_comparison", "../configs/ner_biobert.cfg", "ner",
+     #                    result_tab_0.csv"capped_for_comparison")
 
     # rel
-    train_across_domains("../datasets/4_preprocessed/capped_for_comparison", "../configs/rel_biobert.cfg", "rel",
-                         "capped_for_comparison")
+    #train_across_domains("../datasets/4_preprocessed/capped_for_comparison", "../configs/rel_biobert.cfg", "rel",
+     #                    "capped_for_comparison")
 
     # ner mixed domain comparison
-    train_across_domains("../datasets/4_preprocessed/capped_mix", "../configs/ner_biobert.cfg", "ner", "capped_mix")
+   # train_across_domains("../datasets/4_preprocessed/capped_mix", "../configs/ner_biobert.cfg", "ner", "capped_mix")
 
     # rel mixed domain comparison
-    train_across_domains("../datasets/4_preprocessed/capped_mix", "../configs/rel_biobert.cfg", "rel", "capped_mix")
+    #train_across_domains("../datasets/4_preprocessed/capped_mix", "../configs/rel_biobert.cfg", "rel", "capped_mix")
 
 
 

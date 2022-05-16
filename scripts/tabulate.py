@@ -137,7 +137,7 @@ def output_csvs(dataframes, output_path):
 
 if __name__ == "__main__":
     # tabulate predictions from different models
-    doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
+    #doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
     #model_bases = ["biobert", "scibert", "roberta"]
     #for model_base in model_bases:
      #   print(model_base)
@@ -165,20 +165,20 @@ if __name__ == "__main__":
 
     # tabulate predictions from different training size strats
 
-    for strat in os.listdir("../trained_models/biobert/ner/all_domain_strats"):
-       print(strat)
-       nlp = spacy.blank("en")
-       doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-       docs = doc_bin.get_docs(nlp.vocab)
-       ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/all_domain_strats/{strat}/model-best", docs)
-       rel_preds = relation_extraction(f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best", ner_preds)
-       dfs = []
-       for doc in rel_preds:
-           dfs.append(tabulate_pico_entities(doc))
-       output_csvs(dfs, f"../output_tables/all_domains_strats/train_{strat}")
+    #for strat in os.listdir("../trained_models/biobert/ner/all_domain_strats"):
+     #  print(strat)
+      # nlp = spacy.blank("en")
+       #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+       #docs = doc_bin.get_docs(nlp.vocab)
+       #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/all_domain_strats/{strat}/model-best", docs)
+       #rel_preds = relation_extraction(f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best", ner_preds)
+       #dfs = []
+       #for doc in rel_preds:
+        #   dfs.append(tabulate_pico_entities(doc))
+       #output_csvs(dfs, f"../output_tables/all_domains_strats/train_{strat}")
 
 
-# tabulate predictions from different models
+# tabulate predictions from different domains
     #doc_path = os.listdir("../datasets/4_preprocessed/out_of_domain")
     #for path in doc_path:
      #   domain = path.replace("_as_test","")
@@ -193,6 +193,39 @@ if __name__ == "__main__":
          #   dfs.append(tabulate_pico_entities(doc))
         #output_csvs(dfs, f"../output_tables/out_of_domain/{domain}")
         #output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}")
+
+    # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
+    for domain in os.listdir("../datasets/preprocessed/4_capped_for_comparison"):
+       print(domain)
+       doc_path = f"../datasets/preprocessed/capped_for_comparison/{domain}/test.spacy"
+       nlp = spacy.blank("en")
+       doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+       docs = doc_bin.get_docs(nlp.vocab)
+       ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
+                                        docs)
+       rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
+    #                               ner_preds)
+    # tabulate_pico_entities(rel_preds, f"../output_tables/{domain}")
+
+    test_sets = ["../datasets/preprocessed/out_of_domain/autism_as_test/train.spacy",
+                 "../datasets/preprocessed/out_of_domain/blood_cancer_as_test/train.spacy",
+                 "../datasets/preprocessed/out_of_domain/diabetes_as_test/train.spacy"]
+
+    names = ["autism", "blood_cancer", "diabetes"]
+    # build incremental domain sets
+    for domain in os.listdir("../datasets/preprocessed/capped_mix"):
+        print(domain)
+        for test, name in zip(test_sets, names):
+            print(name)
+            doc_path = test
+            nlp = spacy.blank("en")
+            doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+            docs = doc_bin.get_docs(nlp.vocab)
+            ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_mix/{domain}/model-best",
+                                                 docs)
+            rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_mix/{domain}/model-best",
+                                            ner_preds)
+            tabulate_pico_entities(rel_preds, f"../output_tables/{domain}/{name}")
 
 
 

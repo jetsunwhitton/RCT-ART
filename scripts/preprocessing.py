@@ -182,9 +182,7 @@ def cap_docs(doc_dirs, names, cap):
     """Caps number of examples in datasets for comparison, outputting both individual
     sets and merged sets for incremental evaluation"""
     vocab = Vocab()
-    merged_docs = []
-    merged_names = ""
-    count = 0
+
     for docs, name in zip(doc_dirs, names):
         doc_bin = DocBin(store_user_data=True).from_disk(docs)
         capped = list(doc_bin.get_docs(vocab))[:cap-1]
@@ -200,18 +198,27 @@ def cap_docs(doc_dirs, names, cap):
         capped_test = DocBin(docs=test, store_user_data=True)
         capped_test.to_disk(f"../datasets/4_preprocessed/capped_for_comparison/{name}/test.spacy")
 
+def mix_cap_docs(doc_dirs, names, cap):
         # output merged sets of capped docs for incremental domain increase evaluation
-        merged_docs += capped
-        merged_names += name + "_"
-        if count > 0:
+        vocab = Vocab()
+        merged_docs = []
+        merged_names = ""
+        count = 0
+        for docs, name in zip(doc_dirs, names):
+            doc_bin = DocBin(store_user_data=True).from_disk(docs)
+            capped = list(doc_bin.get_docs(vocab))[:cap - 1]
+            random.shuffle(capped)
+            merged_docs += capped
+            merged_names += name + "_"
             random.shuffle(merged_docs)
             train = merged_docs[:int(len(merged_docs)*0.9)]
             dev = merged_docs[int(len(merged_docs)*0.9):]
             merged_train = DocBin(docs= train, store_user_data=True)
             merged_train.to_disk(f"../datasets/4_preprocessed/capped_mix/{merged_names[:-1]}/train.spacy")
+
             merged_dev = DocBin(docs=dev, store_user_data=True)
             merged_dev.to_disk(f"../datasets/4_preprocessed/capped_mix/{merged_names[:-1]}/dev.spacy")
-        count += 1
+            count += 1
 
 
 if __name__ == "__main__":
@@ -242,8 +249,25 @@ if __name__ == "__main__":
             "../datasets/4_preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
             "../datasets/4_preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"]
 
-    cap_docs(docs, names, 72)
+    cap_docs(docs, names, 112)
 
+    names = ["glaucoma"]
+    docs = ["../datasets/4_preprocessed/out_of_domain/glaucoma_as_test/test.spacy"]
+
+    mix_cap_docs(docs, names, 210) # glaucoma
+
+    names = ["glaucoma", "cardiovascular_disease"]
+    docs = ["../datasets/4_preprocessed/out_of_domain/glaucoma_as_test/test.spacy",
+            "../datasets/4_preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy"]
+
+    mix_cap_docs(docs, names, 105)  # glaucoma, cardiovascular disease
+
+    names = ["glaucoma", "cardiovascular_disease", "solid_tumour_cancer"]
+    docs = ["../datasets/4_preprocessed/out_of_domain/glaucoma_as_test/test.spacy",
+            "../datasets/4_preprocessed/out_of_domain/cardiovascular_disease_as_test/test.spacy",
+            "../datasets/4_preprocessed/out_of_domain/solid_tumour_cancer_as_test/test.spacy"]
+
+    mix_cap_docs(docs, names, 70)  # glaucoma, cardiovascular disease, solid tumour cancer
 
 
 

@@ -164,6 +164,41 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\datasets\5_gold_tables\capped_for_comparison\cardiovascular_disease\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\capped_for_comparison\glaucoma\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\capped_for_comparison\solid_tumour_cancer\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\capped_mix\glaucoma_cardiovascular_disease\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\datasets\5_gold_tables\capped_mix\glaucoma_cardiovascular_disease_solid_tumour_cancer\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\datasets\5_gold_tables\out_of_domain\autism\result_tab_0.csv">
           <value>
             <Attribute>
@@ -886,6 +921,13 @@
           </value>
         </entry>
         <entry key="\output_tables\all_domains_strats\train_strat_90%\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\output_tables\capped_for_comparison\glaucoma\result_tab_0.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
