@@ -179,54 +179,53 @@ if __name__ == "__main__":
 
 
 # tabulate predictions from different domains
-    #doc_path = os.listdir("../datasets/4_preprocessed/out_of_domain")
-    #for path in doc_path:
-     #   domain = path.replace("_as_test","")
-      #  print(domain)
-       # nlp = spacy.blank("en")
-        #doc_bin = DocBin(store_user_data=True).from_disk(f"../datasets/4_preprocessed/out_of_domain/{path}/test.spacy")
-        #docs = doc_bin.get_docs(nlp.vocab)
-        #ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
-        #rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
-        #dfs = []
-        #for doc in docs:
-         #   dfs.append(tabulate_pico_entities(doc))
-        #output_csvs(dfs, f"../output_tables/out_of_domain/{domain}") # for predicted
+    doc_path = os.listdir("../datasets/4_preprocessed/out_of_domain")
+    for domain in os.listdir("../datasets/4_preprocessed/out_of_domain"):
+        print(domain)
+        nlp = spacy.blank("en")
+        doc_bin = DocBin(store_user_data=True).from_disk(f"../datasets/4_preprocessed/out_of_domain/{domain}/test.spacy")
+        docs = doc_bin.get_docs(nlp.vocab)
+        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best", docs)
+        rel_preds = relation_extraction(f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best", ner_preds)
+        dfs = []
+        for doc in docs:
+            dfs.append(tabulate_pico_entities(doc))
+        output_csvs(dfs, f"../output_tables/out_of_domain/{domain}") # for predicted
         #output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}") # for gold tables
 
     # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
-    for domain in os.listdir("../datasets/4_preprocessed/capped_for_comparison"):
-       print(domain)
-       doc_path = f"../datasets/4_preprocessed/capped_for_comparison/{domain}/test.spacy"
-       nlp = spacy.blank("en")
-       doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-       docs = doc_bin.get_docs(nlp.vocab)
+    #for domain in os.listdir("../datasets/4_preprocessed/capped_for_comparison"):
+       #print(domain)
+       #doc_path = f"../datasets/4_preprocessed/capped_for_comparison/{domain}/test.spacy"
+       #nlp = spacy.blank("en")
+       #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+       #docs = doc_bin.get_docs(nlp.vocab)
       #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_for_comparison/{domain}/model-best",
         #                                docs)
       #rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_for_comparison/{domain}/model-best",
         #                           ner_preds)
-       dfs = []
-       for doc in docs:
-           dfs.append(tabulate_pico_entities(doc))
-       output_csvs(dfs, f"../datasets/5_gold_tables/capped_for_comparison/{domain}") # for gold tables
+       #dfs = []
+       #for doc in docs:
+        #   dfs.append(tabulate_pico_entities(doc))
+       #output_csvs(dfs, f"../datasets/5_gold_tables/capped_for_comparison/{domain}") # for gold tables
      # output_csvs(dfs, f"../output_tables/capped_for_comparison/{domain}") # for predicted
 
 
     # build incremental domain sets
-    for domain in os.listdir("../datasets/4_preprocessed/capped_mix"):
-        print(domain)
-        doc_path = f"../datasets/4_preprocessed/capped_mix/{domain}/test.spacy"
-        nlp = spacy.blank("en")
-        doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-        docs = doc_bin.get_docs(nlp.vocab)
+    #for domain in os.listdir("../datasets/4_preprocessed/capped_mix"):
+        #print(domain)
+        #doc_path = f"../datasets/4_preprocessed/capped_mix/{domain}/test.spacy"
+        #nlp = spacy.blank("en")
+        #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+        #docs = doc_bin.get_docs(nlp.vocab)
         #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/capped_mix/{domain}/model-best",
          #                                    docs)
         #rel_preds = relation_extraction(f"../trained_models/biobert/rel/capped_mix/{domain}/model-best",
          #                               ner_preds)
-        dfs = []
-        for doc in docs:
-            dfs.append(tabulate_pico_entities(doc))
-        output_csvs(dfs, f"../datasets/5_gold_tables/capped_mix/{domain}")  # for gold tables
+        #dfs = []
+        #for doc in docs:
+         #   dfs.append(tabulate_pico_entities(doc))
+        #output_csvs(dfs, f"../datasets/5_gold_tables/capped_mix/{domain}")  # for gold tables
       # output_csvs(dfs, f"../output_tables/capped_mix/{domain}") # for predicted
 
 
