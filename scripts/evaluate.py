@@ -319,7 +319,7 @@ if __name__ == "__main__":
         doc_path = f"../datasets/4_preprocessed/out_of_domain/{domain}/test.spacy"
         ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
         rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
-        gold_table_path = f"../datasets/5_gold_tables/out_of_domain/{domain.replace('_as_test','')}"
+        gold_table_path = f"../datasets/5_gold_tables/out_of_domain/{domain}"
         pred_table_path = f"../output_tables/out_of_domain/{domain}"
         # assess ner performance
         ner_evaluate(ner_model, doc_path)

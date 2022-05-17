@@ -190,8 +190,8 @@ if __name__ == "__main__":
         dfs = []
         for doc in docs:
             dfs.append(tabulate_pico_entities(doc))
-        output_csvs(dfs, f"../output_tables/out_of_domain/{domain}") # for predicted
-        #output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}") # for gold tables
+        #output_csvs(dfs, f"../output_tables/out_of_domain/{domain}") # for predicted
+        output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}") # for gold tables
 
     # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
     #for domain in os.listdir("../datasets/4_preprocessed/capped_for_comparison"):

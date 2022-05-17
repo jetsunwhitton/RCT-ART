@@ -206,6 +206,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\datasets\5_gold_tables\out_of_domain\autism_as_test\result_tab_0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\datasets\5_gold_tables\out_of_domain\blood_cancer\result_tab_0.csv">
           <value>
             <Attribute>
