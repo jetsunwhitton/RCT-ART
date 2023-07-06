@@ -1,0 +1,5 @@
+,outcome,arm 1,arm 2
+0,intervention,pioglitazone,glimepiride
+0,"FSI values, QUICKI values changed a, HOMA-S values",18.0 %,NR
+0,"FSI values, HOMA-S values",-21.1,-7.9 %
+0,HOMA-S values,NR,15.1 pmol/L

@@ -1,0 +1,5 @@
+,outcome,arm 1,arm 2
+0,intervention,after priming,"before, without priming"
+0,"proportion of patients with a neutrophil count less than 500/microL, day 16, mean neutrophil count, neutrophil nadir","1030 +/- 580/microL, 17 . 1 %, 490 +/- 310/microL","550 +/- 350/microL, 690 +/- 370/microL"
+0,"proportion of patients with a neutrophil count less than 500/microL, day 16, neutrophil nadir",six of 35,NR
+0,"proportion of patients with a neutrophil count less than 500/microL, day 16, mean neutrophil count",NR,"12 of 34, 35.3 %"

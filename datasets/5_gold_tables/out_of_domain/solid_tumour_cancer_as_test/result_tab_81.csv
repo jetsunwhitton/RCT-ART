@@ -1,0 +1,7 @@
+,outcome,arm 1,arm 2
+0,intervention,P600,P900
+0,,47 patients,45 patients
+0,median times to tumor progression,4.2,4.6 months
+0,stable disease,50 %,50 %
+0,response rates,"17.0 % ( 95 % confidence interval , 7.7-30.8 % )","15.6 % ( 95 % confidence interval , 6.5-29.5 % )"
+0,median progression-free survival,4.2,4.1 months

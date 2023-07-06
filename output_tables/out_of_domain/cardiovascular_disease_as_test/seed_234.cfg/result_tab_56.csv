@@ -1,0 +1,5 @@
+,outcome,arm 1,arm 2
+0,intervention,transfusion group,standard-care group
+0,"cerebral infarctions, intracerebral hematoma",NR,10
+0,intracerebral hematoma,1,1
+0,"intracerebral hematoma, total study group",infarction,infarction

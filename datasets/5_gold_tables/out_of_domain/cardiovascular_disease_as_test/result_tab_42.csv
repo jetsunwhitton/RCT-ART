@@ -1,0 +1,5 @@
+,outcome,arm 1,arm 2
+0,intervention,Patients with statin withdrawal,non-statin-withdrawal group
+0,END,65.2 %,20.9 %
+0,infarct volume,"74 [ 45 , 126 ]","26 [ 12 , 70 ] mL"
+0,frequency of mRS score > 2 at the end of follow-up,60.0 %,39.0 %

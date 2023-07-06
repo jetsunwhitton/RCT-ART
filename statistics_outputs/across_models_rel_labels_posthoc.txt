@@ -1,0 +1,33 @@
+A1_POSTHOC:
+Test Multiple Comparison ttest_rel 
+FWER=0.05 method=bonf
+alphacSidak=0.02, alphacBonf=0.017
+==============================================
+ group1  group2  stat   pval  pval_corr reject
+----------------------------------------------
+biobert roberta 3.4966 0.0068    0.0203   True
+biobert scibert 3.7082 0.0049    0.0146   True
+roberta scibert 1.1372 0.2848    0.8545  False
+----------------------------------------------
+A2_POSTHOC:
+Test Multiple Comparison ttest_rel 
+FWER=0.05 method=bonf
+alphacSidak=0.02, alphacBonf=0.017
+==============================================
+ group1  group2  stat   pval  pval_corr reject
+----------------------------------------------
+biobert roberta 1.9797 0.0791    0.2373  False
+biobert scibert 3.1373  0.012    0.0359   True
+roberta scibert 1.0113 0.3383       1.0  False
+----------------------------------------------
+OC_POSTHOC:
+Test Multiple Comparison ttest_rel 
+FWER=0.05 method=bonf
+alphacSidak=0.02, alphacBonf=0.017
+===============================================
+ group1  group2   stat   pval  pval_corr reject
+-----------------------------------------------
+biobert roberta  2.1213 0.0629    0.1887  False
+biobert scibert  0.9575 0.3633       1.0  False
+roberta scibert -0.5188 0.6164       1.0  False
+-----------------------------------------------

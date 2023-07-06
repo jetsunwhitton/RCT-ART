@@ -1,0 +1,4 @@
+,outcome,arm 1,arm 2
+0,intervention,"glimepirede, pioglitazone",
+0,intent-to-treat sample,-0.78,NR
+0,"baseline, intent-to-treat sample, total study group",-0.68 %,-0.68 %

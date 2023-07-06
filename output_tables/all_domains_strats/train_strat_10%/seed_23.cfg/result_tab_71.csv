@@ -1,0 +1,5 @@
+,outcome,arm 1,arm 2
+0,intervention,350-mm2 group,500-mm2 group
+0,"5 years, life-table success rates",98%,"66%, 92%"
+0,"5 years, cumulative success rate, life-table success rates",79%,NR
+0,"life-table success rates, total study group",cumulative success rate,cumulative success rate

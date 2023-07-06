@@ -137,19 +137,25 @@ def output_csvs(dataframes, output_path):
 
 if __name__ == "__main__":
     # tabulate predictions from different models
-    #doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
-    #model_bases = ["biobert", "scibert", "roberta"]
-    #for model_base in model_bases:
-     #   print(model_base)
-      #  nlp = spacy.blank("en")
-       # doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-        #docs = doc_bin.get_docs(nlp.vocab)
-        #ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/model-best", docs)
-        #rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/model-best", ner_preds)
-        #dfs = []
-        #for doc in rel_preds:
-         #   dfs.append(tabulate_pico_entities(doc))
-        #output_csvs(dfs, f"../output_tables/all_domains_{model_base}")
+    doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
+    seed_config_path = "../configs/ner/biobert"
+    model_bases = ["biobert", "scibert", "roberta"]
+
+   # for model_base in model_bases:
+        #print(model_base)
+       # for seed_run in os.listdir(seed_config_path):
+           # print(seed_run)
+          #  nlp = spacy.blank("en")
+          #  doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+          #  docs = doc_bin.get_docs(nlp.vocab)
+           # ner_preds = named_entity_recognition(f"../trained_models/{model_base}/ner/all_domains/{seed_run}/model-best", docs)
+          #  rel_preds = relation_extraction(f"../trained_models/{model_base}/rel/all_domains/{seed_run}/model-best", ner_preds)
+          #  dfs = []
+          #  for doc in rel_preds:
+           #     dfs.append(tabulate_pico_entities(doc))
+          #  out_path = f"../output_tables/all_domains_{model_base}/{seed_run}"
+          #  os.mkdir(out_path)
+          #  output_csvs(dfs, out_path)
 
     # tabulate gold tables from test set
     #nlp = spacy.load("../trained_models/biobert/rel/all_domains/model-best")
@@ -166,32 +172,55 @@ if __name__ == "__main__":
     # tabulate predictions from different training size strats
 
     #for strat in os.listdir("../trained_models/biobert/ner/all_domain_strats"):
-     #  print(strat)
-      # nlp = spacy.blank("en")
-       #doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
-       #docs = doc_bin.get_docs(nlp.vocab)
-       #ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/all_domain_strats/{strat}/model-best", docs)
-       #rel_preds = relation_extraction(f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best", ner_preds)
-       #dfs = []
-       #for doc in rel_preds:
-        #   dfs.append(tabulate_pico_entities(doc))
-       #output_csvs(dfs, f"../output_tables/all_domains_strats/train_{strat}")
-
+     #   print(strat)
+      #  for seed_run in os.listdir(seed_config_path):
+       #     nlp = spacy.blank("en")
+        #    doc_bin = DocBin(store_user_data=True).from_disk(doc_path)
+         #   docs = doc_bin.get_docs(nlp.vocab)
+          #  ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/all_domain_strats/{strat}/{seed_run}/model-best", docs)
+           # rel_preds = relation_extraction(f"../trained_models/biobert/rel/all_domain_strats/{strat}/{seed_run}/model-best", ner_preds)
+           # dfs = []
+            #for doc in rel_preds:
+           #     dfs.append(tabulate_pico_entities(doc))
+            #try:
+             #   os.mkdir(f"../output_tables/all_domains_strats/train_{strat}")
+            #except:
+             #   pass
+            #out_path = f"../output_tables/all_domains_strats/train_{strat}/{seed_run}"
+            #try:
+             #   os.mkdir(out_path)
+            #except:
+             #   pass
+            #output_csvs(dfs, out_path)
 
 # tabulate predictions from different domains
-    doc_path = os.listdir("../datasets/4_preprocessed/out_of_domain")
-    for domain in os.listdir("../datasets/4_preprocessed/out_of_domain"):
-        print(domain)
-        nlp = spacy.blank("en")
-        doc_bin = DocBin(store_user_data=True).from_disk(f"../datasets/4_preprocessed/out_of_domain/{domain}/test.spacy")
-        docs = doc_bin.get_docs(nlp.vocab)
-        ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best", docs)
-        rel_preds = relation_extraction(f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best", ner_preds)
-        dfs = []
-        for doc in docs:
-            dfs.append(tabulate_pico_entities(doc))
-        #output_csvs(dfs, f"../output_tables/out_of_domain/{domain}") # for predicted
-        output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}") # for gold tables
+    domaincuts = ["out_of_domain","capped_for_comparison","capped_mix"]
+    for domaincut in domaincuts:
+        print(domaincut)
+        doc_path = os.listdir(f"../datasets/4_preprocessed/{domaincut}")
+        for domain in os.listdir(f"../datasets/4_preprocessed/{domaincut}"):
+            print(domain)
+            for seed_run in os.listdir(seed_config_path):
+                print(seed_run)
+                nlp = spacy.blank("en")
+                doc_bin = DocBin(store_user_data=True).from_disk(f"../datasets/4_preprocessed/{domaincut}/{domain}/test.spacy")
+                docs = doc_bin.get_docs(nlp.vocab)
+                ner_preds = named_entity_recognition(f"../trained_models/biobert/ner/{domaincut}/{domain}/{seed_run}/model-best", docs)
+                rel_preds = relation_extraction(f"../trained_models/biobert/rel/{domaincut}/{domain}/{seed_run}/model-best", ner_preds)
+                dfs = []
+                for doc in rel_preds:
+                    dfs.append(tabulate_pico_entities(doc))
+                try:
+                    os.mkdir(f"../output_tables/{domaincut}/{domain}")
+                except:
+                    pass
+                out_path = f"../output_tables/{domaincut}/{domain}/{seed_run}"
+                try:
+                    os.mkdir(out_path)
+                except:
+                    pass
+                output_csvs(dfs, out_path)# for predicted
+            #output_csvs(dfs, f"../datasets/5_gold_tables/out_of_domain/{domain}") # for gold tables
 
     # create capped_for_comparison preds or gold (ignore models and use tabulate function straight on docs for gold)
     #for domain in os.listdir("../datasets/4_preprocessed/capped_for_comparison"):

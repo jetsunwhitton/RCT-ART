@@ -1,0 +1,4 @@
+,outcome,arm 1,arm 2
+0,intervention,MMC,OLO
+0,"sensitivity, IOP =17  , specificity","75%, 83%",NR
+0,IOP =17  ,NR,"67%, 73%"

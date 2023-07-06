@@ -1,0 +1,4 @@
+,outcome,arm 1,arm 2
+0,intervention,vitamin E group,placebo group
+0,cancer incidence,"1022 ( 21.5 % ), 156 ( 3.3 % ), 552 patients ( 11.6 % )","178 ( 3.7 % ), 985 ( 20.6 % )"
+0,"cancer deaths, cancer incidence",NR,586 ( 12.3 % )

@@ -1,0 +1,5 @@
+,outcome,arm 1,arm 2
+0,intervention,dutasteride,placebo
+0,"sensitivity, specificity","0.671, 0.737",NR
+0,specificity,NR,0.804
+0,,NR,0.578

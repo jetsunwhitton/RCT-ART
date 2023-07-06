@@ -1,0 +1,4 @@
+,outcome,arm 1,arm 2
+0,intervention,dutasteride,placebo
+0,"for prostate cancer, sensitivity",0.737,0.804
+0,"specificity, for prostate cancer",0.671,0.578

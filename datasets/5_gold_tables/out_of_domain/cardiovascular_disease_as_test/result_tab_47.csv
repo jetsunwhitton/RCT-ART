@@ -1,0 +1,9 @@
+,outcome,arm 1,arm 2
+0,intervention,formoterol,placebo
+0,heart rate,80+/-8.6,80+/-10.6
+0,"total, , number and rate of ventricular premature beats",732+/-2685.4,650+/-2090.6
+0,"rate, , number and rate of ventricular premature beats",35+/-131.0,30+/-101.3 per h
+0,"total, ventricular tachycardia events",0.4+/-1.70,1.0+/-9.23
+0,"rate, ventricular tachycardia events",0.02+/-0.082,0.05+/-0.479 per h
+0,"supraventricular premature beats, total",504+/-1844.1,823+/-2961.8
+0,"rate, supraventricular premature beats",22+/-80.6,37+/-129.6 per h

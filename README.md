@@ -45,7 +45,7 @@ are the commands we used to train the models made available with this repository
 #### spaCy cmd for training BioBERT-based NER model on all-domains dataset ####
 
 ```bash
-python -m spacy train configs/ner_biobert.cfg --output ../trained_models/biobert/ner/all_domains --paths.train ../datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev ../datasets/preprocessed/all_domains/results_only/dev.spacy -c ../scripts/custom_functions.py --gpu-id 0
+python -m spacy train configs/seed_3.cfg --output ../trained_models/biobert/ner/all_domains --paths.train ../datasets/preprocessed/all_domains/results_only/train.spacy --paths.dev ../datasets/preprocessed/all_domains/results_only/dev.spacy -c ../scripts/custom_functions.py --gpu-id 0
 ```
 
 #### spaCy cmd for training BioBERT-based RE model on all-domains dataset ####

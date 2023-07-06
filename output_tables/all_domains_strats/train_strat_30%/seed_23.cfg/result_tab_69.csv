@@ -1,0 +1,4 @@
+,outcome,arm 1,arm 2
+0,intervention,MMC,OLO
+0,successful/unsuccessful bleb,"73%, 83%",NR
+0,"successful/unsuccessful bleb, sensitivity",NR,"67%, 75%"

@@ -8,6 +8,7 @@ from spacy.training.example import Example
 from spacy.scorer import Scorer,PRFScore
 from spacy.vocab import Vocab
 from itertools import zip_longest
+import pandas as pd
 
 # make the factory work
 from rel_pipe import make_relation_extractor, score_relations
@@ -28,8 +29,8 @@ def ner_evaluate(ner_model_path,test_data):
         examples.append(Example(pred, gold))
     print("|| Evaluating NER task performance")
     print(nlp.evaluate(examples))
-    outfile.write("NER_evaluation\n")
-    outfile.write(f"{nlp.evaluate(examples)}\n")
+    return nlp.evaluate(examples)
+
 
 
 # This function was extensively adapted from the spaCy relation component
@@ -103,20 +104,16 @@ def joint_ner_rel_evaluate(ner_model_path, rel_model_path, test_data, print_deta
     task = False
     if ner_model_path != None:
         task = True
-    _score_and_format(examples, thresholds, task)
+    return _score_and_format(examples, thresholds, task)
 
 
 def _score_and_format(examples, thresholds, task):
     """outputs rel and joint performance scores, to console and/or txt file"""
-    if task:
-        outfile.write("Joint\n")
-    else:
-        outfile.write("Rel alone\n")
+    threshold_dict = {}
     for threshold in thresholds:
         r = score_relations(examples, threshold)
-        results = {k: "{:.2f}".format(v * 100) for k, v in r.items()}
-        #print(f"threshold {'{:.2f}'.format(threshold)} \t {results}")
-        outfile.write(f"threshold {'{:.2f}'.format(threshold)} \t {results}\n")
+        threshold_dict[threshold] = {k: "{:.2f}".format(v) for k, v in r.items()}
+    return threshold_dict
 
 
 def evaluate_result_tables(gold_path, predicted_path, strict = True):
@@ -177,11 +174,8 @@ def evaluate_result_tables(gold_path, predicted_path, strict = True):
     output = {"rel_micro_p": prf.precision,
               "rel_micro_r": prf.recall,
               "rel_micro_f": prf.fscore,}
-    outfile.write("Table_evaluation")
-    if strict: outfile.write("strict\n")
-    else: outfile.write("relaxed\n")
-    outfile.write(f"{output}\n")
     print(output)
+    return output
 
 
 def create_ner_confusion_matrix(model_path, test_path):
@@ -212,9 +206,9 @@ def create_ner_confusion_matrix(model_path, test_path):
                                   display_labels=["OC","INTV","MEAS","NO_ENT"])
     font = {'family': 'normal',
             'weight': 'normal',
-            'size': 24}
+            'size': 16}
     plt.rc('font', **font)
-    fig, ax = plt.subplots(figsize=(12, 12))
+    fig, ax = plt.subplots(figsize=(16, 16))
     disp = disp.plot(include_values=True,
              cmap=plt.cm.Blues, ax=ax, xticks_rotation='vertical')
 
@@ -258,81 +252,299 @@ def create_rel_confusion_matrix(model_path, test_path):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["A1_RES", "A2_RES", "OC_RES", "NO_RE"])
     font = {'family': 'normal',
             'weight': 'normal',
-            'size': 24}
+            'size': 16}
     plt.rc('font', **font)
-    fig, ax = plt.subplots(figsize=(12, 12))
+    fig, ax = plt.subplots(figsize=(16, 16))
     disp = disp.plot(include_values=True,
                      cmap=plt.cm.Blues, ax=ax, xticks_rotation='vertical')
 
     plt.show()
 
 
+def save(data, path):
+    """Save infomation to CSV database file"""
+    try:
+        os.mkdir(path)
+    except:
+        pass
+    #save runs
+    runs_file = path + '/runs.csv'
+    df = pd.DataFrame.from_records(data)
+    df.to_csv(runs_file)
+
+    #save mean and SD
+    means_stds_file = path + '/means_stds.csv'
+    means_stds = pd.concat([df.mean(),df.std()],axis=1,keys=['Mean', 'Std'])
+    means_stds.to_csv(means_stds_file)
+
+
+def eval_base_models(doc_path, model_bases, seed_config_path, gold_table_path, pred_table_path,output):
+    for model_base in model_bases:
+        model_overview_runs = []
+        model_ner_label_runs = []
+        model_rel_label_runs = []
+        for seed_run in os.listdir(seed_config_path):
+            models_output = {"NER_P": [], "NER_R": [], "NER_F": [],
+                             "REL_P": [], "REL_R": [], "REL_F": [],
+                             "JOINT_P": [], "JOINT_R": [], "JOINT_F": [],
+                             "STRICT_P": [], "STRICT_R": [], "STRICT_F": [],
+                             "RELAXED_P": [], "RELAXED_R": [], "RELAXED_F": []}
+
+            model_ner_labels = {"OC_P": [], "OC_R": [], "OC_F": [],
+                                "INTV_P": [], "INTV_R": [], "INTV_F": [],
+                                "MEAS_P": [], "MEAS_R": [], "MEAS_F": []}
+
+            model_rel_labels = {"A1_RES_P": [], "A1_RES_R": [], "A1_RES_F": [],
+                                "A2_RES_P": [], "A2_RES_R": [], "A2_RES_F": [],
+                                "OC_RES_P": [], "OC_RES_R": [], "OC_RES_F": []}
+
+            """assess ner performance"""
+            # overall performance
+            ner_res = ner_evaluate(f"../trained_models/{model_base}/ner/all_domains/{seed_run}/model-best", doc_path)
+
+            models_output["NER_P"], models_output["NER_R"], models_output["NER_F"] = \
+                ner_res['ents_p'], ner_res['ents_r'], ner_res['ents_f']
+
+            # label performance
+            ner_label_res = ner_res['ents_per_type']
+
+            oc_res = ner_label_res['OC']
+            model_ner_labels["OC_P"], model_ner_labels["OC_R"], model_ner_labels["OC_F"] = oc_res['p'], oc_res['r'], \
+                                                                                           oc_res['f']
+
+            intv_res = ner_label_res['INTV']
+            model_ner_labels["INTV_P"], model_ner_labels["INTV_R"], model_ner_labels["INTV_F"] = intv_res['p'], \
+                                                                                                 intv_res['r'], \
+                                                                                                 intv_res['f']
+
+            meas_res = ner_label_res['MEAS']
+            model_ner_labels["MEAS_P"], model_ner_labels["MEAS_R"], model_ner_labels["MEAS_F"] = meas_res['p'], \
+                                                                                                 meas_res['r'], \
+                                                                                                 meas_res['f']
+
+            model_ner_label_runs.append(model_ner_labels)
+
+            """assess rel performance"""
+            # overall performance
+            rel_res = joint_ner_rel_evaluate(None,
+                                             f"../trained_models/{model_base}/rel/all_domains/{seed_run}/model-best",
+                                             doc_path, False)
+            rel_at_treshold = rel_res[0.5]
+            models_output["REL_P"], models_output["REL_R"], models_output["REL_F"] = \
+                float(rel_at_treshold['rel_micro_p']), float(rel_at_treshold['rel_micro_r']), float(
+                    rel_at_treshold['rel_micro_f'])
+
+            # label performance
+            model_rel_labels["A1_RES_P"], model_rel_labels["A1_RES_R"], model_rel_labels["A1_RES_F"], \
+            model_rel_labels["A2_RES_P"], model_rel_labels["A2_RES_R"], model_rel_labels["A2_RES_F"], \
+            model_rel_labels["OC_RES_P"], model_rel_labels["OC_RES_R"], model_rel_labels["OC_RES_F"] = \
+                float(rel_at_treshold['a1_res_p']), float(rel_at_treshold['a1_res_r']), float(
+                    rel_at_treshold['a1_res_f']), \
+                float(rel_at_treshold['a2_res_p']), float(rel_at_treshold['a2_res_r']), float(
+                    rel_at_treshold['a2_res_f']), \
+                float(rel_at_treshold['oc_res_p']), float(rel_at_treshold['oc_res_r']), float(
+                    rel_at_treshold['oc_res_f'])
+
+            model_rel_label_runs.append(model_rel_labels)
+
+            """assess joint performance"""
+            joint_res = joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/{seed_run}/model-best"
+                                               ,
+                                               f"../trained_models/{model_base}/rel/all_domains/{seed_run}/model-best",
+                                               doc_path, False)
+            joint_at_treshold = joint_res[0.5]
+            models_output["JOINT_P"], models_output["JOINT_R"], models_output["JOINT_F"] = \
+                float(joint_at_treshold['rel_micro_p']), float(joint_at_treshold['rel_micro_r']), float(
+                    joint_at_treshold['rel_micro_f'])
+
+            """assess table strict performance"""
+            strict_res = evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}/{seed_run}",
+                                                strict=True)
+            models_output["STRICT_P"], models_output["STRICT_R"], models_output["STRICT_F"] = \
+                strict_res['rel_micro_p'], strict_res['rel_micro_r'], strict_res['rel_micro_f']
+
+            """assess table relaxed performance"""
+            relaxed_res = evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}/{seed_run}",
+                                                 strict=False)
+            models_output["RELAXED_P"], models_output["RELAXED_R"], models_output["RELAXED_F"] = \
+                relaxed_res['rel_micro_p'], relaxed_res['rel_micro_r'], relaxed_res['rel_micro_f']
+            model_overview_runs.append(models_output)
+        save(model_overview_runs,
+             f"{output}/{model_base}")
+        save(model_ner_label_runs,
+             f"{output}/{model_base}/labels/ner")
+        save(model_rel_label_runs,
+             f"{output}/{model_base}/labels/rel")
+
+
+def eval_strat_models(doc_path, ner_model_strats, seed_config_path, gold_table_path, output):
+    for strat in os.listdir(ner_model_strats):
+        model_strat_runs = []
+        for seed_run in os.listdir(seed_config_path):
+            models_output = {"NER_P": [], "NER_R": [], "NER_F": [],
+                             "REL_P": [], "REL_R": [], "REL_F": [],
+                             "JOINT_P": [], "JOINT_R": [], "JOINT_F": [],
+                             "STRICT_P": [], "STRICT_R": [], "STRICT_F": [],
+                             "RELAXED_P": [], "RELAXED_R": [], "RELAXED_F": []}
+
+            """assess ner performance"""
+            # overall performance
+            ner_res = ner_evaluate(f"../trained_models/biobert/ner/all_domain_strats/{strat}/{seed_run}/model-best", doc_path)
+
+            models_output["NER_P"], models_output["NER_R"], models_output["NER_F"] = \
+                ner_res['ents_p'], ner_res['ents_r'], ner_res['ents_f']
+
+            """assess rel performance"""
+            # overall performance
+            rel_res = joint_ner_rel_evaluate(None,
+                                             f"../trained_models/biobert/rel/all_domain_strats/{strat}/{seed_run}/model-best",
+                                             doc_path, False)
+            rel_at_treshold = rel_res[0.5]
+            models_output["REL_P"], models_output["REL_R"], models_output["REL_F"] = \
+                float(rel_at_treshold['rel_micro_p']), float(rel_at_treshold['rel_micro_r']), float(
+                    rel_at_treshold['rel_micro_f'])
+
+
+            """assess joint performance"""
+            joint_res = joint_ner_rel_evaluate(f"../trained_models/biobert/ner/all_domain_strats/{strat}/{seed_run}/model-best",
+                                               f"../trained_models/biobert/rel/all_domain_strats/{strat}/{seed_run}/model-best",
+                                               doc_path, False)
+            joint_at_treshold = joint_res[0.5]
+            models_output["JOINT_P"], models_output["JOINT_R"], models_output["JOINT_F"] = \
+                float(joint_at_treshold['rel_micro_p']), float(joint_at_treshold['rel_micro_r']), float(
+                    joint_at_treshold['rel_micro_f'])
+
+            """assess table strict performance"""
+            strict_res = evaluate_result_tables(gold_table_path, f"../output_tables/all_domains_strats/train_{strat}/{seed_run}",
+                                                strict=True)
+            models_output["STRICT_P"], models_output["STRICT_R"], models_output["STRICT_F"] = \
+                strict_res['rel_micro_p'], strict_res['rel_micro_r'], strict_res['rel_micro_f']
+
+            """assess table relaxed performance"""
+            relaxed_res = evaluate_result_tables(gold_table_path, f"../output_tables/all_domains_strats/train_{strat}/{seed_run}",
+                                                 strict=False)
+            models_output["RELAXED_P"], models_output["RELAXED_R"], models_output["RELAXED_F"] = \
+                relaxed_res['rel_micro_p'], relaxed_res['rel_micro_r'], relaxed_res['rel_micro_f']
+
+            model_strat_runs.append(models_output)
+
+        save(model_strat_runs,
+             f"{output}/{strat}")
+
+
+def eval_domain_models(domain_cuts, seed_config_path, gold_table_path, output):
+    for domain in os.listdir(f"../datasets/4_preprocessed/{domain_cuts}"):
+        print(domain)
+        model_domain_runs = []
+        doc_path = f"../datasets/4_preprocessed/{domain_cuts}/{domain}/test.spacy"
+        for seed_run in os.listdir(seed_config_path):
+            print(seed_run)
+            models_output = {"NER_P": [], "NER_R": [], "NER_F": [],
+                             "REL_P": [], "REL_R": [], "REL_F": [],
+                             "JOINT_P": [], "JOINT_R": [], "JOINT_F": [],
+                             "STRICT_P": [], "STRICT_R": [], "STRICT_F": [],
+                             "RELAXED_P": [], "RELAXED_R": [], "RELAXED_F": []}
+
+            """assess ner performance"""
+            # overall performance
+            ner_res = ner_evaluate(f"../trained_models/biobert/ner/{domain_cuts}/{domain}/{seed_run}/model-best", doc_path)
+
+            models_output["NER_P"], models_output["NER_R"], models_output["NER_F"] = \
+                ner_res['ents_p'], ner_res['ents_r'], ner_res['ents_f']
+
+            """assess rel performance"""
+            # overall performance
+            rel_res = joint_ner_rel_evaluate(None,
+                                             f"../trained_models/biobert/rel/{domain_cuts}/{domain}/{seed_run}/model-best",
+                                             doc_path, False)
+            rel_at_treshold = rel_res[0.5]
+            models_output["REL_P"], models_output["REL_R"], models_output["REL_F"] = \
+                float(rel_at_treshold['rel_micro_p']), float(rel_at_treshold['rel_micro_r']), float(
+                    rel_at_treshold['rel_micro_f'])
+
+
+            """assess joint performance"""
+            joint_res = joint_ner_rel_evaluate(f"../trained_models/biobert/ner/{domain_cuts}/{domain}/{seed_run}/model-best",
+                                               f"../trained_models/biobert/rel/{domain_cuts}/{domain}/{seed_run}/model-best",
+                                               doc_path, False)
+            joint_at_treshold = joint_res[0.5]
+            models_output["JOINT_P"], models_output["JOINT_R"], models_output["JOINT_F"] = \
+                float(joint_at_treshold['rel_micro_p']), float(joint_at_treshold['rel_micro_r']), float(
+                    joint_at_treshold['rel_micro_f'])
+
+            """assess table strict performance"""
+            strict_res = evaluate_result_tables(f"{gold_table_path}/{domain_cuts}/{domain}", f"../output_tables/{domain_cuts}/{domain}/{seed_run}",
+                                                strict=True)
+            models_output["STRICT_P"], models_output["STRICT_R"], models_output["STRICT_F"] = \
+                strict_res['rel_micro_p'], strict_res['rel_micro_r'], strict_res['rel_micro_f']
+
+            """assess table relaxed performance"""
+            relaxed_res = evaluate_result_tables(f"{gold_table_path}/{domain_cuts}/{domain}", f"../output_tables/{domain_cuts}/{domain}/{seed_run}",
+                                                 strict=False)
+            models_output["RELAXED_P"], models_output["RELAXED_R"], models_output["RELAXED_F"] = \
+                relaxed_res['rel_micro_p'], relaxed_res['rel_micro_r'], relaxed_res['rel_micro_f']
+
+            model_domain_runs.append(models_output)
+
+        save(model_domain_runs,
+             f"{output}/{domain_cuts}/{domain}")
 
 if __name__ == "__main__":
 
     # some of these paths require trained models to be in place already
     #doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
     #gold_table_path = "../datasets/5_gold_tables/all_domains"
-    #model_bases = ["biobert","scibert","roberta"]
-    #ner_evaluate(f"../trained_models/biobert/ner/all_domains/model-best", doc_path)
+    #pred_table_path = "../output_tables/all_domains_"
+    #model_bases = ["biobert", "scibert","roberta"]
+    #output = "../evaluation_results/models_all_domains"
+    #seed_config_path = "../configs/ner/biobert"
 
     # evaluate different model-bases
-    #for model_base in model_bases:
-     #   outfile = open(f"../evaluation_results/{model_base}.txt", "w")
-        # assess ner performance
-      #  ner_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best",doc_path)
-        # assess rel performance
-       # joint_ner_rel_evaluate(None,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
-        # assess joint performance
-        #joint_ner_rel_evaluate(f"../trained_models/{model_base}/ner/all_domains/model-best"
-      #                         ,f"../trained_models/{model_base}/rel/all_domains/model-best",doc_path,False)
-        # assess table strict performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=True)
-        # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{model_base}", strict=False)
-
-        #outfile.close()
+    #eval_base_models(model_bases,seed_config_path,doc_path,gold_table_path,pred_table_path)
 
     # evaluate different training size strats
-    #model_strats = "../trained_models/biobert/ner/all_domain_strats"
+
+    ner_model_strats = "../trained_models/biobert/ner/all_domain_strats"
+    seed_config_path = "../configs/ner/biobert"
+    pred_table_path = "../output_tables/all_domains_strats/train_"
+    output = "../evaluation_results/strats_all_domains"
+
+    #eval_strat_models(doc_path, ner_model_strats, seed_config_path, gold_table_path, output)
+
+    # evaluate different training size strats
+    #doc_path = "../datasets/4_preprocessed/all_domains/test.spacy"
+    #ner_model_strats = "../trained_models/biobert/ner/all_domain_strats"
+    #seed_config_path = "../configs/ner/biobert"
     #gold_table_path = "../datasets/5_gold_tables/all_domains"
     #pred_table_path = "../output_tables/all_domains_strats/train_"
-    #for strat in os.listdir(model_strats):
-     #   outfile = open(f"../evaluation_results/{strat}.txt", "w")
-        # assess ner performance
-      #  ner_evaluate(f"{model_strats}/{strat}/model-best",doc_path)
-        # assess rel performance
-       # joint_ner_rel_evaluate(None,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
-        # assess joint performance
-       # joint_ner_rel_evaluate(f"{model_strats}/{strat}/model-best"
-       #            ,f"../trained_models/biobert/rel/all_domain_strats/{strat}/model-best",doc_path,False)
-        # assess table strict performance
-       # evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=True)
-        # assess table relaxed performance
-        #evaluate_result_tables(gold_table_path, f"{pred_table_path}{strat}", strict=False)
-        #outfile.close()
+    domaincuts = ["out_of_domain", "capped_for_comparison", "capped_mix"]
+    output = "../evaluation_results"
+    for domaincut in domaincuts:
+        print(domaincut)
+        gold_table_path = f"../datasets/5_gold_tables"
+        eval_domain_models(domaincut, seed_config_path, gold_table_path, output)
 
     # evaluate out of domain perfomance
-    for domain in os.listdir("../datasets/4_preprocessed/out_of_domain"):
-        outfile = open(f"../evaluation_results/{domain}.txt", "w")
-        print(domain)
-        doc_path = f"../datasets/4_preprocessed/out_of_domain/{domain}/test.spacy"
-        ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
-        rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
-        gold_table_path = f"../datasets/5_gold_tables/out_of_domain/{domain}"
-        pred_table_path = f"../output_tables/out_of_domain/{domain}"
+    #for domain in os.listdir("../datasets/4_preprocessed/out_of_domain"):
+     #   outfile = open(f"../evaluation_results/{domain}.txt", "w")
+      #  print(domain)
+       # doc_path = f"../datasets/4_preprocessed/out_of_domain/{domain}/test.spacy"
+       # ner_model = f"../trained_models/biobert/ner/out_of_domain/{domain}/model-best"
+       # rel_model = f"../trained_models/biobert/rel/out_of_domain/{domain}/model-best"
+       # gold_table_path = f"../datasets/5_gold_tables/out_of_domain/{domain}"
+       # pred_table_path = f"../output_tables/out_of_domain/{domain}"
         # assess ner performance
-        ner_evaluate(ner_model, doc_path)
+       # ner_evaluate(ner_model, doc_path)
         # assess rel performance
-        joint_ner_rel_evaluate(None, rel_model, doc_path, False)
+       # joint_ner_rel_evaluate(None, rel_model, doc_path, False)
         # assess joint performance
-        joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
+       # joint_ner_rel_evaluate(ner_model, rel_model, doc_path, False)
         # assess table strict performance
-        evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
+        #evaluate_result_tables(gold_table_path, pred_table_path, strict=True)
         # assess table relaxed performance
-        evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
+        #evaluate_result_tables(gold_table_path, pred_table_path, strict=False)
 
-        outfile.close()
+        #outfile.close()
 
      # evaluate single capped domain perfomance
      #for domain in os.listdir("../datasets/4_preprocessed/capped_for_comparison"):
